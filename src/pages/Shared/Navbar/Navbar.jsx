@@ -19,7 +19,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50 max-w-7xl mx-auto">
+    <nav className="bg-white shadow-lg sticky top-0 z-50 ">
       {/* Top bar with contact info */}
       <div className="bg-gray-900 text-white py-2 px-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center text-sm">

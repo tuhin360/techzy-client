@@ -1,4 +1,5 @@
 import Banner from "../Banner/Banner";
+import Cover from "../Cover/Cover";
 import NewProducts from "../NewProducts/NewProducts";
 import TrendingProducts from "../TrendingProducts/TrendingProducts";
 
@@ -9,6 +10,7 @@ const HomePage = () => {
             <Banner/>
             <TrendingProducts/>
             <NewProducts/>
+            <Cover/>
         </div>
     );
 };

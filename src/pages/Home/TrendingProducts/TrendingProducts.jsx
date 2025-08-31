@@ -45,7 +45,7 @@ const products = [
   },
   {
     id: 4,
-    title: "Apple iPhone 15 Pro Max",
+    title: "Apple iPhone 15 Pro",
     price: 165000,
     originalPrice: 180000,
     discount: 8,
@@ -63,7 +63,7 @@ const products = [
   },
   {
     id: 6,
-    title: "Apple Watch SE (2nd Gen)",
+    title: "Apple Watch SE",
     price: 32000,
     originalPrice: 36000,
     discount: 11,
@@ -98,7 +98,7 @@ const TrendingProducts = () => {
 
   return (
     <section className="py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -125,7 +125,7 @@ const TrendingProducts = () => {
         >
           {products.map((product) => (
             <SwiperSlide key={product.id}>
-              <div className="relative bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+              <div className="relative bg-white rounded-xl shadow-lg transition-all duration-300 overflow-hidden">
                 {/* Discount Badge */}
                 {product.discount > 0 && (
                   <div className="absolute top-3 left-3 z-10">
@@ -149,16 +149,12 @@ const TrendingProducts = () => {
                   />
                 </button>
 
-                {/* Product Image */}
+                {/* Product Image (No Hover Animation) */}
                 <div className="h-48 bg-gray-100 overflow-hidden">
                   <img
                     src={product.image}
                     alt={product.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      e.target.src =
-                        "https://via.placeholder.com/300x200/e5e7eb/6b7280?text=Product";
-                    }}
+                    className="w-full h-full object-cover hover:scale-105 transition-all duration-300"
                   />
                 </div>
 

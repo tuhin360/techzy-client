@@ -3,7 +3,7 @@ import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin, CreditCard,
 
 const Footer = () => {
     return (
-        <footer className="bg-gray-900 text-white max-w-7xl mx-auto">
+        <footer className="bg-gray-900 text-white">
             {/* Features section */}
             <div className="bg-gray-800 py-8">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

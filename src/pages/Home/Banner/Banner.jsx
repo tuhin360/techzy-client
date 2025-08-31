@@ -3,7 +3,7 @@ import { ShoppingBag, Star, Truck, Shield } from 'lucide-react';
 
 const Banner = () => {
     return (
-      <div className="relative max-w-7xl mx-auto min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] overflow-hidden bg-gray-900">
+      <div className="relative min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] overflow-hidden bg-gray-900">
         {/* Background Image with Parallax Effect */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat transform transition-transform duration-1000 ease-out"
