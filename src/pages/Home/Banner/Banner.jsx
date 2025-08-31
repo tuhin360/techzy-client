@@ -1,4 +1,4 @@
-import bannerImage from '../../../assets/banner/5.jpg'; // Adjust path as needed
+import bannerImage from '../../../assets/banner/1.jpg'; // Adjust path as needed
 import { ShoppingBag, Star, Truck, Shield } from 'lucide-react';
 
 const Banner = () => {
