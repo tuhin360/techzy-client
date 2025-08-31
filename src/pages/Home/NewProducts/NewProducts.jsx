@@ -10,6 +10,7 @@ import watch1 from "../../../assets/products/watch/smartwatch1.jpg";
 import iphone17 from "../../../assets/products/phone/iphone.jpg";
 import laptop1 from "../../../assets/products/laptop/laptop1.jpg";
 import powerbank from "../../../assets/products/battery/2.jpg";
+import { ArrowRight } from "lucide-react";
 
 const NewProducts = () => {
   const [wishlist, setWishlist] = useState([]);
@@ -132,8 +133,11 @@ const NewProducts = () => {
       .replace("BDT", "৳");
   };
 
+ 
+
+
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-12">
@@ -151,8 +155,8 @@ const NewProducts = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products.map((product) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+          {products.slice(0, 6).map((product) => (
             <div
               key={product.id}
               className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden transform hover:-translate-y-2"
@@ -269,22 +273,12 @@ const NewProducts = () => {
 
         {/* View All Products Button */}
         <div className="text-center mt-12">
-          <button className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-gray-900 to-gray-800 text-white font-semibold rounded-full hover:from-gray-800 hover:to-gray-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
-            View All Products
-            <svg
-              className="w-5 h-5 ml-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
+           <button className="group inline-flex items-center px-10 py-5 bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 text-white font-bold rounded-2xl hover:from-gray-800 hover:via-blue-800 hover:to-purple-800 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-3xl">
+            <span className="text-lg">Explore All Products</span>
+            <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform duration-300" />
+            <div className="absolute inset-0 rounded-2xl bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
           </button>
+          
         </div>
       </div>
     </section>
