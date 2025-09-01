@@ -97,14 +97,17 @@ const TrendingProducts = () => {
   };
 
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="px-4 sm:px-6 lg:px-8">
+    <section className="max-w-7xl mx-auto mb-20">
+      <div className="px-4 sm:px-6 lg:px-0">
         {/* Header */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Trending <span className="text-blue-600">Products</span>
+          <h2 className="text-5xl md:text-6xl font-bold text-gray-900">
+            Trending{" "}
+            <span className="text-gradient bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
+              Products
+            </span>
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-gray-600 max-w-2xl mx-auto  mt-6">
             Latest gadgets and electronics with amazing deals
           </p>
         </div>
@@ -196,7 +199,25 @@ const TrendingProducts = () => {
                         </span>
                       )}
                     </div>
+                    {product.discount > 0 && (
+                      <p className="text-sm text-green-600 font-medium">
+                        You save{" "}
+                        {formatPrice(product.originalPrice - product.price)}
+                      </p>
+                    )}
                   </div>
+
+                  {/* Add to Cart Button */}
+                  <button
+                    className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-4 px-6 rounded-2xl font-bold text-lg shadow-lg flex items-center justify-center space-x-3"
+                    style={{
+                      transition: "none !important",
+                      transform: "none !important",
+                    }}
+                  >
+                    <ShoppingCart className="w-6 h-6" />
+                    <span>Add to Cart</span>
+                  </button>
                 </div>
               </div>
             </SwiperSlide>
