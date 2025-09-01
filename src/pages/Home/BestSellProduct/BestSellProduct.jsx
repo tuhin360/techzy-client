@@ -17,8 +17,7 @@ import canon from "../../../assets/products/trending/canon.jpg";
 
 const BestSellProduct = () => {
   const [wishlist, setWishlist] = useState([]);
-  const [viewMode, setViewMode] = useState("grid"); // grid or list
-
+ 
   const bestSellerProducts = [
     {
       id: 1,
