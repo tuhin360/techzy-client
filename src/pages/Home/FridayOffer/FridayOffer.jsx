@@ -1,6 +1,6 @@
-import React from "react";
 import { ArrowRight } from "lucide-react";
 import { useProducts } from "../../../hooks/useProducts";
+import { FridayOfferCardSkeleton } from "../../../components/FridayOfferCardSkeleton";
 
 const gradients = [
   "from-pink-400 to-purple-500",
@@ -12,16 +12,16 @@ const gradients = [
 const FridayOffer = () => {
   const { products, loading, error } = useProducts();
 
-  // Filter only "offered" tagged products
-  const offeredProducts = products.filter((p) => p.tags?.includes("offered"));
-
-  const formatPrice = (price) => `৳${price?.toLocaleString("en-US") || 0}`;
-
-  if (loading) return <div className="text-center py-10">Loading...</div>;
+  if (loading) return <FridayOfferCardSkeleton />;
   if (error)
     return <div className="text-center py-10 text-red-500">{error}</div>;
+
+  // Filter only "offered" tagged products
+  const offeredProducts = products.filter((p) => p.tags?.includes("offered"));
   if (!offeredProducts.length)
     return <div className="text-center py-10">No offers available.</div>;
+
+  const formatPrice = (price) => `৳${price?.toLocaleString("en-US") || 0}`;
 
   return (
     <section className="pb-20">
@@ -43,7 +43,6 @@ const FridayOffer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {offeredProducts.map((offer, index) => {
             const gradient = gradients[index % gradients.length]; // Cycle through gradients
-
             return (
               <div
                 key={offer._id}
