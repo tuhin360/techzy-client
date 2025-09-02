@@ -40,7 +40,7 @@ const Navbar = () => {
       </div>
 
       {/* Main navbar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
@@ -110,10 +110,10 @@ const Navbar = () => {
               </div>
             </div>
             <a
-              href="/deals"
+              href="/shop"
               className="text-gray-700 hover:text-blue-600 transition duration-200"
             >
-              Deals
+              Shop
             </a>
             <a
               href="/about"
@@ -136,9 +136,11 @@ const Navbar = () => {
               <Heart size={20} />
             </button>
             {/* User account */}
-            <button className="p-2 text-gray-700 hover:text-blue-600 transition duration-200">
-              <User size={20} />
-            </button>
+            <a href="/login">
+              <button className="p-2 text-gray-700 hover:text-blue-600 transition duration-200">
+                <User size={20} />
+              </button>
+            </a>
 
             {/* Shopping cart */}
             <button className="relative p-2 text-gray-700 hover:text-blue-600 transition duration-200">
@@ -217,10 +219,10 @@ const Navbar = () => {
               </a>
             </div>
             <a
-              href="/deals"
+              href="/shop"
               className="block text-gray-700 hover:text-blue-600 transition duration-200"
             >
-              Deals
+              Shop
             </a>
             <a
               href="/about"

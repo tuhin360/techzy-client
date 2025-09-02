@@ -7,22 +7,25 @@ import NewProducts from "../NewProducts/NewProducts";
 import StatSection from "../StatSection/StatSection";
 import Testimonial from "../Testimonial/Testimonial";
 import TrendingProducts from "../TrendingProducts/TrendingProducts";
-
+import { Helmet } from "react-helmet-async";
 
 const HomePage = () => {
-    return (
-        <div>
-            <Banner/>
-            <NewProducts/>
-            <TrendingProducts/>
-            <Cover/>
-            <BestSellProduct/>
-            <FridayOffer/>
-            <FeaturedProduct/>
-            <StatSection/>
-            <Testimonial/>
-        </div>
-    );
+  return (
+    <div>
+      <Helmet>
+        <title>Techzy | Home Page</title>
+      </Helmet>
+      <Banner />
+      <NewProducts />
+      <TrendingProducts />
+      <Cover />
+      <BestSellProduct />
+      <FridayOffer />
+      <FeaturedProduct />
+      <StatSection />
+      <Testimonial />
+    </div>
+  );
 };
 
 export default HomePage;
