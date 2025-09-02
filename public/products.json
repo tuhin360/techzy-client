@@ -10,7 +10,12 @@
     "badge": "Best Seller",
     "category": "Audio",
     "sold": 2340,
-    "features": ["H2 Chip", "Active Noise Cancellation", "Spatial Audio", "MagSafe Charging"],
+    "features": [
+      "H2 Chip",
+      "Active Noise Cancellation",
+      "Spatial Audio",
+      "MagSafe Charging"
+    ],
     "colors": ["White"],
     "tags": ["new", "best-seller", "featured"]
   },
@@ -61,7 +66,12 @@
     "image": "https://i.ibb.co.com/Fq4n3Ndb/apple-watch-series-10-5.jpg",
     "badge": "Most Popular",
     "category": "Wearables",
-    "features": ["S9 Chip", "Digital Crown", "Always-On Display", "GPS + Cellular"],
+    "features": [
+      "S9 Chip",
+      "Digital Crown",
+      "Always-On Display",
+      "GPS + Cellular"
+    ],
     "colors": ["Midnight", "Starlight", "Silver", "Product Red"],
     "timeLeft": "1 day left",
     "tags": ["new", "trending", "best-seller", "featured"]
@@ -77,8 +87,18 @@
     "badge": "Flagship",
     "category": "Mobile",
     "sold": 1890,
-    "features": ["A18 Pro Chip", "48MP Camera System", "Titanium Design", "USB-C"],
-    "colors": ["Space Black", "Natural Titanium", "White Titanium", "Blue Titanium"],
+    "features": [
+      "A18 Pro Chip",
+      "48MP Camera System",
+      "Titanium Design",
+      "USB-C"
+    ],
+    "colors": [
+      "Space Black",
+      "Natural Titanium",
+      "White Titanium",
+      "Blue Titanium"
+    ],
     "timeLeft": "2 days left",
     "tags": ["new", "trending", "best-seller", "featured"]
   },
@@ -118,5 +138,119 @@
     "badge": "Pro Choice",
     "category": "Camera",
     "tags": ["trending", "best-seller"]
+  },
+
+  {
+    "title": "Google Alexa",
+    "price": 10500,
+    "originalPrice": 12500,
+    "discount": 16,
+    "rating": 4.6,
+    "reviews": 1230,
+    "image": "https://i.ibb.co.com/6cCmjzdP/alexa.png",
+    "badge": "Hot Deal",
+    "category": "Virtual assistant",
+    "tags": ["offered"]
+  },
+  {
+    "title": "Sony Headphones",
+    "price": 29000,
+    "originalPrice": 35000,
+    "discount": 17,
+    "rating": 4.8,
+    "reviews": 1589,
+    "image": "https://i.ibb.co.com/4ZxSKYKZ/red-Head-Phone-min.png",
+    "badge": "Best Seller",
+    "category": "Gaming Headphone",
+    "tags": ["offered"]
+  },
+  {
+    "title": "Apple Watch",
+    "price": 36000,
+    "originalPrice": 42000,
+    "discount": 14,
+    "rating": 4.4,
+    "reviews": 784,
+    "image": "https://i.ibb.co.com/B5C6gWSR/iwatch.png",
+    "badge": "New Arrival",
+    "category": "Smartwatches",
+    "tags": ["offered"]
+  },
+  {
+    "title": "Apple Airpod",
+    "price": 72000,
+    "originalPrice": 82000,
+    "discount": 12,
+    "rating": 4.7,
+    "reviews": 947,
+    "image": "https://i.ibb.co.com/XZrCY4z9/blueaairpod-min.png",
+    "badge": "Trending",
+    "category": "Airpod",
+    "tags": ["offered"]
+  },
+  {
+    "title": "Apple Watch Series 9",
+    "subtitle": "Your health companion",
+    "price": 45000,
+    "originalPrice": 52000,
+    "discount": 14,
+    "rating": 4.8,
+    "reviews": 1234,
+    "image": "https://i.ibb.co.com/B5C6gWSR/iwatch.png",
+    "features": [
+      "S9 Chip",
+      "Digital Crown",
+      "Always-On Display",
+      "GPS + Cellular"
+    ],
+    "colors": ["Midnight", "Starlight", "Silver", "Product Red"],
+    "badge": "Most Popular",
+    "timeLeft": "1 day left",
+    "tags": ["featured"]
+  },
+  {
+    "title": "iPhone 17 Pro Max",
+    "subtitle": "The most advanced iPhone ever",
+    "price": 190000,
+    "originalPrice": 210000,
+    "discount": 9,
+    "rating": 4.9,
+    "reviews": 1876,
+    "image": "https://i.ibb.co.com/RK8WTPK/iphone172.png",
+    "features": [
+      "A18 Pro Chip",
+      "48MP Camera System",
+      "Titanium Design",
+      "USB-C"
+    ],
+    "colors": [
+      "Space Black",
+      "Natural Titanium",
+      "White Titanium",
+      "Blue Titanium"
+    ],
+    "badge": "Limited Edition",
+    "timeLeft": "2 days left",
+    "tags": ["featured"]
+  },
+  {
+    "title": "AirPods Pro (2nd Gen)",
+    "subtitle": "Immersive audio experience",
+    "price": 28000,
+    "originalPrice": 33000,
+    "discount": 15,
+    "rating": 4.8,
+    "reviews": 2145,
+    "image": "https://i.ibb.co.com/XZrCY4z9/blueaairpod-min.png",
+    "features": [
+      "H2 Chip",
+      "Active Noise Cancellation",
+      "Spatial Audio",
+      "MagSafe Charging"
+    ],
+    "colors": ["White"],
+    "badge": "Best Value",
+    "timeLeft": "3 days left",
+    "tags": ["featured"]
   }
 ]

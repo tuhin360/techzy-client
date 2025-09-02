@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+/* Style Swiper navigation arrows */
+.swiper-button-next,
+.swiper-button-prev {
+  @apply bg-white  w-14 h-14 rounded-md flex items-center justify-center text-gray-700 shadow-md transition;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  @apply text-lg font-bold;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  @apply bg-gray-100;
+}
+
+/* Style pagination bullets */
+.swiper-pagination-bullet {
+  @apply bg-gray-300 opacity-100 w-3 h-3 rounded-full transition;
+}
+
+.swiper-pagination-bullet-active {
+  @apply bg-yellow-500 w-4 h-4;
+}
