@@ -3,14 +3,41 @@ import { Heart, ShoppingCart, Star } from "lucide-react";
 import useAuth from "../hooks/useAuth";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 export const ProductCard = ({ product }) => {
   console.log({ product });
   const [wishlist, setWishlist] = useState([]);
-  const { title, image, price, rating, discount } = product;
+  const { title, image, price, rating, discount, _id } = product;
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const axiosSecure = useAxiosSecure();
+
+  const handleAddToCart = (product) => {
+    // console.log("Product added to cart:", product, user.email);
+    if (user && user.email) {
+      // TODO: send cart item to database
+      console.log(user.email, product);
+      const cartItem = {
+        menuId: _id,
+        email: user.email,
+        title,
+        image,
+        price,
+      };
+      axiosSecure.post("/carts", cartItem).then((res) => {
+        console.log(res.data);
+
+        if (res.data.insertedId) {
+          toast.success("Item added to cart");
+        }
+      });
+    } else {
+      toast.error("Please login first");
+      navigate("/login", { state: { from: location } });
+    }
+  };
 
   const toggleWishlist = () => {
     setWishlist((prev) =>
@@ -21,16 +48,6 @@ export const ProductCard = ({ product }) => {
   };
 
   const formatPrice = (price) => `৳${price?.toLocaleString("en-US")}`;
-
-  const handleAddToCart = (product) => {
-    // console.log("Product added to cart:", product, user.email);
-    if (user && user.email) {
-      // TODO: send cart to database
-    } else {
-      toast.error("Please login first");
-      navigate("/login", { state: { from: location } });
-    }
-  };
 
   return (
     <div className="relative bg-white rounded-xl shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100">
