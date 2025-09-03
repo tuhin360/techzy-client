@@ -13,8 +13,7 @@ const FridayOffer = () => {
   const { products, loading, error } = useProducts();
 
   if (loading) return <FridayOfferCardSkeleton />;
-  if (error)
-    return <div className="text-center py-10 text-red-500">{error}</div>;
+  if (error) return <div className="text-center py-10 text-red-500">{error}</div>;
 
   // Filter only "offered" tagged products
   const offeredProducts = products.filter((p) => p.tags?.includes("offered"));
@@ -54,12 +53,8 @@ const FridayOffer = () => {
                       {offer.category}
                     </span>
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2">
-                    {offer.title}
-                  </h3>
-                  <span className="text-lg font-bold text-white">
-                    {formatPrice(offer.price)}
-                  </span>
+                  <h3 className="text-lg font-bold text-white mb-2">{offer.title}</h3>
+                  <span className="text-lg font-bold text-white">{formatPrice(offer.price)}</span>
                 </div>
                 <button className="flex items-center space-x-1 bg-white hover:bg-gray-100 py-1.5 px-4 rounded-full font-semibold text-xs w-fit transition-colors duration-200">
                   <span>Shop Now</span>
@@ -97,12 +92,8 @@ const FridayOffer = () => {
                   <span className="text-base sm:text-lg font-bold">25%</span>
                 </div>
               </div>
-              <p className="text-gray-300 text-sm sm:text-lg mb-2">
-                YOUR PURCHASE TODAY ONLY!
-              </p>
-              <p className="text-gray-400 text-xs sm:text-sm mb-4">
-                WHILE YOUR OFFER LASTS...
-              </p>
+              <p className="text-gray-300 text-sm sm:text-lg mb-2">YOUR PURCHASE TODAY ONLY!</p>
+              <p className="text-gray-400 text-xs sm:text-sm mb-4">WHILE YOUR OFFER LASTS...</p>
               <button className="bg-yellow-400 text-black py-2 sm:py-3 px-6 sm:px-8 rounded-full font-bold text-sm sm:text-lg mx-auto transition-colors duration-200 hover:bg-yellow-500">
                 Shop Now
               </button>
