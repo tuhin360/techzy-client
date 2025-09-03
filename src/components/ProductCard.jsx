@@ -1,8 +1,16 @@
 import { useState } from "react";
 import { Heart, ShoppingCart, Star } from "lucide-react";
+import useAuth from "../hooks/useAuth";
+import toast from "react-hot-toast";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const ProductCard = ({ product }) => {
+  console.log({ product });
   const [wishlist, setWishlist] = useState([]);
+  const { title, image, price, rating, discount } = product;
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const toggleWishlist = () => {
     setWishlist((prev) =>
@@ -13,6 +21,16 @@ export const ProductCard = ({ product }) => {
   };
 
   const formatPrice = (price) => `৳${price?.toLocaleString("en-US")}`;
+
+  const handleAddToCart = (product) => {
+    // console.log("Product added to cart:", product, user.email);
+    if (user && user.email) {
+      // TODO: send cart to database
+    } else {
+      toast.error("Please login first");
+      navigate("/login", { state: { from: location } });
+    }
+  };
 
   return (
     <div className="relative bg-white rounded-xl shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100">
@@ -100,7 +118,10 @@ export const ProductCard = ({ product }) => {
         </div>
 
         {/* Cart Button */}
-        <button className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 rounded-lg font-medium text-sm shadow hover:from-yellow-600 hover:to-orange-600 transition-colors duration-300 flex items-center justify-center gap-2 cursor-pointer">
+        <button
+          onClick={() => handleAddToCart(product)}
+          className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 rounded-lg font-medium text-sm shadow hover:from-yellow-600 hover:to-orange-600 transition-colors duration-300 flex items-center justify-center gap-2 cursor-pointer"
+        >
           <ShoppingCart className="w-4 h-4" /> Add to Cart
         </button>
       </div>
