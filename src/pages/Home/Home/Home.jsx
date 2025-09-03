@@ -13,7 +13,7 @@ const HomePage = () => {
   return (
     <div>
       <Helmet>
-        <title>Techzy | Home Page</title>
+        <title>Techzy | Home</title>
       </Helmet>
       <Banner />
       <NewProducts />

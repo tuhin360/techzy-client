@@ -55,7 +55,7 @@ const About = () => {
   ];
 
   return (
-    <div>
+    <>
       <Helmet>
         <title>Techzy | About</title>
       </Helmet>
@@ -199,7 +199,7 @@ const About = () => {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 };
 

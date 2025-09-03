@@ -4,15 +4,31 @@ import {
   Search,
   Menu,
   X,
-  User,
   Heart,
   Phone,
   Mail,
 } from "lucide-react";
+import { Link } from "react-router-dom"; // ✅ Link import
+import { useContext } from "react";
+import { AuthContext } from "../../../providers/AuthProvider";
+import { ChevronRight } from "lucide-react";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(3); // Example cart count
+  const [cartCount, setCartCount] = useState(3);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleCategories = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const { user, logOut } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logOut()
+      .then(() => {})
+      .catch((error) => console.log(error));
+  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -44,13 +60,15 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <h1 className="text-2xl font-bold text-black">
-              Tech<span className="text-orange-500">Zy</span>
-            </h1>
+            <Link to="/">
+              <h1 className="text-2xl font-bold text-black">
+                Tech<span className="text-orange-500">Zy</span>
+              </h1>
+            </Link>
           </div>
 
           {/* Search bar - Desktop */}
-          <div className="hidden md:flex flex-1 max-w-lg mx-8">
+          <div className="hidden md:flex flex-1 max-w-1/3 mx-8">
             <div className="relative w-full">
               <input
                 type="text"
@@ -63,12 +81,12 @@ const Navbar = () => {
 
           {/* Desktop menu */}
           <div className="hidden md:flex items-center space-x-6">
-            <a
-              href="/"
+            <Link
+              to="/"
               className="text-gray-700 hover:text-blue-600 transition duration-200"
             >
               Home
-            </a>
+            </Link>
             <div className="relative group">
               <button className="text-gray-700 hover:text-blue-600 transition duration-200">
                 Categories
@@ -76,71 +94,71 @@ const Navbar = () => {
               {/* Dropdown */}
               <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                 <div className="py-2">
-                  <a
-                    href="#"
+                  <Link
+                    to="/category/smartphones"
                     className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
                   >
                     Smartphones
-                  </a>
-                  <a
-                    href="#"
+                  </Link>
+                  <Link
+                    to="/category/laptops"
                     className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
                   >
                     Laptops
-                  </a>
-                  <a
-                    href="#"
+                  </Link>
+                  <Link
+                    to="/category/headphones"
                     className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
                   >
                     Headphones
-                  </a>
-                  <a
-                    href="#"
+                  </Link>
+                  <Link
+                    to="/category/gaming"
                     className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
                   >
                     Gaming
-                  </a>
-                  <a
-                    href="#"
+                  </Link>
+                  <Link
+                    to="/category/accessories"
                     className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
                   >
                     Accessories
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
-            <a
-              href="/shop"
+            <Link
+              to="/secret"
+              className="text-gray-700 hover:text-blue-600 transition duration-200"
+            >
+              Secret
+            </Link>
+            <Link
+              to="/shop"
               className="text-gray-700 hover:text-blue-600 transition duration-200"
             >
               Shop
-            </a>
-            <a
-              href="/about"
+            </Link>
+            <Link
+              to="/about"
               className="text-gray-700 hover:text-blue-600 transition duration-200"
             >
               About
-            </a>
-            <a
-              href="/contact"
+            </Link>
+            <Link
+              to="/contact"
               className="text-gray-700 hover:text-blue-600 transition duration-200"
             >
               Contact
-            </a>
+            </Link>
           </div>
 
           {/* Right side icons */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
             {/* Wishlist */}
-            <button className="p-2 text-gray-700 hover:text-blue-600 transition duration-200">
+            <button className=" text-gray-700 hover:text-blue-600 transition duration-200">
               <Heart size={20} />
             </button>
-            {/* User account */}
-            <a href="/login">
-              <button className="p-2 text-gray-700 hover:text-blue-600 transition duration-200">
-                <User size={20} />
-              </button>
-            </a>
 
             {/* Shopping cart */}
             <button className="relative p-2 text-gray-700 hover:text-blue-600 transition duration-200">
@@ -151,6 +169,35 @@ const Navbar = () => {
                 </span>
               )}
             </button>
+
+            {/* User profile */}
+            {user ? (
+              <div className="flex items-center gap-4 pl-2 ">
+                {/* Profile Image */}
+                <img
+                  src={
+                    user.photoURL || "https://i.ibb.co.com/GvFrhKg6/user.png"
+                  }
+                  alt="profile"
+                  title={user.displayName || "User"} // Hover tooltip
+                  className="w-10 h-10 rounded-full border cursor-pointer hidden md:block"
+                />
+
+                {/* Logout Button */}
+                <button
+                  onClick={handleLogout}
+                  className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2 px-6 rounded-md font-bold shadow-lg hover:from-yellow-600 hover:to-orange-600 transition cursor-pointer hidden md:block"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link to="/login">
+                <button className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white ml-2  py-2 px-6 rounded-md font-bold shadow-lg hover:from-yellow-600 hover:to-orange-600 transition cursor-pointer hidden md:block">
+                  Login
+                </button>
+              </Link>
+            )}
 
             {/* Mobile menu button */}
             <button
@@ -174,75 +221,133 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-
+      
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white border-t shadow-lg">
+        <div className="md:hidden bg-white border-t shadow-lg h-screen overflow-y-auto">
           <div className="px-4 py-3 space-y-3">
-            <a
-              href="/"
+            {/* Main Links */}
+            <Link
+              to="/"
+              onClick={() => setIsMenuOpen(false)}
               className="block text-gray-700 hover:text-blue-600 transition duration-200"
             >
               Home
-            </a>
+            </Link>
+
+            {/* Categories */}
             <div className="border-l-2 border-gray-200 pl-4">
-              <p className="font-semibold text-gray-800 mb-2">Categories</p>
-              <a
-                href="#"
-                className="block text-gray-600 hover:text-blue-600 py-1"
+              <button
+                onClick={toggleCategories}
+                className="w-full flex justify-between items-center font-semibold text-gray-800 mb-2 focus:outline-none"
               >
-                Smartphones
-              </a>
-              <a
-                href="#"
-                className="block text-gray-600 hover:text-blue-600 py-1"
-              >
-                Laptops
-              </a>
-              <a
-                href="#"
-                className="block text-gray-600 hover:text-blue-600 py-1"
-              >
-                Headphones
-              </a>
-              <a
-                href="#"
-                className="block text-gray-600 hover:text-blue-600 py-1"
-              >
-                Gaming
-              </a>
-              <a
-                href="#"
-                className="block text-gray-600 hover:text-blue-600 py-1"
-              >
-                Accessories
-              </a>
+                Categories
+                <ChevronRight
+                  className={`w-6 h-6 transition-transform duration-300 ${
+                    isOpen ? "rotate-90" : ""
+                  }`}
+                />
+              </button>
+
+              {isOpen && (
+                <div className="space-y-1 pl-2">
+                  <Link
+                    to="/category/smartphones"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block text-gray-600 hover:text-blue-600 py-1"
+                  >
+                    Smartphones
+                  </Link>
+                  <Link
+                    to="/category/laptops"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block text-gray-600 hover:text-blue-600 py-1"
+                  >
+                    Laptops
+                  </Link>
+                  <Link
+                    to="/category/headphones"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block text-gray-600 hover:text-blue-600 py-1"
+                  >
+                    Headphones
+                  </Link>
+                  <Link
+                    to="/category/gaming"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block text-gray-600 hover:text-blue-600 py-1"
+                  >
+                    Gaming
+                  </Link>
+                  <Link
+                    to="/category/accessories"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block text-gray-600 hover:text-blue-600 py-1"
+                  >
+                    Accessories
+                  </Link>
+                </div>
+              )}
             </div>
-            <a
-              href="/shop"
+
+            <Link
+              to="/shop"
+              onClick={() => setIsMenuOpen(false)}
               className="block text-gray-700 hover:text-blue-600 transition duration-200"
             >
               Shop
-            </a>
-            <a
-              href="/about"
+            </Link>
+            <Link
+              to="/about"
+              onClick={() => setIsMenuOpen(false)}
               className="block text-gray-700 hover:text-blue-600 transition duration-200"
             >
               About
-            </a>
-            <a
-              href="/contact"
+            </Link>
+            <Link
+              to="/contact"
+              onClick={() => setIsMenuOpen(false)}
               className="block text-gray-700 hover:text-blue-600 transition duration-200"
             >
               Contact
-            </a>
+            </Link>
+
+            {/* User Section */}
             <div className="border-t pt-3 mt-3">
-              <a
-                href="/login"
-                className="block bg-blue-600 text-white px-4 py-2 rounded-md text-center hover:bg-blue-700 transition duration-200"
-              >
-                Login / Register
-              </a>
+              {user ? (
+                <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-3">
+                  {/* Profile Image */}
+                  <img
+                    src={user.photoURL || "https://i.ibb.co/GvFrhKg6/user.png"}
+                    alt="profile"
+                    className="w-14 h-14 rounded-full border flex-shrink-0"
+                  />
+
+                  {/* User Name */}
+                  <span className="font-medium text-gray-700 text-center">
+                    {user.displayName || "User"}
+                  </span>
+
+                  {/* Logout Button */}
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsMenuOpen(false); // close menu on logout
+                    }}
+                    className="w-full sm:w-auto bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2 px-6 rounded-md font-bold shadow-lg hover:from-yellow-600 hover:to-orange-600 transition"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="w-full block text-center bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2 px-6 rounded-md font-bold shadow-lg hover:from-yellow-600 hover:to-orange-600 transition"
+                >
+                  Login
+                </Link>
+              )}
             </div>
           </div>
         </div>
