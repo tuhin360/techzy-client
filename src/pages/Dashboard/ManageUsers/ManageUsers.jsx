@@ -13,60 +13,59 @@ const ManageUsers = () => {
     },
   });
 
-const handleMakeAdmin = async (user) => {
-  try {
-    const res = await axiosSecure.patch(`/users/admin/${user._id}`);
+  const handleMakeAdmin = async (user) => {
+    try {
+      const res = await axiosSecure.patch(`/users/admin/${user._id}`);
 
-    if (res.data.success) {
-      refetch();  
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: `${user.name} is now an admin`,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    } else {
-      Swal.fire("Failed!", "Could not make user admin.", "error");
+      if (res.data.success) {
+        refetch();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: `${user.name} is now an admin`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } else {
+        Swal.fire("Failed!", "Could not make user admin.", "error");
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire("Error!", "Something went wrong.", "error");
     }
-  } catch (error) {
-    console.error(error);
-    Swal.fire("Error!", "Something went wrong.", "error");
-  }
-};
+  };
 
+  const handleDeleteUser = async (user) => {
+    try {
+      const res = await axiosSecure.delete(`/users/${user._id}`);
 
-const handleDeleteUser = async (user) => {
-  try {
-    const res = await axiosSecure.delete(`/users/${user._id}`);
-
-    // Use dynamic messages based on backend response
-    if (res.data.success) {
-      refetch(); // refresh users list instantly
-      Swal.fire({
-        icon: "success",
-        title: `Deleted!`,
-        text: `${user.name || "User"} has been deleted successfully.`,
-        timer: 1500,
-        showConfirmButton: false,
-      });
-    } else {
+      // Use dynamic messages based on backend response
+      if (res.data.success) {
+        refetch(); // refresh users list instantly
+        Swal.fire({
+          icon: "success",
+          title: `Deleted!`,
+          text: `${user.name || "User"} has been deleted successfully.`,
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Failed!",
+          text:
+            res.data.message || `Could not delete ${user.name || "this user"}.`,
+        });
+      }
+    } catch (err) {
+      console.error(err);
       Swal.fire({
         icon: "error",
-        title: "Failed!",
-        text: res.data.message || `Could not delete ${user.name || "this user"}.`,
+        title: "Error!",
+        text: `Something went wrong while deleting ${user.name || "the user"}.`,
       });
     }
-  } catch (err) {
-    console.error(err);
-    Swal.fire({
-      icon: "error",
-      title: "Error!",
-      text: `Something went wrong while deleting ${user.name || "the user"}.`,
-    });
-  }
-};
-
+  };
 
   const getRoleBadge = (role) => {
     if (role === "admin") {
