@@ -12,11 +12,14 @@ import { Link } from "react-router-dom"; // ✅ Link import
 import { useContext } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { ChevronRight } from "lucide-react";
+import useCart from "../../../hooks/useCart";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(9);
+  // const [cartCount, setCartCount] = useState(9);
   const [isOpen, setIsOpen] = useState(false);
+
+  const [cart] = useCart();
 
   const toggleCategories = () => {
     setIsOpen(!isOpen);
@@ -164,9 +167,9 @@ const Navbar = () => {
             <Link to="/">
               <button className="relative p-2 text-gray-700 hover:text-blue-600 transition duration-200 cursor-pointer">
                 <ShoppingCart size={20} />
-                {cartCount > 0 && (
+                {cart.length > 0 && (
                   <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {cartCount}
+                    {cart.length}
                   </span>
                 )}
               </button>
