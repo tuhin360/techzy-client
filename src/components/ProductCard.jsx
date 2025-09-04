@@ -4,20 +4,20 @@ import useAuth from "../hooks/useAuth";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import useCart from "../hooks/useCart";
 
 export const ProductCard = ({ product }) => {
   console.log({ product });
   const [wishlist, setWishlist] = useState([]);
-  const { title, image, price, rating, discount, _id } = product;
+  const { title, image, price, _id } = product;
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const axiosSecure = useAxiosSecure();
+  const [, refetch] = useCart();
 
-  const handleAddToCart = (product) => {
-    // console.log("Product added to cart:", product, user.email);
+  const handleAddToCart = () => {
     if (user && user.email) {
-      // TODO: send cart item to database
       console.log(user.email, product);
       const cartItem = {
         menuId: _id,
@@ -32,6 +32,7 @@ export const ProductCard = ({ product }) => {
         if (res.data.insertedId) {
           toast.success("Item added to cart");
         }
+        refetch();
       });
     } else {
       toast.error("Please login first");
@@ -136,7 +137,7 @@ export const ProductCard = ({ product }) => {
 
         {/* Cart Button */}
         <button
-          onClick={() => handleAddToCart(product)}
+          onClick={handleAddToCart}
           className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 rounded-lg font-medium text-sm shadow hover:from-yellow-600 hover:to-orange-600 transition-colors duration-300 flex items-center justify-center gap-2 cursor-pointer"
         >
           <ShoppingCart className="w-4 h-4" /> Add to Cart
