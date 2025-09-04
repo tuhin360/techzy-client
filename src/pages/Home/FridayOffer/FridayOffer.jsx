@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { useProducts } from "../../../hooks/useProducts";
 import { FridayOfferCardSkeleton } from "../../../components/FridayOfferCardSkeleton";
+import { Link } from "react-router-dom";
 
 const gradients = [
   "from-pink-400 to-purple-500",
@@ -53,13 +54,22 @@ const FridayOffer = () => {
                       {offer.category}
                     </span>
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2">{offer.title}</h3>
-                  <span className="text-lg font-bold text-white">{formatPrice(offer.price)}</span>
+                  <h3 className="text-lg font-bold text-white mb-2">
+                    {offer.title}
+                  </h3>
+                  <span className="text-lg font-bold text-white">
+                    {formatPrice(offer.price)}
+                  </span>
                 </div>
-                <button className="flex items-center space-x-1 bg-white hover:bg-gray-100 py-1.5 px-4 rounded-full font-semibold text-xs w-fit transition-colors duration-200">
-                  <span>Shop Now</span>
-                  <ArrowRight className="w-3 h-3" />
-                </button>
+                <Link
+                  to="/shop"
+                   
+                >
+                  <button className="flex items-center space-x-1 bg-white hover:bg-gray-100 py-1.5 px-4 rounded-full font-semibold text-xs w-fit transition-colors duration-200 cursor-pointer">
+                    <span>Shop Now</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </button>
+                </Link>
 
                 {offer.image && (
                   <img

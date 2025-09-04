@@ -1,14 +1,15 @@
 import { useState } from "react";
 import {
-  Store,
-  Info,
-  Mail,
-  Home,
-  Menu,
-  X,
-  ShoppingBag,
-  User,
-} from "lucide-react";
+  FaStore,
+  FaInfoCircle,
+  FaEnvelope,
+  FaHome,
+  FaShoppingBag,
+  FaHeart,
+  FaUser,
+  FaListAlt,
+} from "react-icons/fa";
+import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { NavLink, Outlet } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useCart from "../hooks/useCart";
@@ -21,6 +22,9 @@ const Dashboard = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  // TODO: get admin value from the database
+  const isAdmin = true;
 
   return (
     <div className="flex min-h-screen bg-gray-50 font-sans">
@@ -35,106 +39,132 @@ const Dashboard = () => {
 
       {/* Main Dashboard Container */}
       <div className="flex flex-1 max-w-7xl mx-auto w-full">
-        {/* Sidebar (Mobile/Tablet: Toggleable, Desktop: Sticky) */}
+        {/* Sidebar */}
         <div
-          className={`fixed top-0 left-0 z-40 w-64 sm:w-72 h-full bg-gradient-to-b from-orange-600 to-orange-800 shadow-2xl transform transition-transform duration-300 ease-in-out ${
-            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          className={`fixed top-0 right-0 z-40 w-64 sm:w-72 h-full bg-gradient-to-b from-orange-600 to-orange-800 shadow-2xl transform transition-transform duration-300 ease-in-out ${
+            isSidebarOpen ? "translate-x-0" : "translate-x-full"
           } lg:sticky lg:top-0 lg:translate-x-0 lg:w-72 lg:min-h-screen lg:bg-opacity-90 lg:backdrop-blur-md`}
         >
           <div className="p-6">
             {/* Logo */}
             <div className="mb-8 flex items-center space-x-2">
               <h1 className="text-3xl font-extrabold text-white tracking-tight transition-transform duration-200 hover:scale-105">
-                Tech<span className="text-yellow-300">zy</span>
+                Tech<span className="text-yellow-300">Zy</span>
               </h1>
             </div>
 
-            {/* Navigation */}
+            {/* Dashboard Navigation */}
             <nav className="space-y-2">
-              <NavLink
-                to="/dashboard/cart"
-                className={({ isActive }) =>
-                  `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
-                    isActive ? "bg-black text-orange-600 shadow-md" : ""
-                  }`
-                }
-                onClick={() => setIsSidebarOpen(false)}
-              >
-                <ShoppingBag className="w-5 h-5" />
-                <span>My Cart ({cart.length})</span>
-              </NavLink>
-              <NavLink
-                to="/dashboard/orders"
-                className={({ isActive }) =>
-                  `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
-                    isActive ? "bg-white text-orange-600 shadow-md" : ""
-                  }`
-                }
-                onClick={() => setIsSidebarOpen(false)}
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                  />
-                </svg>
-                <span>My Orders</span>
-              </NavLink>
-              <NavLink
-                to="/dashboard/wishlist"
-                className={({ isActive }) =>
-                  `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
-                    isActive ? "bg-white text-orange-600 shadow-md" : ""
-                  }`
-                }
-                onClick={() => setIsSidebarOpen(false)}
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                  />
-                </svg>
-                <span>Wishlist</span>
-              </NavLink>
-              <NavLink
-                to="/dashboard/profile"
-                className={({ isActive }) =>
-                  `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
-                    isActive ? "bg-white text-orange-600 shadow-md" : ""
-                  }`
-                }
-                onClick={() => setIsSidebarOpen(false)}
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-                <span>Profile</span>
-              </NavLink>
+              {isAdmin ? (
+                <>
+                  {/* Admin Menu */}
+                  <NavLink
+                    to="/dashboard/cart"
+                    className={({ isActive }) =>
+                      `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
+                        isActive ? "bg-black text-orange-600 shadow-md" : ""
+                      }`
+                    }
+                    onClick={() => setIsSidebarOpen(false)}
+                  >
+                    <FaShoppingBag className="w-5 h-5" />
+                    <span>My Cart ({cart.length})</span>
+                  </NavLink>
+                  <NavLink
+                    to="/dashboard/manage-users"
+                    className={({ isActive }) =>
+                      `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
+                        isActive ? "bg-black text-orange-600 shadow-md" : ""
+                      }`
+                    }
+                    onClick={() => setIsSidebarOpen(false)}
+                  >
+                    <FaUser className="w-5 h-5" />
+                    <span>Manage Users</span>
+                  </NavLink>
+
+                  <NavLink
+                    to="/dashboard/manage-products"
+                    className={({ isActive }) =>
+                      `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
+                        isActive ? "bg-black text-orange-600 shadow-md" : ""
+                      }`
+                    }
+                    onClick={() => setIsSidebarOpen(false)}
+                  >
+                    <FaShoppingBag className="w-5 h-5" />
+                    <span>Manage Products</span>
+                  </NavLink>
+
+                  <NavLink
+                    to="/dashboard/manage-orders"
+                    className={({ isActive }) =>
+                      `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
+                        isActive ? "bg-black text-orange-600 shadow-md" : ""
+                      }`
+                    }
+                    onClick={() => setIsSidebarOpen(false)}
+                  >
+                    <FaListAlt className="w-5 h-5" />
+                    <span>Manage Orders</span>
+                  </NavLink>
+                </>
+              ) : (
+                <>
+                  {/* Normal User Menu */}
+                  <NavLink
+                    to="/dashboard/cart"
+                    className={({ isActive }) =>
+                      `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
+                        isActive ? "bg-black text-orange-600 shadow-md" : ""
+                      }`
+                    }
+                    onClick={() => setIsSidebarOpen(false)}
+                  >
+                    <FaShoppingBag className="w-5 h-5" />
+                    <span>My Cart ({cart.length})</span>
+                  </NavLink>
+
+                  <NavLink
+                    to="/dashboard/orders"
+                    className={({ isActive }) =>
+                      `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
+                        isActive ? "bg-white text-orange-600 shadow-md" : ""
+                      }`
+                    }
+                    onClick={() => setIsSidebarOpen(false)}
+                  >
+                    <FaListAlt className="w-5 h-5" />
+                    <span>My Orders</span>
+                  </NavLink>
+
+                  <NavLink
+                    to="/dashboard/wishlist"
+                    className={({ isActive }) =>
+                      `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
+                        isActive ? "bg-white text-orange-600 shadow-md" : ""
+                      }`
+                    }
+                    onClick={() => setIsSidebarOpen(false)}
+                  >
+                    <FaHeart className="w-5 h-5" />
+                    <span>Wishlist</span>
+                  </NavLink>
+
+                  <NavLink
+                    to="/dashboard/profile"
+                    className={({ isActive }) =>
+                      `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
+                        isActive ? "bg-white text-orange-600 shadow-md" : ""
+                      }`
+                    }
+                    onClick={() => setIsSidebarOpen(false)}
+                  >
+                    <FaUser className="w-5 h-5" />
+                    <span>Profile</span>
+                  </NavLink>
+                </>
+              )}
             </nav>
 
             {/* Divider */}
@@ -147,7 +177,7 @@ const Dashboard = () => {
                 className="flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-orange-100 hover:bg-white/20 hover:scale-105 transition-all duration-200"
                 onClick={() => setIsSidebarOpen(false)}
               >
-                <Home className="w-5 h-5" />
+                <FaHome className="w-5 h-5" />
                 <span>Home</span>
               </NavLink>
               <NavLink
@@ -155,7 +185,7 @@ const Dashboard = () => {
                 className="flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-orange-100 hover:bg-white/20 hover:scale-105 transition-all duration-200"
                 onClick={() => setIsSidebarOpen(false)}
               >
-                <Store className="w-5 h-5" />
+                <FaStore className="w-5 h-5" />
                 <span>Shop</span>
               </NavLink>
               <NavLink
@@ -163,7 +193,7 @@ const Dashboard = () => {
                 className="flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-orange-100 hover:bg-white/20 hover:scale-105 transition-all duration-200"
                 onClick={() => setIsSidebarOpen(false)}
               >
-                <Info className="w-5 h-5" />
+                <FaInfoCircle className="w-5 h-5" />
                 <span>About</span>
               </NavLink>
               <NavLink
@@ -171,7 +201,7 @@ const Dashboard = () => {
                 className="flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-orange-100 hover:bg-white/20 hover:scale-105 transition-all duration-200"
                 onClick={() => setIsSidebarOpen(false)}
               >
-                <Mail className="w-5 h-5" />
+                <FaEnvelope className="w-5 h-5" />
                 <span>Contact</span>
               </NavLink>
             </nav>
@@ -191,8 +221,7 @@ const Dashboard = () => {
                 className="w-6 h-6 rounded-full"
                 src={user?.photoURL}
                 alt=""
-              ></img>
-              {/* <User className="w-6 h-6 text-orange-600" /> */}
+              />
             </div>
           </header>
           <div className="p-4 sm:p-6 lg:p-8">
@@ -211,7 +240,7 @@ const Dashboard = () => {
             }`
           }
         >
-          <Home className="w-6 h-6" />
+          <FaHome className="w-6 h-6" />
           <span className="text-xs">Home</span>
         </NavLink>
         <NavLink
@@ -222,7 +251,7 @@ const Dashboard = () => {
             }`
           }
         >
-          <Store className="w-6 h-6" />
+          <FaStore className="w-6 h-6" />
           <span className="text-xs">Shop</span>
         </NavLink>
         <NavLink
@@ -233,7 +262,7 @@ const Dashboard = () => {
             }`
           }
         >
-          <ShoppingBag className="w-6 h-6" />
+          <FaShoppingBag className="w-6 h-6" />
           <span className="text-xs">Cart</span>
         </NavLink>
         <button
@@ -242,9 +271,9 @@ const Dashboard = () => {
           aria-label={isSidebarOpen ? "Close menu" : "Open menu"}
         >
           {isSidebarOpen ? (
-            <X className="w-6 h-6" />
+            <AiOutlineClose className="w-6 h-6" />
           ) : (
-            <Menu className="w-6 h-6" />
+            <AiOutlineMenu className="w-6 h-6" />
           )}
           <span className="text-xs">Menu</span>
         </button>

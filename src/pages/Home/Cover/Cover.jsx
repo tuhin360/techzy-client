@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import alexa from "../../../assets/products/cover/alexa.png";
 import headphone from "../../../assets/products/cover/headphone.png";
+import { Link } from "react-router-dom";
 
 const Cover = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -165,19 +166,23 @@ const Cover = () => {
 
             {/* Premium CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <button className="group relative bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-8 md:px-10 py-4 md:py-5 rounded-2xl font-black text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="relative flex items-center justify-center space-x-3">
-                  <ShoppingBag className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
-                  <span>Shop Now</span>
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                </div>
-              </button>
+              <Link to="/shop">
+                <button className="group relative bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-8 md:px-10 py-4 md:py-5 rounded-2xl font-black text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 overflow-hidden cursor-pointer">
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative flex items-center justify-center space-x-3">
+                    <ShoppingBag className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+                    <span>Shop Now</span>
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </div>
+                </button>
+              </Link>
 
-              <button className="group border-3 border-white/80 text-white px-8 md:px-10 py-4 md:py-5 rounded-2xl font-bold text-lg backdrop-blur-sm bg-white/10 hover:bg-white hover:text-gray-900 transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-3">
-                <Gift className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
-                <span>All Deals</span>
-              </button>
+              <Link to="/shop">
+                <button className="group border-3 border-white/80 text-white px-8 md:px-10 py-4 md:py-5 rounded-2xl font-bold text-lg backdrop-blur-sm bg-white/10 hover:bg-white hover:text-gray-900 transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-3">
+                  <Gift className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+                  <span>All Deals</span>
+                </button>
+              </Link>
             </div>
 
             {/* Luxury Trust Indicators */}
