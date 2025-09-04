@@ -164,7 +164,7 @@ const Navbar = () => {
             </button>
 
             {/* Shopping cart */}
-            <Link to="/">
+            <Link to="/dashboard/cart">
               <button className="relative p-2 text-gray-700 hover:text-blue-600 transition duration-200 cursor-pointer">
                 <ShoppingCart size={20} />
                 {cart.length > 0 && (
