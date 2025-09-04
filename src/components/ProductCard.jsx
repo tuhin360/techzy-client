@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import useAuth from "../hooks/useAuth";
-import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import useCart from "../hooks/useCart";
+import Swal from "sweetalert2";
 
 export const ProductCard = ({ product }) => {
-  console.log({ product });
+  // console.log({ product });
   const [wishlist, setWishlist] = useState([]);
   const { title, image, price, _id } = product;
   const { user } = useAuth();
@@ -18,7 +18,6 @@ export const ProductCard = ({ product }) => {
 
   const handleAddToCart = () => {
     if (user && user.email) {
-      console.log(user.email, product);
       const cartItem = {
         menuId: _id,
         email: user.email,
@@ -26,17 +25,27 @@ export const ProductCard = ({ product }) => {
         image,
         price,
       };
-      axiosSecure.post("/carts", cartItem).then((res) => {
-        console.log(res.data);
 
+      axiosSecure.post("/carts", cartItem).then((res) => {
         if (res.data.insertedId) {
-          toast.success("Item added to cart");
+          Swal.fire({
+            title: "Added to Cart!",
+            text: `${title} has been added to your cart.`,
+            icon: "success",
+            confirmButtonColor: "#f97316",
+          });
+          refetch();
         }
-        refetch();
       });
     } else {
-      toast.error("Please login first");
-      navigate("/login", { state: { from: location } });
+      Swal.fire({
+        title: "Not Logged In",
+        text: "Please login first to add items to your cart.",
+        icon: "warning",
+        confirmButtonColor: "#f97316",
+      }).then(() => {
+        navigate("/login", { state: { from: location } });
+      });
     }
   };
 

@@ -14,35 +14,36 @@ import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
 import { updateProfile } from "firebase/auth";
-import toast from "react-hot-toast";
+import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const SignUp = () => {
+  const axiosPublic = useAxiosPublic();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
-
   const from = location.state?.from?.pathname || "/";
 
+  // React Hook Form
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
   const { createUser } = useContext(AuthContext);
 
+  // Form submit handler
   const onSubmit = async (data) => {
-    const image = data.photo[0]; // file input থেকে প্রথম image
-
-    // formData বানাই image পাঠানোর জন্য
+    const image = data.photo[0]; // get first file from input
     const formData = new FormData();
     formData.append("image", image);
 
     const url = `https://api.imgbb.com/1/upload?key=bc1aa9cda145ca4353091bcbb08066ce`;
 
     try {
-      // imgbb এ upload
+      // Upload image to imgbb
       const res = await fetch(url, {
         method: "POST",
         body: formData,
@@ -50,35 +51,46 @@ const SignUp = () => {
 
       const imgData = await res.json();
 
-      if (imgData.success) {
-        const photoURL = imgData.data.display_url; // hosted image URL
-
-        // এখন createUser এর সাথে এই photoURL পাঠাও
-        createUser(data.email, data.password)
-          .then((result) => {
-            const loggedUser = result.user;
-            console.log("User created:", loggedUser);
-
-            // Firebase হলে profile update করতে পারো
-            updateProfile(loggedUser, {
-              displayName: data.name,
-              photoURL: photoURL,
-            }).then(() => {
-              toast.success("Account created successfully!");
-            });
-          })
-          .catch((error) => {
-            console.error(error.message);
-            toast.error(error.message);
-          });
-      } else {
-        toast.error("Image upload failed!");
+      if (!imgData.success) {
+        Swal.fire("Error", "Image upload failed!", "error");
+        return;
       }
 
-      navigate(from, { replace: true });
+      const photoURL = imgData.data.display_url;
+
+      // Create Firebase user
+      createUser(data.email, data.password)
+        .then((result) => {
+          const loggedUser = result.user;
+
+          // Update Firebase profile
+          updateProfile(loggedUser, {
+            displayName: data.name,
+            photoURL: photoURL,
+          }).then(() => {
+            // Add user to database
+            const userInfo = { name: data.name, email: data.email };
+            axiosPublic.post("/users", userInfo).then((res) => {
+              if (res.data.insertedId) {
+                reset(); // clear form
+                Swal.fire(
+                  "Success",
+                  "Account created successfully!",
+                  "success"
+                ).then(() => {
+                  navigate(from, { replace: true });
+                });
+              }
+            });
+          });
+        })
+        .catch((error) => {
+          console.error(error.message);
+          Swal.fire("Error", error.message, "error");
+        });
     } catch (error) {
       console.error("Image upload error:", error);
-      toast.error("Something went wrong!");
+      Swal.fire("Error", "Something went wrong!", "error");
     }
   };
 
@@ -91,14 +103,12 @@ const SignUp = () => {
       <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-amber-50 to-orange-50 flex items-center justify-center p-4">
         <div className="w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden">
           <div className="flex flex-col lg:flex-row min-h-[600px]">
-            {/* Left Side */}
+            {/* Left Side Illustration */}
             <div className="lg:w-1/2 bg-gradient-to-br from-yellow-400 via-amber-400 to-orange-400 p-8 lg:p-12 flex items-center justify-center relative overflow-hidden">
-              {/* Decorative Elements */}
               <div className="absolute top-0 left-0 w-32 h-32 bg-white/10 rounded-full -translate-x-16 -translate-y-16"></div>
               <div className="absolute bottom-0 right-0 w-40 h-40 bg-white/10 rounded-full translate-x-20 translate-y-20"></div>
               <div className="absolute top-1/2 left-0 w-24 h-24 bg-white/10 rounded-full -translate-x-12"></div>
 
-              {/* Illustration */}
               <div className="relative z-10 text-center">
                 <div className="mb-8">
                   <div className="w-64 h-64 mx-auto relative">
@@ -132,14 +142,13 @@ const SignUp = () => {
               </div>
             </div>
 
-            {/* Right Side - Form */}
+            {/* Right Side Form */}
             <div className="lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
               <div className="w-full max-w-md mx-auto">
                 <h1 className="text-3xl font-bold text-gray-800 mb-8">
                   Sign Up
                 </h1>
 
-                {/* Form Start */}
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                   {/* Name */}
                   <div>
@@ -214,30 +223,15 @@ const SignUp = () => {
                         )}
                       </button>
                     </div>
-                    {errors.password?.type === "required" && (
+                    {errors.password && (
                       <span className="text-red-500 mt-1 ml-2 text-sm">
-                        Password is required
-                      </span>
-                    )}
-                    {errors.password?.type === "minLength" && (
-                      <span className="text-red-500 mt-1 ml-2 text-sm">
-                        Password must be at least 6 characters
-                      </span>
-                    )}
-                    {errors.password?.type === "maxLength" && (
-                      <span className="text-red-500 mt-1 ml-2 text-sm">
-                        Password must be less than 20 characters
-                      </span>
-                    )}
-                    {errors.password?.type === "pattern" && (
-                      <span className="text-red-500 mt-1 ml-2 text-sm">
-                        Password must contain uppercase, lowercase, number, and
-                        special character
+                        Password must be 6-20 characters, include uppercase,
+                        lowercase, number & special char
                       </span>
                     )}
                   </div>
 
-                  {/* Photo Upload */}
+                  {/* Profile Photo */}
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Profile Photo

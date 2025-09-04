@@ -1,8 +1,8 @@
- 
 import useCart from "../../../hooks/useCart";
 import { Trash2, Plus, Minus, ShoppingBag, CreditCard } from "lucide-react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
   const [cart, refetch] = useCart();
@@ -27,35 +27,37 @@ const Cart = () => {
     console.log("Decrease quantity for item:", id);
   };
 
-
-const handleRemoveItem = (id) => {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "Do you want to remove this item from your cart?",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#f43f5e",
-    cancelButtonColor: "#9ca3af",
-    confirmButtonText: "Yes, remove it!",
-    cancelButtonText: "Cancel",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        const res = await axiosSecure.delete(`/carts/${id}`);
-        if (res.data.success) {
-          refetch(); // refresh cart instantly
-          Swal.fire("Removed!", "Item removed successfully.", "success");
-        } else {
-          Swal.fire("Failed!", res.data.message || "Could not remove the item.", "error");
+  const handleRemoveItem = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to remove this item from your cart?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#f43f5e",
+      cancelButtonColor: "#9ca3af",
+      confirmButtonText: "Yes, remove it!",
+      cancelButtonText: "Cancel",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await axiosSecure.delete(`/carts/${id}`);
+          if (res.data.success) {
+            refetch(); // refresh cart instantly
+            Swal.fire("Removed!", "Item removed successfully.", "success");
+          } else {
+            Swal.fire(
+              "Failed!",
+              res.data.message || "Could not remove the item.",
+              "error"
+            );
+          }
+        } catch (err) {
+          console.log(err);
+          Swal.fire("Error!", "Something went wrong.", "error");
         }
-      } catch (err) {
-        console.log(err);
-        Swal.fire("Error!", "Something went wrong.", "error");
       }
-    }
-  });
-};
-
+    });
+  };
 
   const handlePayment = () => {
     // Implement payment logic
@@ -83,9 +85,11 @@ const handleRemoveItem = (id) => {
           <p className="text-gray-600 mb-6">
             Add some products to get started!
           </p>
-          <button className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-            Continue Shopping
-          </button>
+          <Link to="/shop">
+            <button className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer">
+              Continue Shopping
+            </button>
+          </Link>
         </div>
       ) : (
         <>
@@ -198,10 +202,10 @@ const handleRemoveItem = (id) => {
                       <td className="px-6 py-4 text-center">
                         <button
                           onClick={() => handleRemoveItem(item._id)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors cursor-pointer"
                           title="Remove item"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-6 h-6" />
                         </button>
                       </td>
                     </tr>
