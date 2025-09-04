@@ -18,7 +18,7 @@ const handleMakeAdmin = async (user) => {
     const res = await axiosSecure.patch(`/users/admin/${user._id}`);
 
     if (res.data.success) {
-      refetch(); // ✅ fetch latest users from backend
+      refetch();  
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -36,37 +36,37 @@ const handleMakeAdmin = async (user) => {
 };
 
 
-  const handleDeleteUser = (user) => {
+const handleDeleteUser = async (user) => {
+  try {
+    const res = await axiosSecure.delete(`/users/${user._id}`);
+
+    // Use dynamic messages based on backend response
+    if (res.data.success) {
+      refetch(); // refresh users list instantly
+      Swal.fire({
+        icon: "success",
+        title: `Deleted!`,
+        text: `${user.name || "User"} has been deleted successfully.`,
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Failed!",
+        text: res.data.message || `Could not delete ${user.name || "this user"}.`,
+      });
+    }
+  } catch (err) {
+    console.error(err);
     Swal.fire({
-      title: "Are you sure?",
-      text: " Do you want to delete this user?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#f43f5e",
-      cancelButtonColor: "#9ca3af",
-      confirmButtonText: "Yes, remove it!",
-      cancelButtonText: "Cancel",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const res = await axiosSecure.delete(`/users/${user._id}`);
-          if (res.data.success) {
-            refetch(); // refresh cart instantly
-            Swal.fire("Deleted!", "User deleted successfully.", "success");
-          } else {
-            Swal.fire(
-              "Failed!",
-              res.data.message || "Could not delete the user.",
-              "error"
-            );
-          }
-        } catch (err) {
-          console.log(err);
-          Swal.fire("Error!", "Something went wrong.", "error");
-        }
-      }
+      icon: "error",
+      title: "Error!",
+      text: `Something went wrong while deleting ${user.name || "the user"}.`,
     });
-  };
+  }
+};
+
 
   const getRoleBadge = (role) => {
     if (role === "admin") {
