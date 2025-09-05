@@ -10,9 +10,10 @@ import {
   FaListAlt,
 } from "react-icons/fa";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
-import { NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useCart from "../hooks/useCart";
+import useAdmin from "../hooks/useAdmin";
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -24,7 +25,7 @@ const Dashboard = () => {
   };
 
   // TODO: get admin value from the database
-  const isAdmin = true;
+  const [isAdmin] = useAdmin();
 
   return (
     <div className="flex min-h-screen bg-gray-50 font-sans">
@@ -48,9 +49,11 @@ const Dashboard = () => {
           <div className="p-6">
             {/* Logo */}
             <div className="mb-8 flex items-center space-x-2">
-              <h1 className="text-3xl font-extrabold text-white tracking-tight transition-transform duration-200 hover:scale-105">
-                Tech<span className="text-yellow-300">Zy</span>
-              </h1>
+              <Link to="/">
+                <h1 className="text-3xl font-extrabold text-white tracking-tight transition-transform duration-200 hover:scale-105">
+                  Tech<span className="text-yellow-300">Zy</span>
+                </h1>
+              </Link>
             </div>
 
             {/* Dashboard Navigation */}

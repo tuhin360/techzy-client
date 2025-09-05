@@ -252,7 +252,7 @@ const ManageUsers = () => {
                 )}
                 <button
                   onClick={() => handleDeleteUser(user)}
-                  className="flex items-center space-x-1 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  className="flex items-center space-x-1 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors  cursor-pointer"
                 >
                   <Trash2 className="w-4 h-4" />
                   <span>Delete</span>
