@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { ArrowRight } from "lucide-react"; 
-import { useProducts } from "../../../hooks/useProducts";
+import { ArrowRight } from "lucide-react";
+import useProducts from "../../../hooks/useProducts";
 import { ProductCard } from "../../../components/ProductCard";
 import { SkeletonCard } from "../../../components/SkeletonCard";
 
@@ -43,14 +43,16 @@ const NewProducts = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
           {loading
             ? Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
-            : newProducts.slice(0, 6).map((product) => (
-                <ProductCard
-                  key={product._id}
-                  product={product}
-                  wishlist={wishlist}
-                  toggleWishlist={toggleWishlist}
-                />
-              ))}
+            : newProducts
+                .slice(0, 6)
+                .map((product) => (
+                  <ProductCard
+                    key={product._id}
+                    product={product}
+                    wishlist={wishlist}
+                    toggleWishlist={toggleWishlist}
+                  />
+                ))}
         </div>
 
         <div className="text-center mt-16">
@@ -65,5 +67,3 @@ const NewProducts = () => {
 };
 
 export default NewProducts;
-
- 

@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { ProductCard } from "../../components/ProductCard";
 import { SkeletonCard } from "../../components/SkeletonCard";
-import { useProducts } from "../../hooks/useProducts";
+import  useProducts  from "../../hooks/useProducts";
 import { ArrowRight } from "lucide-react";
 
 export const Shop = () => {

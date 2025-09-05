@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
-import { useProducts } from "../../../hooks/useProducts";
+import useProducts from "../../../hooks/useProducts";
+
 import { BestSellProductCard } from "../../../components/BestSellProductCard";
 import { BestSellerCardSkeleton } from "../../../components/BestSellerCardSkeleton";
 

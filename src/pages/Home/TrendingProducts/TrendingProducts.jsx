@@ -5,7 +5,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { SkeletonCard } from "../../../components/SkeletonCard";
-import { useProducts } from "../../../hooks/useProducts";
+import  useProducts  from "../../../hooks/useProducts";
 import { ArrowRight } from "lucide-react";
 import { ProductCard } from "../../../components/ProductCard";
 import "./TrendingProducts.css"; //
