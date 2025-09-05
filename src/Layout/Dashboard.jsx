@@ -14,6 +14,7 @@ import { Link, NavLink, Outlet } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useCart from "../hooks/useCart";
 import useAdmin from "../hooks/useAdmin";
+import DashboardSkeleton from "../components/DashboardSkeleton";
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -24,8 +25,12 @@ const Dashboard = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  // TODO: get admin value from the database
-  const [isAdmin] = useAdmin();
+  // Check if the user is an admin using the useAdmin hook
+  const [isAdmin, isAdminLoading] = useAdmin();
+
+  if (isAdminLoading) {
+    return <DashboardSkeleton />;
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-50 font-sans">
@@ -61,7 +66,7 @@ const Dashboard = () => {
               {isAdmin ? (
                 <>
                   {/* Admin Menu */}
-                  <NavLink
+                  {/* <NavLink
                     to="/dashboard/cart"
                     className={({ isActive }) =>
                       `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
@@ -72,7 +77,7 @@ const Dashboard = () => {
                   >
                     <FaShoppingBag className="w-5 h-5" />
                     <span>My Cart ({cart.length})</span>
-                  </NavLink>
+                  </NavLink> */}
                   <NavLink
                     to="/dashboard/manage-users"
                     className={({ isActive }) =>
@@ -212,9 +217,9 @@ const Dashboard = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 w-full">
+        <div className="flex-1 w-full h-screen overflow-auto">
           {/* Header */}
-          <header className="bg-white shadow-sm p-4 flex items-center justify-between">
+          <header className="bg-white shadow-sm p-4 flex items-center justify-between sticky top-0 z-10">
             <h2 className="text-xl font-semibold text-gray-800">Dashboard</h2>
             <div className="flex items-center space-x-3">
               <span className="text-sm font-medium text-gray-600 hidden sm:block">
@@ -227,6 +232,7 @@ const Dashboard = () => {
               />
             </div>
           </header>
+
           <div className="p-4 sm:p-6 lg:p-8">
             <Outlet />
           </div>

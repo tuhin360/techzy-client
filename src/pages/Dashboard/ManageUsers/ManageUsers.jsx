@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Users, UserCheck, Shield, Trash2, Edit, Crown } from "lucide-react";
 import Swal from "sweetalert2";
+// import { useNavigate } from "react-router-dom";
 
 const ManageUsers = () => {
   const axiosSecure = useAxiosSecure();
@@ -13,49 +14,64 @@ const ManageUsers = () => {
     },
   });
 
-  const handleMakeAdmin = async (user) => {
-    try {
-      const res = await axiosSecure.patch(`/users/admin/${user._id}`);
-
-      if (res.data.success) {
-        refetch();
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: `${user.name} is now an admin`,
-          showConfirmButton: false,
-          timer: 1500,
+  const handleToggleRole = (user) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: `Do you want to toggle role for ${user.email}?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, toggle it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.patch(`/users/role/${user._id}`).then((res) => {
+          if (res.data.success) {
+            refetch();
+            Swal.fire(
+              "Updated!",
+              `${user.email} is now ${res.data.newRole}`,
+              "success"
+            );
+          }
         });
-      } else {
-        Swal.fire("Failed!", "Could not make user admin.", "error");
       }
-    } catch (error) {
-      console.error(error);
-      Swal.fire("Error!", "Something went wrong.", "error");
-    }
+    });
   };
 
   const handleDeleteUser = async (user) => {
     try {
-      const res = await axiosSecure.delete(`/users/${user._id}`);
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: `Do you really want to delete ${user.name || user.email}?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      });
 
-      // Use dynamic messages based on backend response
-      if (res.data.success) {
-        refetch(); // refresh users list instantly
-        Swal.fire({
-          icon: "success",
-          title: `Deleted!`,
-          text: `${user.name || "User"} has been deleted successfully.`,
-          timer: 1500,
-          showConfirmButton: false,
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Failed!",
-          text:
-            res.data.message || `Could not delete ${user.name || "this user"}.`,
-        });
+      if (result.isConfirmed) {
+        const res = await axiosSecure.delete(`/users/${user._id}`);
+
+        if (res.data.success) {
+          refetch(); // refresh users list instantly
+          Swal.fire({
+            icon: "success",
+            title: "Deleted!",
+            text: `${user.name || "User"} has been deleted successfully.`,
+            timer: 1500,
+            showConfirmButton: false,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Failed!",
+            text:
+              res.data.message ||
+              `Could not delete ${user.name || "this user"}.`,
+          });
+        }
       }
     } catch (err) {
       console.error(err);
@@ -185,18 +201,15 @@ const ManageUsers = () => {
                   <td className="px-6 py-4">{getRoleBadge(user.role)}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-center space-x-2">
-                      {user.role !== "admin" && (
-                        <button
-                          onClick={() => handleMakeAdmin(user)}
-                          className="p-2 text-orange-600 hover:bg-orange-50 rounded-full transition-colors"
-                          title="Make Admin"
-                        >
-                          <Shield className="w-4 h-4" />
-                        </button>
-                      )}
+                      <button
+                        onClick={() => handleToggleRole(user)}
+                        className="p-2 text-orange-600 hover:bg-orange-50 rounded-full transition-colors cursor-pointer"
+                      >
+                        <Shield className="w-6 h-6" />
+                      </button>
                       <button
                         onClick={() => handleDeleteUser(user)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors cursor-pointer"
                         title="Delete User"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -212,7 +225,11 @@ const ManageUsers = () => {
         {/* Mobile Cards */}
         <div className="md:hidden p-4 space-y-4">
           {users.map((user, index) => (
-            <div key={user._id} className="bg-gray-50 rounded-xl p-4 space-y-3">
+            <div
+              key={user._id}
+              className="bg-white rounded-xl shadow-sm p-4 space-y-3 border border-gray-100"
+            >
+              {/* Top section: serial & role */}
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-gray-500">
                   #{String(index + 1).padStart(2, "0")}
@@ -220,6 +237,7 @@ const ManageUsers = () => {
                 {getRoleBadge(user.role)}
               </div>
 
+              {/* User info */}
               <div className="flex items-center space-x-3">
                 <img
                   src={
@@ -240,11 +258,12 @@ const ManageUsers = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-end space-x-2 pt-2 border-t border-gray-200">
+              {/* Action buttons */}
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-gray-200">
                 {user.role !== "admin" && (
                   <button
-                    onClick={() => handleMakeAdmin(user)}
-                    className="flex items-center space-x-1 px-3 py-2 text-sm text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                    onClick={() => handleToggleRole(user)}
+                    className="flex items-center gap-1 px-3 py-2 text-sm text-orange-600 border border-orange-300 hover:bg-orange-50 rounded-lg transition"
                   >
                     <Shield className="w-4 h-4" />
                     <span>Make Admin</span>
@@ -252,7 +271,8 @@ const ManageUsers = () => {
                 )}
                 <button
                   onClick={() => handleDeleteUser(user)}
-                  className="flex items-center space-x-1 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors  cursor-pointer"
+                  className="flex items-center gap-1 px-3 py-2 text-sm text-red-600 border border-red-300 hover:bg-red-50 rounded-lg transition"
+                  title="Delete User"
                 >
                   <Trash2 className="w-4 h-4" />
                   <span>Delete</span>
