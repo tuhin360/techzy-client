@@ -15,7 +15,10 @@ const useAdmin = () => {
     },
   });
 
+   console.log("Is Admin? 👉", isAdmin); // will log true/false once loaded
+
   return [isAdmin, isAdminLoading];
 };
 
 export default useAdmin;
+

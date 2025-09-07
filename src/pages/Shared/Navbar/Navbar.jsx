@@ -8,11 +8,13 @@ import {
   Phone,
   Mail,
 } from "lucide-react";
+import { MdDashboard } from "react-icons/md";
 import { Link } from "react-router-dom"; // ✅ Link import
 import { useContext } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { ChevronRight } from "lucide-react";
 import useCart from "../../../hooks/useCart";
+import useAdmin from "../../../hooks/useAdmin";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,6 +22,10 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [cart] = useCart();
+
+  // Check if the user is an admin using the useAdmin hook
+  const [isAdmin] = useAdmin();
+  console.log(isAdmin);
 
   const toggleCategories = () => {
     setIsOpen(!isOpen);
@@ -159,21 +165,41 @@ const Navbar = () => {
           {/* Right side icons */}
           <div className="flex items-center space-x-2">
             {/* Wishlist */}
-            <button className=" text-gray-700 hover:text-blue-600 transition duration-200">
-              <Heart size={20} />
-            </button>
+          {!isAdmin && (
+  <Link to={user ? "/dashboard/wishlist" : "/login"}>
+    <button className="relative p-2 text-gray-700 hover:text-blue-600 transition duration-200 cursor-pointer">
+      <Heart size={20} />
+      {/* Uncomment if you want to show wishlist count */}
+      {/* {wishlist.length > 0 && (
+        <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+          {wishlist.length}
+        </span>
+      )} */}
+    </button>
+  </Link>
+)}
 
+
+             
             {/* Shopping cart */}
-            <Link to="/dashboard/cart">
-              <button className="relative p-2 text-gray-700 hover:text-blue-600 transition duration-200 cursor-pointer">
-                <ShoppingCart size={20} />
-                {cart.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {cart.length}
-                  </span>
-                )}
-              </button>
-            </Link>
+            {isAdmin ? (
+              <Link to="/dashboard/manage-users">
+                <button className="relative p-2 text-gray-700 hover:text-blue-600 transition duration-200 cursor-pointer">
+                  Admin Dashboard
+                </button>
+              </Link>
+            ) : (
+              <Link to="/dashboard/cart">
+                <button className="relative p-2 text-gray-700 hover:text-blue-600 transition duration-200 cursor-pointer">
+                  <ShoppingCart size={20} />
+                  {cart.length > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      {cart.length}
+                    </span>
+                  )}
+                </button>
+              </Link>
+            )}
 
             {/* User profile */}
             {user ? (

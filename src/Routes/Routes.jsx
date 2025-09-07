@@ -13,6 +13,9 @@ import Contact from "../pages/Contact/Contact";
 import ManageUsers from "../pages/Dashboard/ManageUsers/ManageUsers";
 import ManageOrders from "../pages/Dashboard/ManageOrders/ManageOrders";
 import ManageProducts from "../pages/Dashboard/ManageProducts/ManageProducts";
+import WishList from "../pages/Dashboard/WishList/WishList";
+import AddProduct from "../pages/Dashboard/AddProduct/AddProduct";
+import AdminRoute from "./AdminRoute";
 
 export const router = createBrowserRouter([
   {
@@ -61,21 +64,47 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
+      // user routes
       {
         path: "cart",
         element: <Cart />,
       },
       {
+        path: "wishlist",
+        element: <WishList />,
+      },
+      // admin routes
+      {
         path: "manage-users",
-        element: <ManageUsers />,
+        element: (
+          <AdminRoute>
+            <ManageUsers />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "add-product",
+        element: (
+          <AdminRoute>
+            <AddProduct />
+          </AdminRoute>
+        ),
       },
       {
         path: "manage-orders",
-        element: <ManageOrders />,
+        element: (
+          <AdminRoute>
+            <ManageOrders />
+          </AdminRoute>
+        ),
       },
       {
         path: "manage-products",
-        element: <ManageProducts />,
+        element: (
+          <AdminRoute>
+            <ManageProducts />
+          </AdminRoute>
+        ),
       },
     ],
   },
