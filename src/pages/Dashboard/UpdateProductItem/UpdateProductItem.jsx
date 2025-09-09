@@ -1,14 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, X, Upload, ArrowRight } from "lucide-react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { Helmet } from "react-helmet-async";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
-const AddProduct = () => {
+const UpdateProductItem = () => {
+  const item = useLoaderData();
+  const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [selectedTags, setSelectedTags] = useState(item?.tags || []);
+  const [imagePreview, setImagePreview] = useState(item?.image || null);
+
+  console.log(item); // For debugging
 
   const categories = [
     "Audio",
@@ -48,7 +53,7 @@ const AddProduct = () => {
     "offered",
   ];
 
-  // React Hook Form setup
+  // React Hook Form setup with existing data
   const {
     register,
     control,
@@ -59,22 +64,22 @@ const AddProduct = () => {
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
-      title: "",
-      subtitle: "",
-      description: "",
-      price: "",
-      originalPrice: "",
-      discount: "",
-      rating: "",
-      reviews: "",
-      image: "",
-      badge: "",
-      category: "",
-      sold: "",
-      features: [{ value: "" }],
-      colors: [{ value: "" }],
-      timeLeft: "",
-      tags: [],
+      title: item?.title || "",
+      subtitle: item?.subtitle || "",
+      description: item?.description || "",
+      price: item?.price || "",
+      originalPrice: item?.originalPrice || "",
+      discount: item?.discount || "",
+      rating: item?.rating || "",
+      reviews: item?.reviews || "",
+      imageUrl: item?.image || "",
+      badge: item?.badge || "",
+      category: item?.category || "",
+      sold: item?.sold || "",
+      features: item?.features?.map(f => ({ value: f })) || [{ value: "" }],
+      colors: item?.colors?.map(c => ({ value: c })) || [{ value: "" }],
+      timeLeft: item?.timeLeft || "",
+      tags: item?.tags || [],
     },
   });
 
@@ -100,6 +105,11 @@ const AddProduct = () => {
   // Watch price values for auto-discount calculation
   const watchedPrice = watch("price");
   const watchedOriginalPrice = watch("originalPrice");
+
+  // Set tags in form when component loads
+  useEffect(() => {
+    setValue("tags", selectedTags);
+  }, [selectedTags, setValue]);
 
   // Handle tag selection
   const handleTagChange = (tag) => {
@@ -157,7 +167,7 @@ const AddProduct = () => {
     try {
       let imageUrl = data.imageUrl;
 
-      // Upload image if file is selected
+      // Upload new image if file is selected
       if (data.imageFile && data.imageFile[0]) {
         imageUrl = await handleImageUpload(data.imageFile[0]);
       }
@@ -171,7 +181,7 @@ const AddProduct = () => {
             )
           : 0);
 
-      // Prepare product data
+      // Prepare updated product data
       const productData = {
         title: data.title,
         subtitle: data.subtitle || undefined,
@@ -191,27 +201,31 @@ const AddProduct = () => {
         tags: selectedTags,
       };
 
-      // Send to backend
-      const response = await axiosSecure.post("/products", productData);
+      // Send update request to backend
+      const response = await axiosSecure.patch(`/products/${item._id}`, productData);
 
-      if (response.data.insertedId) {
+      if (response.data.modifiedCount > 0) {
         Swal.fire({
           title: "Success!",
-          text: "Product added successfully!",
+          text: "Product updated successfully!",
           icon: "success",
           confirmButtonColor: "#f59e0b",
+        }).then(() => {
+          navigate('/dashboard/manage-products');
         });
-
-        // Reset form
-        reset();
-        setSelectedTags([]);
-        setImagePreview(null);
+      } else {
+        Swal.fire({
+          title: "No Changes",
+          text: "No changes were made to the product.",
+          icon: "info",
+          confirmButtonColor: "#f59e0b",
+        });
       }
     } catch (error) {
-      console.error("Error adding product:", error);
+      console.error("Error updating product:", error);
       Swal.fire({
         title: "Error!",
-        text: "Failed to add product. Please try again.",
+        text: "Failed to update product. Please try again.",
         icon: "error",
         confirmButtonColor: "#f59e0b",
       });
@@ -221,7 +235,7 @@ const AddProduct = () => {
   return (
     <>
       <Helmet>
-        <title>TechZy | Add Product</title>
+        <title>TechZy | Update Product</title>
       </Helmet>
 
       <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -231,10 +245,13 @@ const AddProduct = () => {
             <div className="flex items-center gap-4 mb-4">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">
-                  Add New Product
+                  Update Product
                 </h1>
                 <p className="text-gray-600 mt-1">
-                  Fill in the product details below
+                  Update the product details below
+                </p>
+                <p className="text-sm text-blue-600 mt-1">
+                  Product ID: {item?._id}
                 </p>
               </div>
             </div>
@@ -242,7 +259,7 @@ const AddProduct = () => {
 
           {/* Form */}
           <div className="bg-white rounded-xl shadow-lg p-6 md:p-8">
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <div onSubmit={handleSubmit(onSubmit)}>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Basic Information */}
                 <div className="lg:col-span-2">
@@ -378,7 +395,7 @@ const AddProduct = () => {
                   )}
                 </div>
 
-                {/* Discount & Sold */}
+                {/* Discount */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Discount (%)
@@ -414,6 +431,7 @@ const AddProduct = () => {
                   )}
                 </div>
 
+                {/* Units Sold */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Units Sold
@@ -425,6 +443,25 @@ const AddProduct = () => {
                     placeholder="0"
                   />
                 </div>
+
+                {/* Savings Display */}
+                {watchedPrice && watchedOriginalPrice && (
+                  <div className="lg:col-span-2 mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-green-700 font-medium">You Save:</span>
+                      <span className="text-green-800 font-bold text-lg">
+                        ৳{(watchedOriginalPrice - watchedPrice).toLocaleString()}
+                        <span className="text-sm ml-1">
+                          ({Math.round(((watchedOriginalPrice - watchedPrice) / watchedOriginalPrice) * 100)}% OFF)
+                        </span>
+                      </span>
+                    </div>
+                    <div className="text-xs text-green-600 mt-1">
+                      Original: ৳{parseFloat(watchedOriginalPrice).toLocaleString()} → 
+                      Sale: ৳{parseFloat(watchedPrice).toLocaleString()}
+                    </div>
+                  </div>
+                )}
 
                 {/* Product Details */}
                 <div className="lg:col-span-2 mt-8">
@@ -485,10 +522,22 @@ const AddProduct = () => {
                     Product Image
                   </label>
 
+                  {/* Current Image Preview */}
+                  {imagePreview && (
+                    <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+                      <p className="text-sm text-gray-600 mb-2">Current Image:</p>
+                      <img 
+                        src={imagePreview} 
+                        alt="Current product" 
+                        className="w-32 h-32 object-cover rounded-lg"
+                      />
+                    </div>
+                  )}
+
                   {/* Image URL Option */}
                   <div className="mb-4">
                     <label className="block text-sm text-gray-600 mb-2">
-                      Image URL
+                      Update Image URL
                     </label>
                     <input
                       type="url"
@@ -522,27 +571,17 @@ const AddProduct = () => {
                           htmlFor="imageUpload"
                           className="cursor-pointer text-blue-600 hover:text-blue-700 font-semibold"
                         >
-                          Click to upload image
+                          Click to upload new image
                         </label>
                         <p className="text-gray-500 text-sm">
                           PNG, JPG up to 5MB
                         </p>
                       </div>
                     </div>
-
-                    {imagePreview && (
-                      <div className="mt-4">
-                        <img
-                          src={imagePreview}
-                          alt="Preview"
-                          className="w-24 h-24 object-cover rounded-lg mx-auto"
-                        />
-                      </div>
-                    )}
                   </div>
                 </div>
 
-                {/* Rating & Reviews */}
+                {/* Rating & Reviews & Time Left */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Rating (0-5)
@@ -617,7 +656,7 @@ const AddProduct = () => {
                   <button
                     type="button"
                     onClick={() => appendFeature({ value: "" })}
-                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
+                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
                   >
                     <Plus className="w-4 h-4" />
                     Add Feature
@@ -651,7 +690,7 @@ const AddProduct = () => {
                   <button
                     type="button"
                     onClick={() => appendColor({ value: "" })}
-                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
+                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
                   >
                     <Plus className="w-4 h-4" />
                     Add Color
@@ -671,8 +710,8 @@ const AddProduct = () => {
                         onClick={() => handleTagChange(tag)}
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                           selectedTags.includes(tag)
-                            ? "bg-blue-500 text-white cursor-pointer"
-                            : "bg-gray-100 text-gray-700 hover:bg-gray-200 cursor-pointer"
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                         }`}
                       >
                         {tag}
@@ -687,28 +726,25 @@ const AddProduct = () => {
                 <div className="flex flex-col sm:flex-row gap-4 sm:justify-end">
                   <button
                     type="button"
-                    onClick={() => {
-                      reset();
-                      setSelectedTags([]);
-                      setImagePreview(null);
-                    }}
-                    className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold cursor-pointer"
+                    onClick={() => navigate('/dashboard/manage-products')}
+                    className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold"
                   >
-                    Reset Form
+                    Cancel
                   </button>
                   <button
-                    type="submit"
+                    type="button"
+                    onClick={handleSubmit(onSubmit)}
                     disabled={isSubmitting}
-                    className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-lg font-semibold flex items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                    className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-lg font-semibold flex items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isSubmitting ? "Adding Product..." : "Add Product"}
+                    {isSubmitting ? "Updating Product..." : "Update Product"}
                     {!isSubmitting && (
                       <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     )}
                   </button>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
@@ -716,4 +752,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default UpdateProductItem;

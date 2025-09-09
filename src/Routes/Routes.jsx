@@ -16,6 +16,7 @@ import ManageProducts from "../pages/Dashboard/ManageProducts/ManageProducts";
 import WishList from "../pages/Dashboard/WishList/WishList";
 import AddProduct from "../pages/Dashboard/AddProduct/AddProduct";
 import AdminRoute from "./AdminRoute";
+import UpdateProductItem from "../pages/Dashboard/UpdateProductItem/UpdateProductItem";
 
 export const router = createBrowserRouter([
   {
@@ -105,6 +106,16 @@ export const router = createBrowserRouter([
             <ManageProducts />
           </AdminRoute>
         ),
+      },
+      {
+        path: "update-item/:id",
+        element: (
+          <AdminRoute>
+            <UpdateProductItem />
+          </AdminRoute>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/products/${params.id}`),
       },
     ],
   },

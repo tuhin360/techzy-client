@@ -1,19 +1,12 @@
 import { Package, Edit, Trash2, DollarSign } from "lucide-react";
 import Swal from "sweetalert2";
-import  useProducts  from "../../../hooks/useProducts";
+import useProducts from "../../../hooks/useProducts";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { Link } from "react-router-dom";
 
 const ManageProducts = () => {
   const { products, loading, error, refetch } = useProducts();
   const axiosSecure = useAxiosSecure();
-
-  const handleEditProduct = (product) => {
-    Swal.fire({
-      title: "Edit Product",
-      text: `Edit functionality for "${product.title}" will be implemented soon.`,
-      icon: "info",
-    });
-  };
 
   const handleDeleteProduct = async (product) => {
     try {
@@ -129,7 +122,10 @@ const ManageProducts = () => {
                   Price
                 </th>
                 <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">
-                  Actions
+                  Edit
+                </th>
+                <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">
+                  Delete
                 </th>
               </tr>
             </thead>
@@ -164,20 +160,19 @@ const ManageProducts = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="flex items-center justify-center space-x-2">
-                      <button
-                        onClick={() => handleEditProduct(product)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-colors cursor-pointer"
-                      >
+                    <Link to={`/dashboard/update-item/${product._id}`}>
+                      <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-colors cursor-pointer">
                         <Edit className="w-4 h-4" />
                       </button>
-                      <button
-                        onClick={() => handleDeleteProduct(product)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors cursor-pointer"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
+                    </Link>
+                  </td>
+                  <td className="px-6 py-4">
+                    <button
+                      onClick={() => handleDeleteProduct(product)}
+                      className="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors cursor-pointer"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -223,13 +218,12 @@ const ManageProducts = () => {
               </div>
 
               <div className="flex items-center justify-end gap-2 pt-3 border-t border-gray-200">
-                <button
-                  onClick={() => handleEditProduct(product)}
-                  className="flex items-center gap-1 px-3 py-2 text-sm text-blue-600 border border-blue-300 hover:bg-blue-50 rounded-lg transition"
-                >
-                  <Edit className="w-4 h-4" />
-                  <span>Edit</span>
-                </button>
+                <Link to={`/dashboard/update-item/${product._id}`}>
+                  <button className="flex items-center gap-1 px-3 py-2 text-sm text-blue-600 border border-blue-300 hover:bg-blue-50 rounded-lg transition">
+                    <Edit className="w-4 h-4" />
+                    <span>Edit</span>
+                  </button>
+                </Link>
                 <button
                   onClick={() => handleDeleteProduct(product)}
                   className="flex items-center gap-1 px-3 py-2 text-sm text-red-600 border border-red-300 hover:bg-red-50 rounded-lg transition"

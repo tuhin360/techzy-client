@@ -17,55 +17,57 @@ import useAdmin from "../hooks/useAdmin";
 import { ToyBrick } from "lucide-react";
 
 // Lazy load the skeleton component
-const DashboardSkeleton = lazy(() => import('../components/DashboardSkeleton'));
+const DashboardSkeleton = lazy(() => import("../components/DashboardSkeleton"));
 
 // Memoized Sidebar Component
-const Sidebar = memo(({ 
-  isSidebarOpen, 
-  setIsSidebarOpen, 
-  isAdmin, 
-  isAdminLoading, 
-  cartLength 
-}) => {
-  const closeSidebar = () => setIsSidebarOpen(false);
+const Sidebar = memo(
+  ({
+    isSidebarOpen,
+    setIsSidebarOpen,
+    isAdmin,
+    isAdminLoading,
+    cartLength,
+  }) => {
+    const closeSidebar = () => setIsSidebarOpen(false);
 
-  return (
-    <div
-      className={`fixed top-0 right-0 z-40 w-64 sm:w-72 h-full bg-gradient-to-b from-orange-600 to-orange-800 shadow-2xl transform transition-transform duration-300 ease-in-out ${
-        isSidebarOpen ? "translate-x-0" : "translate-x-full"
-      } lg:sticky lg:top-0 lg:translate-x-0 lg:w-72 lg:min-h-screen lg:bg-opacity-90 lg:backdrop-blur-md`}
-    >
-      <div className="p-6">
-        {/* Logo */}
-        <div className="mb-8 flex items-center space-x-2">
-          <Link to="/">
-            <h1 className="text-3xl font-extrabold text-white tracking-tight transition-transform duration-200 hover:scale-105">
-              Tech<span className="text-yellow-300">Zy</span>
-            </h1>
-          </Link>
+    return (
+      <div
+        className={`fixed top-0 right-0 z-40 w-64 sm:w-72 h-full bg-gradient-to-b from-orange-600 to-orange-800 shadow-2xl transform transition-transform duration-300 ease-in-out ${
+          isSidebarOpen ? "translate-x-0" : "translate-x-full"
+        } lg:sticky lg:top-0 lg:translate-x-0 lg:w-72 lg:min-h-screen lg:bg-opacity-90 lg:backdrop-blur-md`}
+      >
+        <div className="p-6">
+          {/* Logo */}
+          <div className="mb-8 flex items-center space-x-2">
+            <Link to="/">
+              <h1 className="text-3xl font-extrabold text-white tracking-tight transition-transform duration-200 hover:scale-105">
+                Tech<span className="text-yellow-300">Zy</span>
+              </h1>
+            </Link>
+          </div>
+
+          {/* Dashboard Navigation */}
+          <nav className="space-y-2">
+            {/* Show loading state while checking admin status */}
+            {isAdminLoading ? (
+              DashboardSkeleton
+            ) : isAdmin ? (
+              <AdminMenu closeSidebar={closeSidebar} />
+            ) : (
+              <UserMenu closeSidebar={closeSidebar} cartLength={cartLength} />
+            )}
+          </nav>
+
+          {/* Divider */}
+          <div className="border-t border-orange-400/30 my-6"></div>
+
+          {/* Main Site Navigation */}
+          <MainNavigation closeSidebar={closeSidebar} />
         </div>
-
-        {/* Dashboard Navigation */}
-        <nav className="space-y-2">
-          {/* Show loading state while checking admin status */}
-          {isAdminLoading ? 
-            DashboardSkeleton
-          : isAdmin ? (
-            <AdminMenu closeSidebar={closeSidebar} />
-          ) : (
-            <UserMenu closeSidebar={closeSidebar} cartLength={cartLength} />
-          )}
-        </nav>
-
-        {/* Divider */}
-        <div className="border-t border-orange-400/30 my-6"></div>
-
-        {/* Main Site Navigation */}
-        <MainNavigation closeSidebar={closeSidebar} />
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 // Memoized Admin Menu
 const AdminMenu = memo(({ closeSidebar }) => (
@@ -225,7 +227,7 @@ const Header = memo(({ user }) => (
     <h2 className="text-xl font-semibold text-gray-800">Dashboard</h2>
     <div className="flex items-center space-x-3">
       <span className="text-sm font-medium text-gray-600 hidden sm:block">
-        {user?.displayName || 'Loading...'}
+        {user?.displayName || "Loading..."}
       </span>
       {user?.photoURL && (
         <img
@@ -275,14 +277,16 @@ const Dashboard = () => {
         {/* Main Content */}
         <div className="flex-1 w-full h-screen overflow-auto">
           <Header user={user} />
-          
+
           <div className="p-4 sm:p-6 lg:p-8">
             {/* Use Suspense for lazy-loaded components */}
-            <Suspense fallback={
-              <div className="flex items-center justify-center p-8">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600" />
-              </div>
-            }>
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center p-8">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600" />
+                </div>
+              }
+            >
               <Outlet />
             </Suspense>
           </div>
@@ -290,9 +294,9 @@ const Dashboard = () => {
       </div>
 
       {/* Mobile Bottom Navigation - Memoized */}
-      <MobileBottomNavigation 
-        toggleSidebar={toggleSidebar} 
-        isSidebarOpen={isSidebarOpen} 
+      <MobileBottomNavigation
+        toggleSidebar={toggleSidebar}
+        isSidebarOpen={isSidebarOpen}
       />
     </div>
   );
@@ -350,11 +354,11 @@ const MobileBottomNavigation = memo(({ toggleSidebar, isSidebarOpen }) => (
 ));
 
 // Set display names for debugging
-Sidebar.displayName = 'Sidebar';
-AdminMenu.displayName = 'AdminMenu';
-UserMenu.displayName = 'UserMenu';
-MainNavigation.displayName = 'MainNavigation';
-Header.displayName = 'Header';
-MobileBottomNavigation.displayName = 'MobileBottomNavigation';
+Sidebar.displayName = "Sidebar";
+AdminMenu.displayName = "AdminMenu";
+UserMenu.displayName = "UserMenu";
+MainNavigation.displayName = "MainNavigation";
+Header.displayName = "Header";
+MobileBottomNavigation.displayName = "MobileBottomNavigation";
 
 export default Dashboard;
