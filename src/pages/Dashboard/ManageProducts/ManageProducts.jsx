@@ -5,7 +5,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Link } from "react-router-dom";
 
 const ManageProducts = () => {
-  const { products, loading, error, refetch } = useProducts();
+  const { products, refetch } = useProducts();
   const axiosSecure = useAxiosSecure();
 
   const handleDeleteProduct = async (product) => {
@@ -57,9 +57,6 @@ const ManageProducts = () => {
       style: "currency",
       currency: "USD",
     }).format(price);
-
-  if (loading) return <div>Loading products...</div>;
-  if (error) return <div>Error loading products: {error}</div>;
 
   return (
     <div className="max-w-7xl mx-auto p-6">

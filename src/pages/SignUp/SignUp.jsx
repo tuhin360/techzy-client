@@ -7,8 +7,9 @@ import {
   Lock,
   ArrowRight,
   CheckCircle2,
+  X,
 } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext, useState, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -21,6 +22,8 @@ import SocialLogin from "../../components/SocialLogin/SocialLogin";
 const SignUp = () => {
   const axiosPublic = useAxiosPublic();
   const [showPassword, setShowPassword] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+  const fileInputRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -30,6 +33,8 @@ const SignUp = () => {
     register,
     handleSubmit,
     reset,
+    setValue,
+    clearErrors,
     formState: { errors },
   } = useForm();
 
@@ -37,7 +42,12 @@ const SignUp = () => {
 
   // Form submit handler
   const onSubmit = async (data) => {
-    const image = data.photo[0]; // get first file from input
+    if (!data.photo || !data.photo[0]) {
+      Swal.fire("Error", "Please upload a profile photo!", "error");
+      return;
+    }
+
+    const image = data.photo[0];
     const formData = new FormData();
     formData.append("image", image);
 
@@ -74,6 +84,10 @@ const SignUp = () => {
             axiosPublic.post("/users", userInfo).then((res) => {
               if (res.data.insertedId) {
                 reset(); // clear form
+                setImagePreview(null);
+                if (fileInputRef.current) {
+                  fileInputRef.current.value = "";
+                }
                 Swal.fire(
                   "Success",
                   "Account created successfully!",
@@ -118,7 +132,6 @@ const SignUp = () => {
                         <User className="w-16 h-16 text-yellow-500" />
                       </div>
                     </div>
-
                     <div className="absolute -top-4 -right-4 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg animate-bounce">
                       <Mail className="w-6 h-6 text-yellow-500" />
                     </div>
@@ -133,7 +146,6 @@ const SignUp = () => {
                     </div>
                   </div>
                 </div>
-
                 <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
                   Join Techzy Today!
                 </h2>
@@ -247,6 +259,17 @@ const SignUp = () => {
                             {...register("photo", { required: true })}
                             className="hidden"
                             id="photoUpload"
+                            ref={fileInputRef}
+                            onChange={(e) => {
+                              const file = e.target.files[0];
+                              if (file) {
+                                setImagePreview(URL.createObjectURL(file));
+                                setValue("photo", e.target.files, {
+                                  shouldValidate: true,
+                                });
+                                clearErrors("photo");
+                              }
+                            }}
                           />
                           <label
                             htmlFor="photoUpload"
@@ -259,6 +282,29 @@ const SignUp = () => {
                           </p>
                         </div>
                       </div>
+                      {/* Image Preview */}
+                      {imagePreview && (
+                        <div className="mt-4 flex justify-center relative">
+                          <img
+                            src={imagePreview}
+                            alt="Preview"
+                            className="w-24 h-24 object-cover rounded-lg shadow-md"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setImagePreview(null);
+                              if (fileInputRef.current) {
+                                fileInputRef.current.value = "";
+                              }
+                              setValue("photo", null);
+                            }}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full shadow hover:bg-red-600"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      )}
                     </div>
                     {errors.photo && (
                       <span className="text-red-500 mt-1 ml-2 text-sm">
@@ -293,6 +339,7 @@ const SignUp = () => {
 
                 {/* Social login buttons */}
                 <SocialLogin />
+
                 {/* Footer */}
                 <div className="mt-8 text-center">
                   <p className="text-gray-600">

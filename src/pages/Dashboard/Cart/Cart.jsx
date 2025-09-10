@@ -114,13 +114,15 @@ const Cart = () => {
                   </p>
                 </div>
               </div>
-              <button
-                onClick={handlePayment}
-                className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2 min-w-[200px]"
-              >
-                <CreditCard className="w-5 h-5" />
-                Proceed to Pay
-              </button>
+              <Link to="/dashboard/payment">
+                <button
+                  onClick={handlePayment}
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2 min-w-[200px] cursor-pointer"
+                >
+                  <CreditCard className="w-5 h-5" />
+                  Proceed to Pay
+                </button>
+              </Link>
             </div>
           </div>
 

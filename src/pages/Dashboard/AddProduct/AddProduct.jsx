@@ -4,6 +4,8 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { Helmet } from "react-helmet-async";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { Users } from "lucide-react";
+import { ToyBrick } from "lucide-react";
 
 const AddProduct = () => {
   const axiosSecure = useAxiosSecure();
@@ -228,12 +230,15 @@ const AddProduct = () => {
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="bg-orange-100 p-3 rounded-lg">
+                <ToyBrick className="w-8 h-8 text-orange-600" />
+              </div>
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">
                   Add New Product
                 </h1>
-                <p className="text-gray-600 mt-1">
+                <p className="text-gray-600">
                   Fill in the product details below
                 </p>
               </div>

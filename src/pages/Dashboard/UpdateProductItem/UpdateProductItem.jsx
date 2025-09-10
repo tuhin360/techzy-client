@@ -58,7 +58,6 @@ const UpdateProductItem = () => {
     register,
     control,
     handleSubmit,
-    reset,
     watch,
     setValue,
     formState: { errors, isSubmitting },
@@ -727,7 +726,7 @@ const UpdateProductItem = () => {
                   <button
                     type="button"
                     onClick={() => navigate('/dashboard/manage-products')}
-                    className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold"
+                    className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-semibold cursor-pointer"
                   >
                     Cancel
                   </button>
@@ -735,7 +734,7 @@ const UpdateProductItem = () => {
                     type="button"
                     onClick={handleSubmit(onSubmit)}
                     disabled={isSubmitting}
-                    className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-lg font-semibold flex items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-white rounded-lg transition-all duration-300 transform hover:scale-[1.02] shadow-lg font-semibold flex items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   >
                     {isSubmitting ? "Updating Product..." : "Update Product"}
                     {!isSubmitting && (

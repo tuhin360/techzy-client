@@ -1,7 +1,9 @@
+import React from 'react';
+
 const ManageOrders = () => {
   return (
     <div>
-      <h3>Manage Orders</h3>
+      <h2>Manage Orders</h2>
     </div>
   );
 };

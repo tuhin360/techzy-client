@@ -17,6 +17,7 @@ import WishList from "../pages/Dashboard/WishList/WishList";
 import AddProduct from "../pages/Dashboard/AddProduct/AddProduct";
 import AdminRoute from "./AdminRoute";
 import UpdateProductItem from "../pages/Dashboard/UpdateProductItem/UpdateProductItem";
+import Payment from "../pages/Dashboard/Payment/Payment";
 
 export const router = createBrowserRouter([
   {
@@ -116,6 +117,10 @@ export const router = createBrowserRouter([
         ),
         loader: ({ params }) =>
           fetch(`http://localhost:5000/products/${params.id}`),
+      },
+      {
+        path: "payment",
+        element: <Payment />,
       },
     ],
   },

@@ -1,4 +1,4 @@
-import { useState, memo, Suspense, lazy } from "react";
+import { useState, memo, Suspense } from "react";
 import {
   FaStore,
   FaInfoCircle,
@@ -15,6 +15,7 @@ import useAuth from "../hooks/useAuth";
 import useCart from "../hooks/useCart";
 import useAdmin from "../hooks/useAdmin";
 import { ToyBrick } from "lucide-react";
+import { lazy } from "react";
 
 // Lazy load the skeleton component
 const DashboardSkeleton = lazy(() => import("../components/DashboardSkeleton"));
@@ -50,7 +51,9 @@ const Sidebar = memo(
           <nav className="space-y-2">
             {/* Show loading state while checking admin status */}
             {isAdminLoading ? (
-              DashboardSkeleton
+              <div className="flex items-center justify-center py-4">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+              </div>
             ) : isAdmin ? (
               <AdminMenu closeSidebar={closeSidebar} />
             ) : (

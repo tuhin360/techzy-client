@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Users, UserCheck, Shield, Trash2, Edit, Crown } from "lucide-react";
 import Swal from "sweetalert2";
-// import { useNavigate } from "react-router-dom";
 
 const ManageUsers = () => {
   const axiosSecure = useAxiosSecure();
