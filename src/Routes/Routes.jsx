@@ -5,7 +5,6 @@ import About from "../pages/About/About";
 import { Shop } from "../pages/Shop/Shop";
 import Login from "../pages/Login/Login";
 import SignUp from "../pages/SignUp/SignUp";
-import Secret from "../pages/Shared/Secret/Secret";
 import PrivateRoute from "./PrivateRoute";
 import Dashboard from "../Layout/Dashboard";
 import Cart from "../pages/Dashboard/Cart/Cart";
@@ -18,11 +17,14 @@ import AddProduct from "../pages/Dashboard/AddProduct/AddProduct";
 import AdminRoute from "./AdminRoute";
 import UpdateProductItem from "../pages/Dashboard/UpdateProductItem/UpdateProductItem";
 import Payment from "../pages/Dashboard/Payment/Payment";
+import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
+import Error from "../pages/Error/Error";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Main />,
+    errorElement: <Error/>,
     children: [
       {
         path: "/",
@@ -48,14 +50,6 @@ export const router = createBrowserRouter([
         path: "signup",
         element: <SignUp />,
       },
-      {
-        path: "secret",
-        element: (
-          <PrivateRoute>
-            <Secret />
-          </PrivateRoute>
-        ),
-      },
     ],
   },
   {
@@ -70,6 +64,10 @@ export const router = createBrowserRouter([
       {
         path: "cart",
         element: <Cart />,
+      },
+      {
+        path: "payment-history",
+        element: <PaymentHistory />,
       },
       {
         path: "wishlist",

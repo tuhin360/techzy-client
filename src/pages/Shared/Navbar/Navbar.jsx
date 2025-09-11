@@ -136,12 +136,7 @@ const Navbar = () => {
                 </div>
               </div>
             </div>
-            <Link
-              to="/secret"
-              className="text-gray-700 hover:text-blue-600 transition duration-200"
-            >
-              Secret
-            </Link>
+           
             <Link
               to="/shop"
               className="text-gray-700 hover:text-blue-600 transition duration-200"
