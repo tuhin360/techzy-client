@@ -9,34 +9,28 @@ const CheckoutForm = () => {
   const elements = useElements();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [processing, setProcessing] = useState(false); // ✅ prevent double payment
+  const [transactionId, setTransactionId] = useState("");
+  const [processing, setProcessing] = useState(false);
   const [clientSecret, setClientSecret] = useState("");
   const axiosSecure = useAxiosSecure();
-  const [cart] = useCart();
+  const [cart, refetch] = useCart();
   const { user } = useAuth();
-  console.log({user});
-  console.log(user.email);
 
-  // calculate total price (rounded)
-  const totalPrice = cart
-    .reduce((total, item) => total + item.price, 0)
-    .toFixed(2);
+  // Calculate total price as number
+  const totalPrice = Number(
+    cart.reduce((total, item) => total + item.price, 0).toFixed(2)
+  );
 
-  // get client secret from backend
+  // Request client secret from backend when cart changes
   useEffect(() => {
     if (totalPrice > 0) {
       axiosSecure
-        .post("/payments/create-payment-intent", { price: totalPrice }) // ✅ corrected endpoint
-        .then((res) => {
-          setClientSecret(res.data.clientSecret);
-        })
-        .catch((err) => {
-          console.error("Error getting clientSecret:", err);
-        });
+        .post("/payments/create-payment-intent", { price: totalPrice })
+        .then((res) => setClientSecret(res.data.clientSecret))
+        .catch((err) => console.error("Error getting clientSecret:", err));
     }
   }, [axiosSecure, totalPrice]);
 
-  // handle form submit
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -48,59 +42,65 @@ const CheckoutForm = () => {
     setProcessing(true);
     setError("");
     setSuccess("");
+    setTransactionId("");
 
-    // 1. Create payment method
-    const { error: pmError, paymentMethod } = await stripe.createPaymentMethod({
-      type: "card",
-      card,
-    });
-
-    if (pmError) {
-      setError(pmError.message);
-      setProcessing(false);
-      return;
-    }
-
-    console.log("✅ Payment Method Created:", paymentMethod);
-
-    // 2. Confirm payment
-    const { paymentIntent, error: confirmError } =
-      await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
+    try {
+      // 1. Create payment method
+      const { error: pmError, paymentMethod } =
+        await stripe.createPaymentMethod({
+          type: "card",
           card,
-          billing_details: {
-            name: user?.displayName || "Anonymous",
-            email: user?.email || "Unknown",
+        });
+
+      if (pmError) {
+        setError(pmError.message);
+        setProcessing(false);
+        return;
+      }
+
+      // 2. Confirm payment
+      const { paymentIntent, error: confirmError } =
+        await stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card,
+            billing_details: {
+              name: user?.displayName || "Anonymous",
+              email: user?.email || "Unknown",
+            },
           },
-        },
-      });
+        });
 
-    if (confirmError) {
-      setError(confirmError.message);
-      setProcessing(false);
-      return;
-    }
+      if (confirmError) {
+        setError(confirmError.message);
+        setProcessing(false);
+        return;
+      }
 
-    // 3. Check payment status
-    if (paymentIntent.status === "succeeded") {
-      setSuccess("Payment Successful!");
-      console.log("🎉 Payment Success:", paymentIntent);
+      // 3. Payment succeeded
+      if (paymentIntent.status === "succeeded") {
+        setSuccess("✅ Payment Successful!");
+        setTransactionId(paymentIntent.id);
 
-      // 👉 Optional: save payment info to DB
-      try {
+        // Send payment info to backend
         await axiosSecure.post("/payments", {
           email: user?.email,
           transactionId: paymentIntent.id,
-          amount: paymentIntent.amount / 100, // ✅ Stripe returns in cents
+          amount: paymentIntent.amount / 100, // Stripe returns cents
           date: new Date(),
           cartItems: cart.map((item) => item._id),
+          menuItems: cart.map((item) => item.menuId),
+          status: "pending",
         });
-      } catch (dbError) {
-        console.error("Failed to save payment to DB:", dbError);
-      }
-    }
 
-    setProcessing(false);
+        // ✅ Refetch cart to update sidebar instantly
+        refetch();
+      }
+    } catch (err) {
+      setError("Payment failed. Please try again.");
+      console.error("Payment error:", err);
+    } finally {
+      setProcessing(false);
+    }
   };
 
   return (
@@ -113,13 +113,9 @@ const CheckoutForm = () => {
               base: {
                 fontSize: "16px",
                 color: "#2d3748",
-                "::placeholder": {
-                  color: "#a0aec0",
-                },
+                "::placeholder": { color: "#a0aec0" },
               },
-              invalid: {
-                color: "#e53e3e",
-              },
+              invalid: { color: "#e53e3e" },
             },
           }}
         />
@@ -133,12 +129,21 @@ const CheckoutForm = () => {
           processing ? "bg-gray-400" : "bg-orange-600 hover:bg-orange-700"
         } text-white font-semibold rounded-xl shadow-lg transition-all duration-300 cursor-pointer`}
       >
-        {processing ? "Processing..." : "Pay Now"}
+        {processing ? "Processing..." : `Pay $${totalPrice}`}
       </button>
 
       {/* Error / Success Messages */}
       {error && <p className="text-red-500 font-medium">{error}</p>}
-      {success && <p className="text-green-600 font-medium">{success}</p>}
+      {success && (
+        <div className="text-green-600 font-medium space-y-1">
+          <p>{success}</p>
+          {transactionId && (
+            <p className="text-sm text-gray-700">
+              Transaction ID: <span className="font-mono">{transactionId}</span>
+            </p>
+          )}
+        </div>
+      )}
     </form>
   );
 };
