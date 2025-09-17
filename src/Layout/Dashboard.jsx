@@ -29,7 +29,7 @@ const USER_MENU = [
   { to: "/dashboard/cart", icon: FaShoppingBag, label: "My Cart" },
   { to: "/dashboard/orders", icon: FaListAlt, label: "My Orders" },
   { to: "/dashboard/wishlist", icon: FaHeart, label: "Wishlist" },
-  { to: "/dashboard/profile", icon: FaUser, label: "Profile" },
+  { to: "/dashboard/profile", icon: FaUser, label: "My Profile" },
   { to: "/dashboard/payment-history", icon: FaRegListAlt, label: "Payment History" },
 ];
 
