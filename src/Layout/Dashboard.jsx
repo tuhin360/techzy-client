@@ -16,21 +16,30 @@ import useAuth from "../hooks/useAuth";
 import useCart from "../hooks/useCart";
 import useAdmin from "../hooks/useAdmin";
 import { ToyBrick } from "lucide-react";
+import { MdRateReview } from "react-icons/md";
 
 // Static menu configurations for zero computation time
 const ADMIN_MENU = [
   { to: "/dashboard/manage-users", icon: FaUser, label: "Manage Users" },
   { to: "/dashboard/add-product", icon: ToyBrick, label: "Add Product" },
-  { to: "/dashboard/manage-products", icon: FaShoppingBag, label: "Manage Products" },
+  {
+    to: "/dashboard/manage-products",
+    icon: FaShoppingBag,
+    label: "Manage Products",
+  },
   { to: "/dashboard/manage-orders", icon: FaListAlt, label: "Manage Orders" },
 ];
 
 const USER_MENU = [
   { to: "/dashboard/cart", icon: FaShoppingBag, label: "My Cart" },
-  { to: "/dashboard/orders", icon: FaListAlt, label: "My Orders" },
-  { to: "/dashboard/wishlist", icon: FaHeart, label: "Wishlist" },
+  { to: "/dashboard/wishlist", icon: FaHeart, label: "My Wishlist" },
+  { to: "/dashboard/add-review", icon: MdRateReview, label: "Add Review" },
   { to: "/dashboard/profile", icon: FaUser, label: "My Profile" },
-  { to: "/dashboard/payment-history", icon: FaRegListAlt, label: "Payment History" },
+  {
+    to: "/dashboard/payment-history",
+    icon: FaRegListAlt,
+    label: "Payment History",
+  },
 ];
 
 const MAIN_NAV = [
@@ -61,89 +70,96 @@ const FastNavLink = memo(({ to, icon: Icon, label, onClick, isActive }) => (
 ));
 
 // Instant-render sidebar with dual menu approach
-const Sidebar = memo(({ isSidebarOpen, setIsSidebarOpen, isAdmin, cartLength }) => {
-  const closeSidebar = useCallback(() => setIsSidebarOpen(false), [setIsSidebarOpen]);
+const Sidebar = memo(
+  ({ isSidebarOpen, setIsSidebarOpen, isAdmin, cartLength }) => {
+    const closeSidebar = useCallback(
+      () => setIsSidebarOpen(false),
+      [setIsSidebarOpen]
+    );
 
-  return (
-    <aside
-      className={`fixed top-0 right-0 z-40 w-64 sm:w-72 h-full bg-gradient-to-b from-orange-600 to-orange-800 shadow-2xl transform transition-transform duration-300 ease-in-out ${
-        isSidebarOpen ? "translate-x-0" : "translate-x-full"
-      } lg:sticky lg:top-0 lg:translate-x-0 lg:w-72 lg:min-h-screen lg:bg-opacity-90 lg:backdrop-blur-md`}
-    >
-      <div className="p-6">
-        {/* Logo */}
-        <div className="mb-8 flex items-center space-x-2">
-          <Link to="/" onClick={closeSidebar}>
-            <h1 className="text-3xl font-extrabold text-white tracking-tight transition-transform duration-200 hover:scale-105">
-              Tech<span className="text-yellow-300">Zy</span>
-            </h1>
-          </Link>
-        </div>
+    return (
+      <aside
+        className={`fixed top-0 right-0 z-40 w-64 sm:w-72 h-full bg-gradient-to-b from-orange-600 to-orange-800 shadow-2xl transform transition-transform duration-300 ease-in-out ${
+          isSidebarOpen ? "translate-x-0" : "translate-x-full"
+        } lg:sticky lg:top-0 lg:translate-x-0 lg:w-72 lg:min-h-screen lg:bg-opacity-90 lg:backdrop-blur-md`}
+      >
+        <div className="p-6">
+          {/* Logo */}
+          <div className="mb-8 flex items-center space-x-2">
+            <Link to="/" onClick={closeSidebar}>
+              <h1 className="text-3xl font-extrabold text-white tracking-tight transition-transform duration-200 hover:scale-105">
+                Tech<span className="text-yellow-300">Zy</span>
+              </h1>
+            </Link>
+          </div>
 
-        {/* Dashboard Navigation - Render both menus, toggle visibility */}
-        <nav className="space-y-2">
-          {/* Admin Menu */}
-          <div className={isAdmin ? 'block' : 'hidden'}>
-            {ADMIN_MENU.map(({ to, icon: Icon, label }) => (
+          {/* Dashboard Navigation - Render both menus, toggle visibility */}
+          <nav className="space-y-2">
+            {/* Admin Menu */}
+            <div className={isAdmin ? "block" : "hidden"}>
+              {ADMIN_MENU.map(({ to, icon: Icon, label }) => (
+                <NavLink
+                  key={to}
+                  to={to}
+                  className={({ isActive }) =>
+                    `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
+                      isActive ? "bg-black text-orange-600 shadow-md" : ""
+                    }`
+                  }
+                  onClick={closeSidebar}
+                >
+                  <Icon className="w-5 h-5 flex-shrink-0" />
+                  <span>{label}</span>
+                </NavLink>
+              ))}
+            </div>
+
+            {/* User Menu */}
+            <div className={!isAdmin ? "block" : "hidden"}>
+              {USER_MENU.map(({ to, icon: Icon, label }) => (
+                <NavLink
+                  key={to}
+                  to={to}
+                  className={({ isActive }) =>
+                    `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
+                      isActive ? "bg-black text-orange-600 shadow-md" : ""
+                    }`
+                  }
+                  onClick={closeSidebar}
+                >
+                  <Icon className="w-5 h-5 flex-shrink-0" />
+                  <span>
+                    {to === "/dashboard/cart"
+                      ? `${label} (${cartLength})`
+                      : label}
+                  </span>
+                </NavLink>
+              ))}
+            </div>
+          </nav>
+
+          {/* Divider */}
+          <div className="border-t border-orange-400/30 my-6"></div>
+
+          {/* Main Site Navigation */}
+          <nav className="space-y-2">
+            {MAIN_NAV.map(({ to, icon: Icon, label }) => (
               <NavLink
                 key={to}
                 to={to}
-                className={({ isActive }) =>
-                  `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
-                    isActive ? "bg-black text-orange-600 shadow-md" : ""
-                  }`
-                }
+                className="flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-orange-100 hover:bg-white/20 hover:scale-105 transition-all duration-200"
                 onClick={closeSidebar}
               >
                 <Icon className="w-5 h-5 flex-shrink-0" />
                 <span>{label}</span>
               </NavLink>
             ))}
-          </div>
-
-          {/* User Menu */}
-          <div className={!isAdmin ? 'block' : 'hidden'}>
-            {USER_MENU.map(({ to, icon: Icon, label }) => (
-              <NavLink
-                key={to}
-                to={to}
-                className={({ isActive }) =>
-                  `flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-white transition-all duration-200 hover:bg-white/20 hover:scale-105 ${
-                    isActive ? "bg-black text-orange-600 shadow-md" : ""
-                  }`
-                }
-                onClick={closeSidebar}
-              >
-                <Icon className="w-5 h-5 flex-shrink-0" />
-                <span>
-                  {to === "/dashboard/cart" ? `${label} (${cartLength})` : label}
-                </span>
-              </NavLink>
-            ))}
-          </div>
-        </nav>
-
-        {/* Divider */}
-        <div className="border-t border-orange-400/30 my-6"></div>
-
-        {/* Main Site Navigation */}
-        <nav className="space-y-2">
-          {MAIN_NAV.map(({ to, icon: Icon, label }) => (
-            <NavLink
-              key={to}
-              to={to}
-              className="flex items-center space-x-3 px-4 py-3 rounded-lg font-medium text-orange-100 hover:bg-white/20 hover:scale-105 transition-all duration-200"
-              onClick={closeSidebar}
-            >
-              <Icon className="w-5 h-5 flex-shrink-0" />
-              <span>{label}</span>
-            </NavLink>
-          ))}
-        </nav>
-      </div>
-    </aside>
-  );
-});
+          </nav>
+        </div>
+      </aside>
+    );
+  }
+);
 
 // Minimal header with instant rendering
 const Header = memo(({ user }) => (
@@ -159,7 +175,7 @@ const Header = memo(({ user }) => (
           src={user.photoURL}
           alt=""
           loading="lazy"
-          onError={(e) => e.target.style.display = 'none'}
+          onError={(e) => (e.target.style.display = "none")}
         />
       )}
     </div>
@@ -183,13 +199,17 @@ const MobileNav = memo(({ toggleSidebar, isSidebarOpen }) => (
         <span className="text-xs">{label}</span>
       </NavLink>
     ))}
-    
+
     <button
       onClick={toggleSidebar}
       className="flex flex-col items-center p-2 text-gray-600 hover:text-orange-600 transition-colors duration-200"
       aria-label={isSidebarOpen ? "Close menu" : "Open menu"}
     >
-      {isSidebarOpen ? <AiOutlineClose className="w-6 h-6" /> : <AiOutlineMenu className="w-6 h-6" />}
+      {isSidebarOpen ? (
+        <AiOutlineClose className="w-6 h-6" />
+      ) : (
+        <AiOutlineMenu className="w-6 h-6" />
+      )}
       <span className="text-xs">Menu</span>
     </button>
   </div>
@@ -199,25 +219,25 @@ const MobileNav = memo(({ toggleSidebar, isSidebarOpen }) => (
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { user } = useAuth();
-  
+
   // Non-blocking data fetching
   const [cart] = useCart();
   const [isAdmin, isAdminLoading] = useAdmin();
-  
+
   // Local state for instant UI updates with defaults
   const [localAdmin, setLocalAdmin] = useState(() => {
     // Try to get from localStorage immediately
-    const saved = localStorage.getItem('userRole');
-    return saved === 'admin';
+    const saved = localStorage.getItem("userRole");
+    return saved === "admin";
   });
-  
+
   const [cartLength, setCartLength] = useState(0);
 
   // Update local state when real data arrives
   useEffect(() => {
     if (!isAdminLoading) {
       setLocalAdmin(isAdmin);
-      localStorage.setItem('userRole', isAdmin ? 'admin' : 'user');
+      localStorage.setItem("userRole", isAdmin ? "admin" : "user");
     }
   }, [isAdmin, isAdminLoading]);
 
@@ -226,7 +246,7 @@ const Dashboard = () => {
   }, [cart?.length]);
 
   const toggleSidebar = useCallback(() => {
-    setIsSidebarOpen(prev => !prev);
+    setIsSidebarOpen((prev) => !prev);
   }, []);
 
   const handleOverlayClick = useCallback(() => {
@@ -257,9 +277,9 @@ const Dashboard = () => {
         {/* Main Content */}
         <main className="flex-1 w-full h-screen overflow-auto">
           <Header user={user} />
-          
+
           <div className="p-4 sm:p-6 lg:p-8">
-            <Suspense 
+            <Suspense
               fallback={
                 <div className="animate-pulse space-y-4">
                   <div className="h-8 bg-gray-200 rounded w-1/4"></div>
@@ -274,10 +294,7 @@ const Dashboard = () => {
       </div>
 
       {/* Mobile Navigation */}
-      <MobileNav
-        toggleSidebar={toggleSidebar}
-        isSidebarOpen={isSidebarOpen}
-      />
+      <MobileNav toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
     </div>
   );
 };

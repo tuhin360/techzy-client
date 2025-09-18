@@ -19,6 +19,7 @@ import UpdateProductItem from "../pages/Dashboard/UpdateProductItem/UpdateProduc
 import Payment from "../pages/Dashboard/Payment/Payment";
 import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
 import Error from "../pages/Error/Error";
+import Profile from "../pages/Dashboard/Profile/Profile";
 
 export const router = createBrowserRouter([
   {
@@ -73,6 +74,10 @@ export const router = createBrowserRouter([
         path: "wishlist",
         element: <WishList />,
       },
+       {
+        path: "payment",
+        element: <Payment />,
+      },
       // admin routes
       {
         path: "manage-users",
@@ -117,8 +122,8 @@ export const router = createBrowserRouter([
           fetch(`http://localhost:5000/products/${params.id}`),
       },
       {
-        path: "payment",
-        element: <Payment />,
+        path: "profile",
+        element: <Profile />,
       },
     ],
   },
