@@ -18,6 +18,9 @@ import {
   Truck,
   RefreshCw,
 } from "lucide-react";
+import { ArrowDown } from "lucide-react";
+import { ArrowUp } from "lucide-react";
+import { MdOutlinePayment } from "react-icons/md";
 
 const PaymentHistory = () => {
   const { user } = useAuth();
@@ -182,7 +185,6 @@ const PaymentHistory = () => {
     ).length;
   };
 
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-6">
@@ -257,10 +259,11 @@ const PaymentHistory = () => {
             isLoaded ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
         >
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-600 bg-clip-text text-transparent mb-2">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-3">
+            <MdOutlinePayment className="w-8 h-8 text-orange-600" />
             Payment History
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-gray-600">
             Track all your payment transactions and order history
           </p>
         </div>
@@ -373,7 +376,7 @@ const PaymentHistory = () => {
                   }
                   className="px-4 py-3 border-2 border-gray-200 rounded-2xl hover:bg-gray-50 transition-all duration-300 bg-white/50 backdrop-blur-sm font-bold text-lg"
                 >
-                  {sortOrder === "asc" ? "↑" : "↓"}
+                  {sortOrder === "asc" ? <ArrowDown /> : <ArrowUp />}
                 </button>
               </div>
             </div>

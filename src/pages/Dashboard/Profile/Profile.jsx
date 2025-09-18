@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { User, Mail, Camera, Edit3 } from "lucide-react";
 import useAuth from "../../../hooks/useAuth";
+import { FaRegUserCircle } from "react-icons/fa";
 
 const Profile = () => {
   const { user } = useAuth();
@@ -11,14 +13,23 @@ const Profile = () => {
   }, []);
 
   return (
-    <div className=" w-full flex items-center justify-center p-4">
-      <div
-        className={`w-full max-w-3xl transform transition-all duration-1000 ${
-          isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
-        }`}
-      >
-        {/* Profile Card */}
-        <div className="bg-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden relative">
+    <div className="bg-gray-100 md:h-screen py-10 px-4">
+      <div className="w-full max-w-4xl">
+        {/* 🔹 Title + Subtitle (same format as AddReview) */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-3">
+            <FaRegUserCircle className="w-8 h-8 text-orange-600" />
+            My Profile
+          </h1>
+          <p className="text-gray-600">Here’s your personal information</p>
+        </div>
+
+        {/* 🔹 Profile Card */}
+        <div
+          className={`bg-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden transform transition-all duration-1000 ${
+            isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
+          }`}
+        >
           {/* Cover Image */}
           <div className="h-36 sm:h-44 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 relative">
             <div className="absolute inset-0 bg-black/20"></div>
@@ -28,7 +39,7 @@ const Profile = () => {
           </div>
 
           {/* Profile Info */}
-          <div className="relative px-6 sm:px-8 pb-8 -mt-16 flex flex-col items-center text-center">
+          <div className="relative px-6 sm:px-8 pb-10 -mt-16 flex flex-col items-center text-center">
             {/* Profile Picture */}
             <div className="relative group mb-4">
               <div className="w-32 h-32 rounded-3xl border-4 border-white shadow-2xl overflow-hidden bg-gradient-to-br from-blue-400 to-indigo-600">

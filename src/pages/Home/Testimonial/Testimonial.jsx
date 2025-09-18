@@ -1,83 +1,20 @@
 import React, { useState } from "react";
-import {
-  Star,
-  Quote,
-  ChevronLeft,
-  ChevronRight,
-  User,
-  MapPin,
-} from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
 
 const Testimonial = () => {
+  const axiosPublic = useAxiosPublic();
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
-  const testimonials = [
-    {
-      id: 1,
-      name: "Sarah Ahmed",
-      location: "Dhaka, Bangladesh",
-      avatar:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
-      rating: 5,
-      review:
-        "Absolutely amazing service! I ordered an iPhone and it arrived the next day in perfect condition. The customer support team was incredibly helpful throughout the entire process. Will definitely shop here again!",
-      product: "iPhone 15 Pro",
-      verified: true,
-      date: "2 days ago",
+  // Fetch reviews dynamically
+  const { data: testimonials = [], isLoading, error } = useQuery({
+    queryKey: ["reviews"],
+    queryFn: async () => {
+      const res = await axiosPublic.get("/reviews");
+      return res.data;
     },
-    {
-      id: 2,
-      name: "Mohammad Rahman",
-      location: "Chittagong, Bangladesh",
-      avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
-      rating: 5,
-      review:
-        "Best electronics store in Bangladesh! The prices are competitive and the quality is top-notch. I've bought multiple items including a laptop and headphones - everything exceeded my expectations.",
-      product: "ASUS ROG Laptop",
-      verified: true,
-      date: "1 week ago",
-    },
-    {
-      id: 3,
-      name: "Fatima Khan",
-      location: "Sylhet, Bangladesh",
-      avatar:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-      rating: 4,
-      review:
-        "Great experience shopping here. The website is easy to navigate and the delivery was prompt. The Apple Watch I ordered works perfectly and came with all original accessories.",
-      product: "Apple Watch Series 9",
-      verified: true,
-      date: "3 days ago",
-    },
-    {
-      id: 4,
-      name: "Karim Hassan",
-      location: "Rajshahi, Bangladesh",
-      avatar:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-      rating: 5,
-      review:
-        "Outstanding quality and service! I was skeptical about buying expensive electronics online, but this store proved me wrong. Fast delivery, genuine products, and excellent customer care.",
-      product: "Canon EOS R6 Mark II",
-      verified: true,
-      date: "5 days ago",
-    },
-    {
-      id: 5,
-      name: "Nusrat Jahan",
-      location: "Khulna, Bangladesh",
-      avatar:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80",
-      rating: 5,
-      review:
-        "Love this store! The AirPods I bought sound incredible and the battery life is exactly as advertised. Plus, the packaging was premium and the delivery was super fast. Highly recommended!",
-      product: "Apple AirPods Pro",
-      verified: true,
-      date: "1 week ago",
-    },
-  ];
+  });
 
   const nextTestimonial = () => {
     setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
@@ -93,8 +30,25 @@ const Testimonial = () => {
     setCurrentTestimonial(index);
   };
 
+  if (isLoading) return <div className="text-center py-10">Loading...</div>;
+  if (error)
+    return (
+      <div className="text-center py-10 text-red-500">
+        Error fetching reviews
+      </div>
+    );
+
+  if (testimonials.length === 0)
+    return (
+      <div className="text-center py-10 text-gray-600">
+        No reviews available.
+      </div>
+    );
+
+  const current = testimonials[currentTestimonial];
+
   return (
-    <section className="my-20 sm:rounded-none md:rounded-xl">
+    <section className="my-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-8">
@@ -126,47 +80,34 @@ const Testimonial = () => {
                   <Star
                     key={i}
                     className={`w-5 h-5 ${
-                      i < testimonials[currentTestimonial].rating
+                      i < current.rating
                         ? "text-yellow-400 fill-yellow-400"
                         : "text-gray-300"
                     }`}
                   />
                 ))}
                 <span className="text-sm font-semibold text-gray-900 ml-2">
-                  {testimonials[currentTestimonial].rating}.0
+                  {current.rating}.0
                 </span>
               </div>
 
               {/* Review Text */}
               <blockquote className="text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 font-medium">
-                "{testimonials[currentTestimonial].review}"
+                "{current.details}"
               </blockquote>
 
               {/* Customer Info */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <img
-                    src={testimonials[currentTestimonial].avatar}
-                    alt={testimonials[currentTestimonial].name}
+                    src={current.avatar}
+                    alt={current.name}
                     className="w-12 h-12 rounded-full object-cover shadow-md"
                   />
                   <div>
-                    <h4 className="text-base font-bold text-gray-900 flex items-center space-x-2">
-                      <span>{testimonials[currentTestimonial].name}</span>
-                      {testimonials[currentTestimonial].verified && (
-                        <span className="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full font-semibold">
-                          Verified
-                        </span>
-                      )}
+                    <h4 className="text-base font-bold text-gray-900">
+                      {current.name}
                     </h4>
-                    <div className="flex items-center text-gray-600 text-sm">
-                      <MapPin className="w-4 h-4 mr-1" />
-                      <span>{testimonials[currentTestimonial].location}</span>
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      Purchased: {testimonials[currentTestimonial].product} •{" "}
-                      {testimonials[currentTestimonial].date}
-                    </div>
                   </div>
                 </div>
 

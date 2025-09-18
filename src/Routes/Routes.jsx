@@ -20,12 +20,13 @@ import Payment from "../pages/Dashboard/Payment/Payment";
 import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
 import Error from "../pages/Error/Error";
 import Profile from "../pages/Dashboard/Profile/Profile";
+import AddReview from "../pages/Dashboard/AddReview/AddReview";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Main />,
-    errorElement: <Error/>,
+    errorElement: <Error />,
     children: [
       {
         path: "/",
@@ -74,7 +75,11 @@ export const router = createBrowserRouter([
         path: "wishlist",
         element: <WishList />,
       },
-       {
+      {
+        path: "add-review",
+        element: <AddReview />,
+      },
+      {
         path: "payment",
         element: <Payment />,
       },
