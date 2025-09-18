@@ -1,8 +1,9 @@
 import { Helmet } from "react-helmet-async";
 import { ProductCard } from "../../components/ProductCard";
 import { SkeletonCard } from "../../components/SkeletonCard";
-import  useProducts  from "../../hooks/useProducts";
+import useProducts from "../../hooks/useProducts";
 import { ArrowRight } from "lucide-react";
+import SharedTitleSection from "../../components/SharedTitleSection/SharedTitleSection";
 
 export const Shop = () => {
   const { products, loading, error } = useProducts();
@@ -21,17 +22,11 @@ export const Shop = () => {
       </Helmet>
       <section className="max-w-7xl mx-auto py-16 lg:py-20">
         <div className="px-4 sm:px-6 lg:px-0">
-          <div className="text-center mb-12">
-            <h2 className="text-5xl md:text-6xl font-bold text-gray-900">
-              All{" "}
-              <span className="text-gradient bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
-                Products
-              </span>
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-4">
-              Browse through our entire product collection
-            </p>
-          </div>
+          <SharedTitleSection
+            title="All"
+            highlight="Products"
+            subtitle="Browse through our entire product collection"
+          />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
             {loading

@@ -4,13 +4,16 @@ import useProducts from "../../../hooks/useProducts";
 
 import { BestSellProductCard } from "../../../components/BestSellProductCard";
 import { BestSellerCardSkeleton } from "../../../components/BestSellerCardSkeleton";
+import SharedTitleSection from "../../../components/SharedTitleSection/SharedTitleSection";
 
 const BestSellProduct = () => {
   const { products, loading, error } = useProducts();
   const [wishlist, setWishlist] = useState([]);
 
   // Filter only "best-seller" tagged products
-  const bestSellProducts = products.filter((p) => p.tags?.includes("best-seller"));
+  const bestSellProducts = products.filter((p) =>
+    p.tags?.includes("best-seller")
+  );
 
   const toggleWishlist = (productId) => {
     setWishlist((prev) =>
@@ -24,17 +27,11 @@ const BestSellProduct = () => {
     <section className="py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-bold text-gray-900">
-            Best{" "}
-            <span className="text-gradient bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
-              Sellers
-            </span>
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mt-6">
-            Top-rated products loved by thousands of customers worldwide
-          </p>
-        </div>
+        <SharedTitleSection
+          title="Best"
+          highlight="Sellers"
+          subtitle="Top-rated products loved by thousands of customers worldwide"
+        />
 
         {error && <div className="text-center text-red-500">{error}</div>}
 
@@ -72,4 +69,3 @@ const BestSellProduct = () => {
 };
 
 export default BestSellProduct;
-

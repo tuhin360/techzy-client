@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import useProducts from "../../../hooks/useProducts";
 import { ProductCard } from "../../../components/ProductCard";
 import { SkeletonCard } from "../../../components/SkeletonCard";
+import SharedTitleSection from "../../../components/SharedTitleSection/SharedTitleSection";
 
 const NewProducts = () => {
   const { products, loading, error } = useProducts();
@@ -21,18 +22,11 @@ const NewProducts = () => {
   return (
     <section className="max-w-7xl mx-auto py-16 lg:py-20">
       <div className="px-4 sm:px-6 lg:px-0">
-        <div className="text-center mb-12">
-          <h2 className="text-5xl md:text-6xl font-bold text-gray-900">
-            New{" "}
-            <span className="text-gradient bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
-              Products
-            </span>
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-4">
-            Discover the latest technology that will revolutionize your digital
-            experience
-          </p>
-        </div>
+        <SharedTitleSection
+          title="New"
+          highlight="Products"
+          subtitle="Discover the latest technology that will revolutionize your digital experience"
+        />
 
         {error && (
           <div className="text-center py-10 text-red-500 font-semibold">

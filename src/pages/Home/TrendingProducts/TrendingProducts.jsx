@@ -5,10 +5,11 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { SkeletonCard } from "../../../components/SkeletonCard";
-import  useProducts  from "../../../hooks/useProducts";
+import useProducts from "../../../hooks/useProducts";
 import { ArrowRight } from "lucide-react";
 import { ProductCard } from "../../../components/ProductCard";
 import "./TrendingProducts.css"; //
+import SharedTitleSection from "../../../components/SharedTitleSection/SharedTitleSection";
 
 const TrendingProducts = () => {
   const { products, loading, error } = useProducts();
@@ -27,18 +28,11 @@ const TrendingProducts = () => {
   return (
     <section className="max-w-7xl mx-auto mb-20">
       <div className="px-4 sm:px-6 lg:px-0">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-5xl md:text-6xl font-bold text-gray-900">
-            Trending{" "}
-            <span className="text-gradient bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
-              Products
-            </span>
-          </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto mt-6">
-            Latest gadgets and electronics with amazing deals
-          </p>
-        </div>
+        <SharedTitleSection
+          title="Trending"
+          highlight="Products"
+          subtitle="Latest gadgets and electronics with amazing deals"
+        />
 
         {error && (
           <div className="text-center py-10 text-red-500 font-semibold">

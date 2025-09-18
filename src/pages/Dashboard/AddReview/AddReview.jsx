@@ -111,7 +111,7 @@ const AddReview = () => {
 
             {/* Word count display */}
             <p className="text-gray-500 text-sm mt-1">
-              Word Count: {wordCount} / 100
+              Word Count: {wordCount} / 50
             </p>
 
             {/* Error message */}

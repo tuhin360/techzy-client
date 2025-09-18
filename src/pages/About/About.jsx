@@ -1,6 +1,7 @@
 import { Store, Truck, Shield, ArrowRight, Star, Users } from "lucide-react";
 import headphoneGirl from "../../assets/banner/2.jpg";
 import { Helmet } from "react-helmet-async";
+import SharedTitleSection from "../../components/SharedTitleSection/SharedTitleSection";
 
 const About = () => {
   const features = [
@@ -62,19 +63,14 @@ const About = () => {
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section */}
-          <div className="text-center md:text-left mb-12">
-            <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-3">
-              About{" "}
-              <span className="bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
-                Techzy
-              </span>
-            </h2>
-            <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto md:mx-0">
-              Your premier destination for cutting-edge electronics in
+
+          <SharedTitleSection
+            title="About"
+            highlight="Techzy"
+            subtitle="Your premier destination for cutting-edge electronics in
               Bangladesh. We bring you the latest gadgets with authenticity,
-              quality, and unmatched service.
-            </p>
-          </div>
+              quality, and unmatched service."
+          />
 
           {/* Mission & Image */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-16">

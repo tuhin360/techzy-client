@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 import useProducts from "../../../hooks/useProducts";
 import { FridayOfferCardSkeleton } from "../../../components/FridayOfferCardSkeleton";
 import { Link } from "react-router-dom";
+import SharedTitleSection from "../../../components/SharedTitleSection/SharedTitleSection";
 
 const gradients = [
   "from-pink-400 to-purple-500",
@@ -28,17 +29,11 @@ const FridayOffer = () => {
     <section className="pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h2 className="text-5xl md:text-6xl font-bold text-gray-900">
-            Friday{" "}
-            <span className="text-gradient bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
-              Offers
-            </span>
-          </h2>
-          <p className="text-gray-600 max-w-md mx-auto mt-6">
-            Grab exclusive deals on the latest gadgets today!
-          </p>
-        </div>
+        <SharedTitleSection
+          title="Friday"
+          highlight="Offers"
+          subtitle="Grab exclusive deals on the latest gadgets today!"
+        />
 
         {/* Offers Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
