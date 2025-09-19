@@ -1,3 +1,4 @@
+import SharedScrollToTop from "../../../components/SharedScrollToTop/SharedScrollToTop";
 import Banner from "../Banner/Banner";
 import BestSellProduct from "../BestSellProduct/BestSellProduct";
 import Cover from "../Cover/Cover";
@@ -15,6 +16,7 @@ const HomePage = () => {
       <Helmet>
         <title>Techzy | Home</title>
       </Helmet>
+      <SharedScrollToTop/>
       <Banner />
       <NewProducts />
       <TrendingProducts />

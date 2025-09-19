@@ -36,7 +36,7 @@ const BestSellProduct = () => {
         {error && <div className="text-center text-red-500">{error}</div>}
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-8">
           {loading
             ? [...Array(6)].map((_, i) => <BestSellerCardSkeleton key={i} />)
             : bestSellProducts.map((product, index) => (
