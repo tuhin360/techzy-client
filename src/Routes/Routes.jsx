@@ -23,6 +23,7 @@ import Profile from "../pages/Dashboard/Profile/Profile";
 import AddReview from "../pages/Dashboard/AddReview/AddReview";
 import AllNewProducts from "../pages/AllNewProducts/AllNewProducts";
 import AllTrendingProducts from "../pages/AllTrendingProducts/AllTrendingProducts";
+import AllBestSellerProducts from "../pages/AllBestSellerProducts/AllBestSellerProducts";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
       {
         path: "/all-trending-products",
         element: <AllTrendingProducts/>
+      },
+      {
+        path: "/all-bestSeller-products",
+        element: <AllBestSellerProducts/>
       },
       {
         path: "shop",

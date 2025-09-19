@@ -5,6 +5,7 @@ import useProducts from "../../../hooks/useProducts";
 import { BestSellProductCard } from "../../../components/BestSellProductCard";
 import { BestSellerCardSkeleton } from "../../../components/BestSellerCardSkeleton";
 import SharedTitleSection from "../../../components/SharedTitleSection/SharedTitleSection";
+import { Link } from "react-router-dom";
 
 const BestSellProduct = () => {
   const { products, loading, error } = useProducts();
@@ -36,10 +37,10 @@ const BestSellProduct = () => {
         {error && <div className="text-center text-red-500">{error}</div>}
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-8">
           {loading
             ? [...Array(6)].map((_, i) => <BestSellerCardSkeleton key={i} />)
-            : bestSellProducts.map((product, index) => (
+            : bestSellProducts.slice(0,8).map((product, index) => (
                 <BestSellProductCard
                   key={product._id}
                   product={product}
@@ -58,10 +59,12 @@ const BestSellProduct = () => {
 
         {/* Explore Button */}
         <div className="text-center mt-16">
-          <button className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-2xl hover:from-yellow-600 hover:to-orange-600 transition-colors duration-300 shadow-lg cursor-pointer">
-            <span className="text-lg">Explore All Products</span>
-            <ArrowRight className="w-6 h-6 ml-3" />
-          </button>
+          <Link to="/all-bestSeller-products">
+            <button className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-2xl hover:from-yellow-600 hover:to-orange-600 transition-colors duration-300 shadow-lg cursor-pointer">
+              <span className="text-lg">Show More Best Seller Products</span>
+              <ArrowRight className="w-6 h-6 ml-3" />
+            </button>
+          </Link>
         </div>
       </div>
     </section>
