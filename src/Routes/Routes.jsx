@@ -22,6 +22,7 @@ import Error from "../pages/Error/Error";
 import Profile from "../pages/Dashboard/Profile/Profile";
 import AddReview from "../pages/Dashboard/AddReview/AddReview";
 import AllNewProducts from "../pages/AllNewProducts/AllNewProducts";
+import AllTrendingProducts from "../pages/AllTrendingProducts/AllTrendingProducts";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
       {
         path: "/all-new-products",
         element: <AllNewProducts/>
+      },
+      {
+        path: "/all-trending-products",
+        element: <AllTrendingProducts/>
       },
       {
         path: "shop",

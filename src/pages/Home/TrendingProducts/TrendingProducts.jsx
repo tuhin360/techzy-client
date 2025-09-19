@@ -10,6 +10,7 @@ import { ArrowRight } from "lucide-react";
 import { ProductCard } from "../../../components/ProductCard";
 import "./TrendingProducts.css"; //
 import SharedTitleSection from "../../../components/SharedTitleSection/SharedTitleSection";
+import { Link } from "react-router-dom";
 
 const TrendingProducts = () => {
   const { products, loading, error } = useProducts();
@@ -73,10 +74,12 @@ const TrendingProducts = () => {
 
         {/* Explore All Button */}
         <div className="text-center mt-16">
+          <Link to="/all-trending-products">
           <button className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-2xl hover:from-yellow-600 hover:to-orange-600 transition-colors duration-300 shadow-lg cursor-pointer">
-            <span className="text-lg">Explore All Products</span>
+            <span className="text-lg">Show More Trending Products</span>
             <ArrowRight className="w-6 h-6 ml-3" />
           </button>
+          </Link>
         </div>
       </div>
     </section>
