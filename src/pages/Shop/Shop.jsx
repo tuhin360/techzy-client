@@ -2,12 +2,27 @@ import { Helmet } from "react-helmet-async";
 import { ProductCard } from "../../components/ProductCard";
 import { SkeletonCard } from "../../components/SkeletonCard";
 import useProducts from "../../hooks/useProducts";
-import { ArrowRight } from "lucide-react";
 import SharedTitleSection from "../../components/SharedTitleSection/SharedTitleSection";
-import SharedScrollToTop from "../../components/SharedScrollToTop/SharedScrollToTop";
+import { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export const Shop = () => {
   const { products, loading, error } = useProducts();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Pagination setup
+  const productsPerPage = 12;
+  const totalPages = Math.ceil(products.length / productsPerPage);
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const currentProducts = products.slice(
+    startIndex,
+    startIndex + productsPerPage
+  );
+
+  // Scroll to top on page change
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, [currentPage]);
 
   if (error)
     return (
@@ -21,7 +36,6 @@ export const Shop = () => {
       <Helmet>
         <title>Techzy | Shop</title>
       </Helmet>
-      <SharedScrollToTop/>
       <section className="max-w-7xl mx-auto py-16 lg:py-20">
         <div className="px-4 sm:px-6 lg:px-0">
           <SharedTitleSection
@@ -30,22 +44,66 @@ export const Shop = () => {
             subtitle="Browse through our entire product collection"
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
+          {/* Products Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
             {loading
-              ? Array.from({ length: 9 }).map((_, i) => (
+              ? Array.from({ length: productsPerPage }).map((_, i) => (
                   <SkeletonCard key={i} />
                 ))
-              : products.map((product) => (
+              : currentProducts.map((product) => (
                   <ProductCard key={product._id} product={product} />
                 ))}
           </div>
 
-          <div className="text-center mt-16">
-            <button className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-2xl hover:from-yellow-600 hover:to-orange-600 transition-colors duration-300 shadow-lg cursor-pointer">
-              <span className="text-lg">Back to Home</span>
-              <ArrowRight className="w-6 h-6 ml-3" />
-            </button>
-          </div>
+          {/* Pagination */}
+          {!loading && totalPages > 1 && (
+            <div className="flex justify-center items-center mt-12 space-x-2">
+              {/* Previous Button */}
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+                className={`flex items-center px-4 py-2 rounded-lg font-semibold transition-colors ${
+                  currentPage === 1
+                    ? "bg-gray-200 text-gray-400 cursor-pointer"
+                    : "bg-yellow-500 text-white hover:bg-yellow-600 cursor-pointer"
+                }`}
+              >
+                <ChevronLeft className="w-4 h-4 mr-1" />
+                Prev
+              </button>
+
+              {/* Page Numbers */}
+              {Array.from({ length: totalPages }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+                    currentPage === i + 1
+                      ? "bg-orange-500 text-white cursor-pointer"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300 cursor-pointer"
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+
+              {/* Next Button */}
+              <button
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(p + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className={`flex items-center px-4 py-2 rounded-lg font-semibold transition-colors ${
+                  currentPage === totalPages
+                    ? "bg-gray-200 text-gray-400 cursor-pointer"
+                    : "bg-yellow-500 text-white hover:bg-yellow-600 cursor-pointer"
+                }`}
+              >
+                Next
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </button>
+            </div>
+          )}
         </div>
       </section>
     </>

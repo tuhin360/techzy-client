@@ -7,7 +7,6 @@ import useCart from "../hooks/useCart";
 import Swal from "sweetalert2";
 
 export const ProductCard = ({ product }) => {
-  // console.log({ product });
   const [wishlist, setWishlist] = useState([]);
   const { title, image, price, _id } = product;
   const { user } = useAuth();

@@ -3,6 +3,8 @@ import useProducts from "../../hooks/useProducts";
 import { ProductCard } from "../../components/ProductCard";
 import { SkeletonCard } from "../../components/SkeletonCard";
 import SharedTitleSection from "../../components/SharedTitleSection/SharedTitleSection";
+import { ChevronLeft } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 const AllBestSellerProducts = () => {
   const { products, loading, error } = useProducts();
@@ -79,15 +81,16 @@ const AllBestSellerProducts = () => {
         {!loading && totalPages > 1 && (
           <div className="flex justify-center items-center mt-12 space-x-2">
             {/* Previous Button */}
-            <button
+             <button
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
               disabled={currentPage === 1}
-              className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+              className={`flex items-center px-4 py-2 rounded-lg font-semibold transition-colors ${
                 currentPage === 1
-                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  : "bg-yellow-500 text-white hover:bg-yellow-600"
+                  ? "bg-gray-200 text-gray-400 cursor-pointer"
+                  : "bg-yellow-500 text-white hover:bg-yellow-600 cursor-pointer"
               }`}
             >
+              <ChevronLeft className="w-4 h-4 mr-1" />
               Prev
             </button>
 
@@ -98,8 +101,8 @@ const AllBestSellerProducts = () => {
                 onClick={() => setCurrentPage(i + 1)}
                 className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
                   currentPage === i + 1
-                    ? "bg-orange-500 text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    ? "bg-orange-500 text-white cursor-pointer"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300 cursor-pointer"
                 }`}
               >
                 {i + 1}
@@ -110,13 +113,14 @@ const AllBestSellerProducts = () => {
             <button
               onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
               disabled={currentPage === totalPages}
-              className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+              className={`flex items-center px-4 py-2 rounded-lg font-semibold transition-colors ${
                 currentPage === totalPages
-                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  : "bg-yellow-500 text-white hover:bg-yellow-600"
+                  ? "bg-gray-200 text-gray-400  cursor-pointer"
+                  : "bg-yellow-500 text-white hover:bg-yellow-600 cursor-pointer"
               }`}
             >
               Next
+              <ChevronRight className="w-4 h-4 ml-1" />
             </button>
           </div>
         )}

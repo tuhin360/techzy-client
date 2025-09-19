@@ -1,7 +1,12 @@
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import useProducts from "../../../hooks/useProducts";
 import { FridayOfferCardSkeleton } from "../../../components/FridayOfferCardSkeleton";
-import { Link } from "react-router-dom";
 import SharedTitleSection from "../../../components/SharedTitleSection/SharedTitleSection";
 
 const gradients = [
@@ -35,48 +40,59 @@ const FridayOffer = () => {
           subtitle="Grab exclusive deals on the latest gadgets today!"
         />
 
-        {/* Offers Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Offers Slider */}
+        <Swiper
+          modules={[Navigation, Pagination, Autoplay]}
+          spaceBetween={20}
+          slidesPerView={1}
+          navigation
+          autoplay={{ delay: 3000, disableOnInteraction: true }}
+          breakpoints={{
+            640: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+            1280: { slidesPerView: 4 },
+          }}
+        >
           {offeredProducts.map((offer, index) => {
-            const gradient = gradients[index % gradients.length]; // Cycle through gradients
+            const gradient = gradients[index % gradients.length];
             return (
-              <div
-                key={offer._id}
-                className={`relative bg-gradient-to-br ${gradient} rounded-xl shadow-lg overflow-hidden h-48 flex flex-col justify-between p-4`}
-              >
-                <div>
-                  <div className="flex items-center mb-1">
+              <SwiperSlide key={offer._id}>
+                <div
+                  className={`relative bg-gradient-to-br ${gradient} rounded-xl shadow-lg overflow-hidden h-64 flex flex-col justify-between p-4`}
+                >
+                  <div>
                     <span className="text-white text-xs font-medium opacity-90">
                       {offer.category}
                     </span>
+                    <h3 className="text-lg font-bold text-white mt-1">
+                      {offer.title}
+                    </h3>
+                    <span className="text-lg font-bold text-white">
+                      {formatPrice(offer.price)}
+                    </span>
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2">
-                    {offer.title}
-                  </h3>
-                  <span className="text-lg font-bold text-white">
-                    {formatPrice(offer.price)}
-                  </span>
-                </div>
-                <Link to="/shop">
-                  <button className="flex items-center space-x-1 bg-white hover:bg-gray-100 py-1.5 px-4 rounded-full font-semibold text-xs w-fit transition-colors duration-200 cursor-pointer">
-                    <span>Shop Now</span>
-                    <ArrowRight className="w-3 h-3" />
-                  </button>
-                </Link>
+                  <Link to="/all-fridayOffer-products">
+                    <button className="flex items-center space-x-1 bg-white hover:bg-gray-100 py-1.5 px-4 rounded-full font-semibold text-xs w-fit transition-colors duration-200 cursor-pointer mt-2">
+                      <span>Shop Now</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </button>
+                  </Link>
 
-                {offer.image && (
-                  <img
-                    src={offer.image}
-                    alt={offer.title}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 w-28 h-28 object-contain"
-                  />
-                )}
-              </div>
+                  {offer.image && (
+                    <img
+                      src={offer.image}
+                      alt={offer.title}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-28 h-28 object-contain"
+                    />
+                  )}
+                </div>
+              </SwiperSlide>
             );
           })}
-        </div>
+        </Swiper>
 
-        {/* Black Friday Main Deal (Full width, below 4 cards) */}
+        {/* Black Friday Main Deal (Full width, below slider) */}
         <div className="mt-8">
           <div className="relative h-80 bg-black rounded-xl shadow-lg overflow-hidden">
             <div className="p-6 sm:p-8 h-full flex flex-col justify-center text-center">
@@ -106,6 +122,16 @@ const FridayOffer = () => {
               </button>
             </div>
           </div>
+        </div>
+
+        {/* Show More Button */}
+        <div className="text-center mt-16">
+          <Link to="/all-fridayOffer-products">
+            <button className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-2xl hover:from-yellow-600 hover:to-orange-600 transition-colors duration-300 shadow-lg cursor-pointer">
+              <span className="text-lg">Show More</span>
+              <ArrowRight className="w-6 h-6 ml-3" />
+            </button>
+          </Link>
         </div>
       </div>
     </section>

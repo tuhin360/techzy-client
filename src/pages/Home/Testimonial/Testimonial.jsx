@@ -113,14 +113,14 @@ const Testimonial = () => {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={prevTestimonial}
-                    className="group p-3 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+                    className="group p-3 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 cursor-pointer"
                   >
                     <ChevronLeft className="w-5 h-5 text-gray-600 group-hover:text-gray-900 transition-colors duration-200" />
                   </button>
 
                   <button
                     onClick={nextTestimonial}
-                    className="group p-3 bg-orange-600 rounded-2xl shadow-sm hover:shadow-md hover:bg-orange-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+                    className="group p-3 bg-orange-600 rounded-2xl shadow-sm hover:shadow-md hover:bg-orange-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 cursor-pointer"
                   >
                     <ChevronRight className="w-5 h-5 text-white group-hover:text-orange-50 transition-colors duration-200" />
                   </button>
