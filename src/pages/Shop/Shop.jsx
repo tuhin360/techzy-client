@@ -4,6 +4,7 @@ import { SkeletonCard } from "../../components/SkeletonCard";
 import useProducts from "../../hooks/useProducts";
 import { ArrowRight } from "lucide-react";
 import SharedTitleSection from "../../components/SharedTitleSection/SharedTitleSection";
+import SharedScrollToTop from "../../components/SharedScrollToTop/SharedScrollToTop";
 
 export const Shop = () => {
   const { products, loading, error } = useProducts();
@@ -20,6 +21,7 @@ export const Shop = () => {
       <Helmet>
         <title>Techzy | Shop</title>
       </Helmet>
+      <SharedScrollToTop/>
       <section className="max-w-7xl mx-auto py-16 lg:py-20">
         <div className="px-4 sm:px-6 lg:px-0">
           <SharedTitleSection

@@ -4,6 +4,7 @@ import useProducts from "../../../hooks/useProducts";
 import { ProductCard } from "../../../components/ProductCard";
 import { SkeletonCard } from "../../../components/SkeletonCard";
 import SharedTitleSection from "../../../components/SharedTitleSection/SharedTitleSection";
+import { Link } from "react-router-dom";
 
 const NewProducts = () => {
   const { products, loading, error } = useProducts();
@@ -50,10 +51,12 @@ const NewProducts = () => {
         </div>
 
         <div className="text-center mt-16">
-          <button className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-2xl hover:from-yellow-600 hover:to-orange-600 transition-colors duration-300 shadow-lg cursor-pointer">
-            <span className="text-lg">Explore All Products</span>
-            <ArrowRight className="w-6 h-6 ml-3" />
-          </button>
+          <Link to="/all-new-products">
+            <button className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-2xl hover:from-yellow-600 hover:to-orange-600 transition-colors duration-300 shadow-lg cursor-pointer">
+              <span className="text-lg">Show More</span>
+              <ArrowRight className="w-6 h-6 ml-3" />
+            </button>
+          </Link>
         </div>
       </div>
     </section>

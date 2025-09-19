@@ -21,6 +21,7 @@ import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
 import Error from "../pages/Error/Error";
 import Profile from "../pages/Dashboard/Profile/Profile";
 import AddReview from "../pages/Dashboard/AddReview/AddReview";
+import AllNewProducts from "../pages/AllNewProducts/AllNewProducts";
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <HomePage />,
+      },
+      {
+        path: "/all-new-products",
+        element: <AllNewProducts/>
       },
       {
         path: "shop",
