@@ -2,15 +2,19 @@ import { Helmet } from "react-helmet-async";
 import { ProductCard } from "../../components/ProductCard";
 import { SkeletonCard } from "../../components/SkeletonCard";
 import useProducts from "../../hooks/useProducts";
+import useWishlist from "../../hooks/useWishlist";
 import SharedTitleSection from "../../components/SharedTitleSection/SharedTitleSection";
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export const Shop = () => {
   const { products, loading, error } = useProducts();
-  const [currentPage, setCurrentPage] = useState(1);
 
-  // Pagination setup
+  // ✅ centralized wishlist from hook
+  const { wishlistIds, toggleWishlist } = useWishlist();
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
   const totalPages = Math.ceil(products.length / productsPerPage);
   const startIndex = (currentPage - 1) * productsPerPage;
@@ -19,7 +23,6 @@ export const Shop = () => {
     startIndex + productsPerPage
   );
 
-  // Scroll to top on page change
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, [currentPage]);
@@ -36,6 +39,7 @@ export const Shop = () => {
       <Helmet>
         <title>Techzy | Shop</title>
       </Helmet>
+
       <section className="max-w-7xl mx-auto py-16 lg:py-20">
         <div className="px-4 sm:px-6 lg:px-0">
           <SharedTitleSection
@@ -51,25 +55,29 @@ export const Shop = () => {
                   <SkeletonCard key={i} />
                 ))
               : currentProducts.map((product) => (
-                  <ProductCard key={product._id} product={product} />
+                  <ProductCard
+                    key={product._id}
+                    product={product}
+                    wishlist={wishlistIds} // ✅ wishlistIds from hook
+                    toggleWishlist={toggleWishlist} // ✅ central toggle
+                  />
                 ))}
           </div>
 
           {/* Pagination */}
           {!loading && totalPages > 1 && (
             <div className="flex justify-center items-center mt-12 space-x-2">
-              {/* Previous Button */}
+              {/* Prev */}
               <button
                 onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                 disabled={currentPage === 1}
                 className={`flex items-center px-4 py-2 rounded-lg font-semibold transition-colors ${
                   currentPage === 1
-                    ? "bg-gray-200 text-gray-400 cursor-pointer"
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                     : "bg-yellow-500 text-white hover:bg-yellow-600 cursor-pointer"
                 }`}
               >
-                <ChevronLeft className="w-4 h-4 mr-1" />
-                Prev
+                <ChevronLeft className="w-4 h-4 mr-1" /> Prev
               </button>
 
               {/* Page Numbers */}
@@ -87,20 +95,17 @@ export const Shop = () => {
                 </button>
               ))}
 
-              {/* Next Button */}
+              {/* Next */}
               <button
-                onClick={() =>
-                  setCurrentPage((p) => Math.min(p + 1, totalPages))
-                }
+                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                 disabled={currentPage === totalPages}
                 className={`flex items-center px-4 py-2 rounded-lg font-semibold transition-colors ${
                   currentPage === totalPages
-                    ? "bg-gray-200 text-gray-400 cursor-pointer"
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                     : "bg-yellow-500 text-white hover:bg-yellow-600 cursor-pointer"
                 }`}
               >
-                Next
-                <ChevronRight className="w-4 h-4 ml-1" />
+                Next <ChevronRight className="w-4 h-4 ml-1" />
               </button>
             </div>
           )}

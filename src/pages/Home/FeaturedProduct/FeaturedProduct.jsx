@@ -5,29 +5,24 @@ import { FeaturedProductCard } from "../../../components/FeaturedProductCard";
 import { FeaturedProductCardSkeleton } from "../../../components/FeaturedProductCardSkeleton";
 import SharedTitleSection from "../../../components/SharedTitleSection/SharedTitleSection";
 import { Link } from "react-router-dom";
+import useWishlist from "../../../hooks/useWishlist"; // ✅ import shared wishlist hook
 
 const FeaturedProduct = () => {
   const { products, loading, error } = useProducts();
   const [selectedProduct, setSelectedProduct] = useState(0);
-  const [wishlist, setWishlist] = useState([]);
+  const { wishlistIds, toggleWishlist } = useWishlist(); // ✅ use shared hook
 
   // Filter featured products
   const featuredProducts = products.filter((p) => p.tags?.includes("featured"));
-
-  const toggleWishlist = (productId) => {
-    setWishlist((prev) =>
-      prev.includes(productId)
-        ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
-    );
-  };
 
   if (loading) return <FeaturedProductCardSkeleton />;
   if (error)
     return <div className="text-center py-10 text-red-500">{error}</div>;
   if (!featuredProducts.length)
     return (
-      <div className="text-center py-10">No featured products available.</div>
+      <div className="text-center py-10">
+        No featured products available.
+      </div>
     );
 
   const currentProduct = featuredProducts[selectedProduct];
@@ -45,8 +40,8 @@ const FeaturedProduct = () => {
         {/* Main Featured Product */}
         <FeaturedProductCard
           product={currentProduct}
-          wishlist={wishlist}
-          toggleWishlist={toggleWishlist}
+          wishlist={wishlistIds} // ✅ use shared wishlist
+          toggleWishlist={toggleWishlist} // ✅ use shared toggle
         />
 
         {/* Product Selector */}
@@ -68,9 +63,9 @@ const FeaturedProduct = () => {
 
         {/* Explore Button */}
         <div className="text-center mt-16">
-          <Link to="/shop">
+          <Link to="/all-featured-products">
             <button className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-2xl hover:from-yellow-600 hover:to-orange-600 transition-colors duration-300 shadow-lg cursor-pointer">
-              <span className="text-lg">Explore All Products</span>
+              <span className="text-lg">Show More</span>
               <ArrowRight className="w-6 h-6 ml-3" />
             </button>
           </Link>

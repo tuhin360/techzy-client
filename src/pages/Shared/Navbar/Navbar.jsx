@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   ShoppingCart,
   Search,
@@ -8,44 +8,34 @@ import {
   Phone,
   Mail,
 } from "lucide-react";
-import { MdDashboard } from "react-icons/md";
-import { Link } from "react-router-dom"; // ✅ Link import
-import { useContext } from "react";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../../providers/AuthProvider";
-import { ChevronRight } from "lucide-react";
 import useCart from "../../../hooks/useCart";
 import useAdmin from "../../../hooks/useAdmin";
+import useWishlist from "../../../hooks/useWishlist";
+// import useWishlist from "../../../hooks/useWishlist";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // const [cartCount, setCartCount] = useState(9);
   const [isOpen, setIsOpen] = useState(false);
 
-  const [cart] = useCart();
-
-  // Check if the user is an admin using the useAdmin hook
-  const [isAdmin] = useAdmin();
-  console.log(isAdmin);
-
-  const toggleCategories = () => {
-    setIsOpen(!isOpen);
-  };
-
   const { user, logOut } = useContext(AuthContext);
+  const [cart] = useCart();
+  const [isAdmin] = useAdmin();
+
+  // ✅ new hook style (object)
+  const { wishlist, isLoading: isWishlistLoading } = useWishlist();
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleCategories = () => setIsOpen(!isOpen);
 
   const handleLogout = () => {
-    logOut()
-      .then(() => {})
-      .catch((error) => console.log(error));
-  };
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+    logOut().catch((error) => console.log(error));
   };
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50 ">
-      {/* Top bar with contact info */}
+    <nav className="bg-white shadow-lg sticky top-0 z-50">
+      {/* Top bar */}
       <div className="bg-gray-900 text-white py-2 px-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center text-sm">
           <div className="flex items-center space-x-4">
@@ -76,7 +66,7 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Search bar - Desktop */}
+          {/* Search bar */}
           <div className="hidden md:flex flex-1 max-w-1/3 mx-8">
             <div className="relative w-full">
               <input
@@ -100,43 +90,27 @@ const Navbar = () => {
               <button className="text-gray-700 hover:text-blue-600 transition duration-200">
                 Categories
               </button>
-              {/* Dropdown */}
               <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                 <div className="py-2">
-                  <Link
-                    to="/category/smartphones"
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                  >
-                    Smartphones
-                  </Link>
-                  <Link
-                    to="/category/laptops"
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                  >
-                    Laptops
-                  </Link>
-                  <Link
-                    to="/category/headphones"
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                  >
-                    Headphones
-                  </Link>
-                  <Link
-                    to="/category/gaming"
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                  >
-                    Gaming
-                  </Link>
-                  <Link
-                    to="/category/accessories"
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                  >
-                    Accessories
-                  </Link>
+                  {[
+                    "smartphones",
+                    "laptops",
+                    "headphones",
+                    "gaming",
+                    "accessories",
+                  ].map((cat) => (
+                    <Link
+                      key={cat}
+                      to={`/category/${cat}`}
+                      className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>
-           
+
             <Link
               to="/shop"
               className="text-gray-700 hover:text-blue-600 transition duration-200"
@@ -160,22 +134,19 @@ const Navbar = () => {
           {/* Right side icons */}
           <div className="flex items-center space-x-2">
             {/* Wishlist */}
-          {!isAdmin && (
-  <Link to={user ? "/dashboard/wishlist" : "/login"}>
-    <button className="relative p-2 text-gray-700 hover:text-blue-600 transition duration-200 cursor-pointer">
-      <Heart size={20} />
-      {/* Uncomment if you want to show wishlist count */}
-      {/* {wishlist.length > 0 && (
-        <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-          {wishlist.length}
-        </span>
-      )} */}
-    </button>
-  </Link>
-)}
+            {!isAdmin && (
+              <Link to={user ? "/dashboard/wishlist" : "/login"}>
+                <button className="relative p-2 text-gray-700 hover:text-blue-600 transition duration-200 cursor-pointer">
+                  <Heart size={20} />
+                  {!isWishlistLoading && wishlist?.length > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      {wishlist.length}
+                    </span>
+                  )}
+                </button>
+              </Link>
+            )}
 
-
-             
             {/* Shopping cart */}
             {isAdmin ? (
               <Link to="/dashboard/manage-users">
@@ -198,18 +169,13 @@ const Navbar = () => {
 
             {/* User profile */}
             {user ? (
-              <div className="flex items-center gap-4 pl-2 ">
-                {/* Profile Image */}
+              <div className="flex items-center gap-4 pl-2">
                 <img
-                  src={
-                    user.photoURL || "https://i.ibb.co.com/GvFrhKg6/user.png"
-                  }
+                  src={user.photoURL || "https://i.ibb.co/GvFrhKg6/user.png"}
                   alt="profile"
-                  title={user.displayName || "User"} // Hover tooltip
+                  title={user.displayName || "User"}
                   className="w-10 h-10 rounded-full border cursor-pointer hidden md:block"
                 />
-
-                {/* Logout Button */}
                 <button
                   onClick={handleLogout}
                   className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2 px-6 rounded-md font-bold shadow-lg hover:from-yellow-600 hover:to-orange-600 transition cursor-pointer hidden md:block"
@@ -219,7 +185,7 @@ const Navbar = () => {
               </div>
             ) : (
               <Link to="/login">
-                <button className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white ml-2  py-2 px-6 rounded-md font-bold shadow-lg hover:from-yellow-600 hover:to-orange-600 transition cursor-pointer hidden md:block">
+                <button className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white ml-2 py-2 px-6 rounded-md font-bold shadow-lg hover:from-yellow-600 hover:to-orange-600 transition cursor-pointer hidden md:block">
                   Login
                 </button>
               </Link>
@@ -234,150 +200,7 @@ const Navbar = () => {
             </button>
           </div>
         </div>
-
-        {/* Mobile search bar */}
-        <div className="md:hidden py-3 border-t">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search gadgets..."
-              className="w-full px-4 py-2 pl-10 pr-4 text-gray-700 bg-gray-100 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-          </div>
-        </div>
       </div>
-
-      {/* Mobile menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-white border-t shadow-lg h-screen overflow-y-auto">
-          <div className="px-4 py-3 space-y-3">
-            {/* Main Links */}
-            <Link
-              to="/"
-              onClick={() => setIsMenuOpen(false)}
-              className="block text-gray-700 hover:text-blue-600 transition duration-200"
-            >
-              Home
-            </Link>
-
-            {/* Categories */}
-            <div className="border-l-2 border-gray-200 pl-4">
-              <button
-                onClick={toggleCategories}
-                className="w-full flex justify-between items-center font-semibold text-gray-800 mb-2 focus:outline-none"
-              >
-                Categories
-                <ChevronRight
-                  className={`w-6 h-6 transition-transform duration-300 ${
-                    isOpen ? "rotate-90" : ""
-                  }`}
-                />
-              </button>
-
-              {isOpen && (
-                <div className="space-y-1 pl-2">
-                  <Link
-                    to="/category/smartphones"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block text-gray-600 hover:text-blue-600 py-1"
-                  >
-                    Smartphones
-                  </Link>
-                  <Link
-                    to="/category/laptops"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block text-gray-600 hover:text-blue-600 py-1"
-                  >
-                    Laptops
-                  </Link>
-                  <Link
-                    to="/category/headphones"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block text-gray-600 hover:text-blue-600 py-1"
-                  >
-                    Headphones
-                  </Link>
-                  <Link
-                    to="/category/gaming"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block text-gray-600 hover:text-blue-600 py-1"
-                  >
-                    Gaming
-                  </Link>
-                  <Link
-                    to="/category/accessories"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block text-gray-600 hover:text-blue-600 py-1"
-                  >
-                    Accessories
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            <Link
-              to="/shop"
-              onClick={() => setIsMenuOpen(false)}
-              className="block text-gray-700 hover:text-blue-600 transition duration-200"
-            >
-              Shop
-            </Link>
-            <Link
-              to="/about"
-              onClick={() => setIsMenuOpen(false)}
-              className="block text-gray-700 hover:text-blue-600 transition duration-200"
-            >
-              About
-            </Link>
-            <Link
-              to="/contact"
-              onClick={() => setIsMenuOpen(false)}
-              className="block text-gray-700 hover:text-blue-600 transition duration-200"
-            >
-              Contact
-            </Link>
-
-            {/* User Section */}
-            <div className="border-t pt-3 mt-3">
-              {user ? (
-                <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-3">
-                  {/* Profile Image */}
-                  <img
-                    src={user.photoURL || "https://i.ibb.co/GvFrhKg6/user.png"}
-                    alt="profile"
-                    className="w-14 h-14 rounded-full border flex-shrink-0"
-                  />
-
-                  {/* User Name */}
-                  <span className="font-medium text-gray-700 text-center">
-                    {user.displayName || "User"}
-                  </span>
-
-                  {/* Logout Button */}
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setIsMenuOpen(false); // close menu on logout
-                    }}
-                    className="w-full sm:w-auto bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2 px-6 rounded-md font-bold shadow-lg hover:from-yellow-600 hover:to-orange-600 transition"
-                  >
-                    Logout
-                  </button>
-                </div>
-              ) : (
-                <Link
-                  to="/login"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="w-full block text-center bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2 px-6 rounded-md font-bold shadow-lg hover:from-yellow-600 hover:to-orange-600 transition"
-                >
-                  Login
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </nav>
   );
 };

@@ -25,6 +25,7 @@ import AllNewProducts from "../pages/AllNewProducts/AllNewProducts";
 import AllTrendingProducts from "../pages/AllTrendingProducts/AllTrendingProducts";
 import AllBestSellerProducts from "../pages/AllBestSellerProducts/AllBestSellerProducts";
 import AllFridayOfferProducts from "../pages/AllFridayOfferProducts/AllFridayOfferProducts";
+import AllFeaturedProducts from "../pages/AllFeaturedProducts/AllFeaturedProducts";
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ export const router = createBrowserRouter([
       {
         path: "/all-fridayOffer-products",
         element: <AllFridayOfferProducts/>
+      },
+      {
+        path: "/all-featured-products",
+        element: <AllFeaturedProducts/>
       },
       {
         path: "shop",

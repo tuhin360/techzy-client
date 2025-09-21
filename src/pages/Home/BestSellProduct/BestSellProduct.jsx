@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import useProducts from "../../../hooks/useProducts";
+import useWishlist from "../../../hooks/useWishlist"; // ✅ shared wishlist hook
 
 import { BestSellProductCard } from "../../../components/BestSellProductCard";
 import { BestSellerCardSkeleton } from "../../../components/BestSellerCardSkeleton";
@@ -9,20 +9,12 @@ import { Link } from "react-router-dom";
 
 const BestSellProduct = () => {
   const { products, loading, error } = useProducts();
-  const [wishlist, setWishlist] = useState([]);
+  const { wishlistIds, toggleWishlist } = useWishlist(); // ✅ use shared hook
 
   // Filter only "best-seller" tagged products
   const bestSellProducts = products.filter((p) =>
     p.tags?.includes("best-seller")
   );
-
-  const toggleWishlist = (productId) => {
-    setWishlist((prev) =>
-      prev.includes(productId)
-        ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
-    );
-  };
 
   return (
     <section className="py-20">
@@ -40,12 +32,12 @@ const BestSellProduct = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-4 gap-8">
           {loading
             ? [...Array(6)].map((_, i) => <BestSellerCardSkeleton key={i} />)
-            : bestSellProducts.slice(0,8).map((product, index) => (
+            : bestSellProducts.slice(0, 8).map((product, index) => (
                 <BestSellProductCard
                   key={product._id}
                   product={product}
-                  wishlist={wishlist}
-                  toggleWishlist={toggleWishlist}
+                  wishlist={wishlistIds} // ✅ centralized wishlist
+                  toggleWishlist={toggleWishlist} // ✅ centralized toggle
                   index={index}
                 />
               ))}

@@ -4,31 +4,29 @@ import { ProductCard } from "../../components/ProductCard";
 import { SkeletonCard } from "../../components/SkeletonCard";
 import SharedTitleSection from "../../components/SharedTitleSection/SharedTitleSection";
 import SharedScrollToTop from "../../components/SharedScrollToTop/SharedScrollToTop";
-import useWishlist from "../../hooks/useWishlist"; // ✅ import shared wishlist hook
+import useWishlist from "../../hooks/useWishlist"; // ✅ shared wishlist hook
 
-const AllFridayOfferProducts = () => {
+const AllFeaturedProducts = () => {
   const { products, loading, error } = useProducts();
-  const { wishlistIds, toggleWishlist } = useWishlist(); // ✅ use shared hook
-
-  // Pagination states
+  const { wishlistIds, toggleWishlist } = useWishlist(); // ✅ use shared wishlist
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
-
-  // Filter "offered" products only
-  const offeredProducts = products.filter((p) => p.tags?.includes("offered"));
-
-  // Pagination calculation
-  const totalPages = Math.ceil(offeredProducts.length / productsPerPage);
-  const startIndex = (currentPage - 1) * productsPerPage;
-  const currentProducts = offeredProducts.slice(
-    startIndex,
-    startIndex + productsPerPage
-  );
 
   // Scroll to top on page change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPage]);
+
+  // Filter featured products
+  const featuredProducts = products.filter((p) => p.tags?.includes("featured"));
+
+  // Pagination calculation
+  const totalPages = Math.ceil(featuredProducts.length / productsPerPage);
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const currentProducts = featuredProducts.slice(
+    startIndex,
+    startIndex + productsPerPage
+  );
 
   if (error)
     return (
@@ -42,9 +40,9 @@ const AllFridayOfferProducts = () => {
       <SharedScrollToTop />
       <div className="px-4 sm:px-6 lg:px-0">
         <SharedTitleSection
-          title="Friday"
-          highlight="Offers"
-          subtitle="Grab exclusive deals on the latest gadgets today!"
+          title="Featured"
+          highlight="Products"
+          subtitle="Check out our top featured products with exclusive offers"
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -56,8 +54,8 @@ const AllFridayOfferProducts = () => {
                 <ProductCard
                   key={product._id}
                   product={product}
-                  wishlist={wishlistIds} // ✅ use shared wishlist
-                  toggleWishlist={toggleWishlist} // ✅ use shared toggle
+                  wishlist={wishlistIds} // ✅ shared wishlist
+                  toggleWishlist={toggleWishlist} // ✅ shared toggle
                 />
               ))}
         </div>
@@ -65,6 +63,7 @@ const AllFridayOfferProducts = () => {
         {/* Pagination */}
         {!loading && totalPages > 1 && (
           <div className="flex justify-center items-center mt-12 space-x-2">
+            {/* Previous Button */}
             <button
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
               disabled={currentPage === 1}
@@ -77,6 +76,7 @@ const AllFridayOfferProducts = () => {
               Prev
             </button>
 
+            {/* Page Numbers */}
             {Array.from({ length: totalPages }).map((_, i) => (
               <button
                 key={i}
@@ -91,6 +91,7 @@ const AllFridayOfferProducts = () => {
               </button>
             ))}
 
+            {/* Next Button */}
             <button
               onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
               disabled={currentPage === totalPages}
@@ -104,9 +105,15 @@ const AllFridayOfferProducts = () => {
             </button>
           </div>
         )}
+
+        {!loading && featuredProducts.length === 0 && (
+          <p className="text-center text-gray-500 mt-10">
+            No featured products available right now.
+          </p>
+        )}
       </div>
     </section>
   );
 };
 
-export default AllFridayOfferProducts;
+export default AllFeaturedProducts;

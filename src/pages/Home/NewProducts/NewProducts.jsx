@@ -1,22 +1,14 @@
-import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import useProducts from "../../../hooks/useProducts";
 import { ProductCard } from "../../../components/ProductCard";
 import { SkeletonCard } from "../../../components/SkeletonCard";
 import SharedTitleSection from "../../../components/SharedTitleSection/SharedTitleSection";
 import { Link } from "react-router-dom";
+import useWishlist from "../../../hooks/useWishlist"; // ✅ import shared hook
 
 const NewProducts = () => {
   const { products, loading, error } = useProducts();
-  const [wishlist, setWishlist] = useState([]);
-
-  const toggleWishlist = (productId) => {
-    setWishlist((prev) =>
-      prev.includes(productId)
-        ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
-    );
-  };
+  const { wishlistIds, toggleWishlist } = useWishlist(); // ✅ use shared hook
 
   const newProducts = products.filter((p) => p.tags?.includes("new"));
 
@@ -38,16 +30,14 @@ const NewProducts = () => {
         <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 gap-6">
           {loading
             ? Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)
-            : newProducts
-                .slice(0, 8)
-                .map((product) => (
-                  <ProductCard
-                    key={product._id}
-                    product={product}
-                    wishlist={wishlist}
-                    toggleWishlist={toggleWishlist}
-                  />
-                ))}
+            : newProducts.slice(0, 8).map((product) => (
+                <ProductCard
+                  key={product._id}
+                  product={product}
+                  wishlist={wishlistIds} // ✅ productId array from hook
+                  toggleWishlist={toggleWishlist} // ✅ centralized toggle function
+                />
+              ))}
         </div>
 
         <div className="text-center mt-16">

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -8,21 +7,14 @@ import { SkeletonCard } from "../../../components/SkeletonCard";
 import useProducts from "../../../hooks/useProducts";
 import { ArrowRight } from "lucide-react";
 import { ProductCard } from "../../../components/ProductCard";
-import "./TrendingProducts.css"; //
+import "./TrendingProducts.css";
 import SharedTitleSection from "../../../components/SharedTitleSection/SharedTitleSection";
 import { Link } from "react-router-dom";
+import useWishlist from "../../../hooks/useWishlist"; // ✅ import shared hook
 
 const TrendingProducts = () => {
   const { products, loading, error } = useProducts();
-  const [wishlist, setWishlist] = useState([]);
-
-  const toggleWishlist = (productId) => {
-    setWishlist((prev) =>
-      prev.includes(productId)
-        ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
-    );
-  };
+  const { wishlistIds, toggleWishlist } = useWishlist(); // ✅ use shared hook
 
   const trendingProducts = products.filter((p) => p.tags?.includes("trending"));
 
@@ -61,12 +53,12 @@ const TrendingProducts = () => {
                   <SkeletonCard />
                 </SwiperSlide>
               ))
-            : trendingProducts.map((product) => (
+            : trendingProducts.slice(0, 7).map((product) => (
                 <SwiperSlide key={product._id}>
                   <ProductCard
                     product={product}
-                    wishlist={wishlist}
-                    toggleWishlist={toggleWishlist}
+                    wishlist={wishlistIds} // ✅ productId array from hook
+                    toggleWishlist={toggleWishlist} // ✅ central toggle function
                   />
                 </SwiperSlide>
               ))}
