@@ -1,6 +1,6 @@
 import { Heart, ShoppingCart, Star, TrendingUp, Award } from "lucide-react";
 import useAuth from "../hooks/useAuth";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import useCart from "../hooks/useCart";
 import Swal from "sweetalert2";
@@ -11,6 +11,7 @@ export const BestSellProductCard = ({
   toggleWishlist,
   index,
 }) => {
+   const { title, image, price, originalPrice, discount, _id } = product;
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -62,11 +63,18 @@ export const BestSellProductCard = ({
     <div className="relative bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300">
       {/* Product Image */}
       <div className="relative h-56 bg-gray-100 overflow-hidden">
+
+         {/* Product Image → navigate to details */}
+      <Link
+        to={`/products/${_id}`}
+        className="block relative h-56 bg-gray-50 overflow-hidden"
+      >
         <img
-          src={product.image}
-          alt={product.title}
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          src={image}
+          alt={title}
+          className="w-full h-full object-cover hover:scale-105 transition-all duration-300"
         />
+      </Link>
 
         {/* Bestseller Badge */}
         <div className="absolute top-3 left-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1">
@@ -82,8 +90,8 @@ export const BestSellProductCard = ({
           <Heart
             className={`w-5 h-5 ${
               wishlist.includes(product._id)
-                ? "text-red-500 fill-red-500"
-                : "text-gray-600"
+                ? "text-red-500 fill-red-500 cursor-pointer"
+                : "text-gray-600 cursor-pointer"
             }`}
           />
         </button>

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { User, Mail, Camera, Edit3 } from "lucide-react";
 import useAuth from "../../../hooks/useAuth";
@@ -13,7 +12,7 @@ const Profile = () => {
   }, []);
 
   return (
-    <div className="bg-gray-100 min-h-screen py-10 px-4 flex justify-center">
+    <div className="min-h-screen py-10 px-4 flex justify-center bg-gradient-to-br from-orange-100 via-yellow-50 to-orange-200">
       <div className="w-full max-w-4xl">
         {/* Title + Subtitle */}
         <div className="mb-8">
@@ -28,13 +27,13 @@ const Profile = () => {
 
         {/* Profile Card */}
         <div
-          className={`bg-white/20 backdrop-blur-3xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden transform transition-all duration-1000 ${
+          className={`bg-white/80 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/30 overflow-hidden transform transition-all duration-1000 ${
             isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
           }`}
         >
           {/* Cover Image */}
-          <div className="h-36 sm:h-44 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 relative">
-            <div className="absolute inset-0 bg-black/25"></div>
+          <div className="h-36 sm:h-44 bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-600 relative">
+            <div className="absolute inset-0 bg-black/20"></div>
             <button className="absolute top-4 right-4 p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/40 transition-all duration-300 shadow-lg">
               <Camera className="w-5 h-5" />
             </button>
@@ -44,7 +43,7 @@ const Profile = () => {
           <div className="relative px-6 sm:px-8 pb-10 -mt-20 flex flex-col items-center text-center">
             {/* Profile Picture */}
             <div className="relative group mb-4">
-              <div className="w-36 h-36 sm:w-40 sm:h-40 rounded-3xl border-4 border-white shadow-2xl overflow-hidden bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center">
+              <div className="w-36 h-36 sm:w-40 sm:h-40 rounded-3xl border-4 border-white shadow-2xl overflow-hidden bg-gradient-to-br from-orange-400 via-yellow-400 to-orange-600 flex items-center justify-center">
                 {user?.photoURL ? (
                   <img
                     src={user.photoURL}
@@ -79,10 +78,10 @@ const Profile = () => {
 
             {/* Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-2xl font-medium hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+              <button className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-2xl font-medium hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
                 Edit Profile
               </button>
-              <button className="px-6 py-3 bg-white/30 backdrop-blur-sm text-gray-800 rounded-2xl font-medium hover:bg-white/50 transition-all duration-300 transform hover:scale-105 shadow-md">
+              <button className="px-6 py-3 bg-white/40 backdrop-blur-sm text-gray-800 rounded-2xl font-medium hover:bg-white/60 transition-all duration-300 transform hover:scale-105 shadow-md">
                 Change Password
               </button>
             </div>

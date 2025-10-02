@@ -79,8 +79,8 @@ export const FeaturedProductCard = ({ product, wishlist, toggleWishlist }) => {
             <Heart
               className={`w-5 h-5 ${
                 wishlist.includes(product._id)
-                  ? "text-red-500 fill-red-500"
-                  : "text-gray-600 hover:text-red-500"
+                  ? "text-red-500 fill-red-500 cursor-pointer"
+                  : "text-gray-600 hover:text-red-500 cursor-pointer"
               }`}
             />
           </button>

@@ -64,7 +64,7 @@ const AddReview = () => {
   };
 
   return (
-    <div className="bg-gray-100 md:h-screen py-10 px-4">
+    <div className="md:h-screen py-10 px-4">
       {/* Header Section */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-3">

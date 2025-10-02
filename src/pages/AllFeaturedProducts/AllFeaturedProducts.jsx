@@ -40,7 +40,7 @@ const AllFeaturedProducts = () => {
       <SharedScrollToTop />
       <div className="px-4 sm:px-6 lg:px-0">
         <SharedTitleSection
-          title="Featured"
+          title="All Featured"
           highlight="Products"
           subtitle="Check out our top featured products with exclusive offers"
         />

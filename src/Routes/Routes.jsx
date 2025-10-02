@@ -26,6 +26,8 @@ import AllTrendingProducts from "../pages/AllTrendingProducts/AllTrendingProduct
 import AllBestSellerProducts from "../pages/AllBestSellerProducts/AllBestSellerProducts";
 import AllFridayOfferProducts from "../pages/AllFridayOfferProducts/AllFridayOfferProducts";
 import AllFeaturedProducts from "../pages/AllFeaturedProducts/AllFeaturedProducts";
+import ProductDetails from "../pages/ProductDetails/ProductDetails";
+import CategoryProduct from "../pages/CategoryProduct/CategoryProduct";
 
 export const router = createBrowserRouter([
   {
@@ -39,23 +41,23 @@ export const router = createBrowserRouter([
       },
       {
         path: "/all-new-products",
-        element: <AllNewProducts/>
+        element: <AllNewProducts />,
       },
       {
         path: "/all-trending-products",
-        element: <AllTrendingProducts/>
+        element: <AllTrendingProducts />,
       },
       {
         path: "/all-bestSeller-products",
-        element: <AllBestSellerProducts/>
+        element: <AllBestSellerProducts />,
       },
       {
         path: "/all-fridayOffer-products",
-        element: <AllFridayOfferProducts/>
+        element: <AllFridayOfferProducts />,
       },
       {
         path: "/all-featured-products",
-        element: <AllFeaturedProducts/>
+        element: <AllFeaturedProducts />,
       },
       {
         path: "shop",
@@ -76,6 +78,14 @@ export const router = createBrowserRouter([
       {
         path: "signup",
         element: <SignUp />,
+      },
+      {
+        path: "/products/:id",
+        element: <ProductDetails />,
+      },
+      {
+        path: "/products/category/:category",
+        element: <CategoryProduct />,
       },
     ],
   },
