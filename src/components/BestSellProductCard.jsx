@@ -11,7 +11,7 @@ export const BestSellProductCard = ({
   toggleWishlist,
   index,
 }) => {
-   const { title, image, price, originalPrice, discount, _id } = product;
+   const { title, image, _id } = product;
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
