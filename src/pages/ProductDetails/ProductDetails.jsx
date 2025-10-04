@@ -40,9 +40,10 @@ const ProductDetails = () => {
   if (!product) return <p className="text-center py-10">Product not found!</p>;
 
   // Get images array - use product.image array if available, otherwise fallback
-  const images = Array.isArray(product.image) && product.image.length > 0
-    ? product.image
-    : [product.image];
+  const images =
+    Array.isArray(product.image) && product.image.length > 0
+      ? product.image
+      : [product.image];
 
   // Calculate total price based on quantity
   const totalPrice = product.price * quantity;
@@ -220,32 +221,37 @@ const ProductDetails = () => {
               <span className="text-2xl font-semibold text-gray-700">
                 ৳{product.price.toLocaleString()}
               </span>
-              {product.originalPrice && product.originalPrice > product.price && (
-                <span className="text-xl text-gray-400 line-through">
-                  ৳{product.originalPrice.toLocaleString()}
-                </span>
-              )}
+              {product.originalPrice &&
+                product.originalPrice > product.price && (
+                  <span className="text-xl text-gray-400 line-through">
+                    ৳{product.originalPrice.toLocaleString()}
+                  </span>
+                )}
             </div>
-            
+
             {quantity > 1 && (
               <div className="flex items-center space-x-3 mt-3 flex-wrap">
                 <span className="text-sm text-gray-600">Total Price:</span>
                 <span className="text-4xl font-bold text-blue-600">
                   ৳{totalPrice.toLocaleString()}
                 </span>
-                {product.originalPrice && product.originalPrice > product.price && (
-                  <span className="text-2xl text-gray-400 line-through">
-                    ৳{originalTotalPrice.toLocaleString()}
-                  </span>
-                )}
+                {product.originalPrice &&
+                  product.originalPrice > product.price && (
+                    <span className="text-2xl text-gray-400 line-through">
+                      ৳{originalTotalPrice.toLocaleString()}
+                    </span>
+                  )}
               </div>
             )}
-            
+
             {product.discount > 0 && (
               <p className="text-green-600 font-semibold mt-2 text-lg">
                 You save ৳
-                {((product.originalPrice - product.price) * quantity).toLocaleString()} (
-                {product.discount}% off)
+                {(
+                  (product.originalPrice - product.price) *
+                  quantity
+                ).toLocaleString()}{" "}
+                ({product.discount}% off)
               </p>
             )}
           </div>

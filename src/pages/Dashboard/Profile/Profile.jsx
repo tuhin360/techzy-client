@@ -12,7 +12,7 @@ const Profile = () => {
   }, []);
 
   return (
-    <div className="min-h-screen py-10 px-4 flex justify-center bg-gradient-to-br from-orange-100 via-yellow-50 to-orange-200">
+    <div className="min-h-screen py-10 px-4 flex justify-center ">
       <div className="w-full max-w-4xl">
         {/* Title + Subtitle */}
         <div className="mb-8">
