@@ -36,8 +36,8 @@ const BestSellProduct = () => {
                 <BestSellProductCard
                   key={product._id}
                   product={product}
-                  wishlist={wishlistIds} // ✅ centralized wishlist
-                  toggleWishlist={toggleWishlist} // ✅ centralized toggle
+                  wishlist={wishlistIds} // centralized wishlist
+                  toggleWishlist={toggleWishlist} // centralized toggle
                   index={index}
                 />
               ))}

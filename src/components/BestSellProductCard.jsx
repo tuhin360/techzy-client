@@ -11,7 +11,7 @@ export const BestSellProductCard = ({
   toggleWishlist,
   index,
 }) => {
-   const { title, image, _id } = product;
+  const { title, image, _id } = product;
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,17 +29,35 @@ export const BestSellProductCard = ({
       : "0";
 
   const handleAddToCart = () => {
-    if (user?.email) {
-      const cartItem = {
-        menuId: product._id,
-        email: user.email,
-        title: product.title,
-        image: product.image,
-        price: product.price,
-      };
+    if (!user?.email) {
+      Swal.fire({
+        title: "Not Logged In",
+        text: "Please login first to add items to your cart.",
+        icon: "warning",
+        confirmButtonColor: "#f97316",
+      }).then(() => navigate("/login", { state: { from: location } }));
+      return;
+    }
 
-      axiosSecure.post("/carts", cartItem).then((res) => {
-        if (res.data.insertedId) {
+    const cartItem = {
+      menuId: product._id,
+      email: user.email,
+      title: product.title,
+      image: product.image,
+      price: product.price,
+    };
+
+    axiosSecure
+      .post("/carts", cartItem)
+      .then((res) => {
+        if (res.data.alreadyInCart) {
+          Swal.fire({
+            title: "Already in Cart",
+            text: `${product.title} is already in your cart.`,
+            icon: "info",
+            confirmButtonColor: "#f97316",
+          });
+        } else if (res.data.insertedId) {
           Swal.fire({
             title: "Added to Cart!",
             text: `${product.title} has been added to your cart.`,
@@ -48,33 +66,27 @@ export const BestSellProductCard = ({
           });
           refetch();
         }
-      });
-    } else {
-      Swal.fire({
-        title: "Not Logged In",
-        text: "Please login first to add items to your cart.",
-        icon: "warning",
-        confirmButtonColor: "#f97316",
-      }).then(() => navigate("/login", { state: { from: location } }));
-    }
+      })
+      .catch(() =>
+        Swal.fire("Error!", "Could not add to cart. Try again later.", "error")
+      );
   };
 
   return (
     <div className="relative bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300">
       {/* Product Image */}
       <div className="relative h-56 bg-gray-100 overflow-hidden">
-
-         {/* Product Image → navigate to details */}
-      <Link
-        to={`/products/${_id}`}
-        className="block relative h-56 bg-gray-50 overflow-hidden"
-      >
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-full object-cover hover:scale-105 transition-all duration-300"
-        />
-      </Link>
+        {/* Product Image → navigate to details */}
+        <Link
+          to={`/products/${_id}`}
+          className="block relative h-56 bg-gray-50 overflow-hidden"
+        >
+          <img
+            src={image}
+            alt={title}
+            className="w-full h-full object-cover hover:scale-105 transition-all duration-300"
+          />
+        </Link>
 
         {/* Bestseller Badge */}
         <div className="absolute top-3 left-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1">

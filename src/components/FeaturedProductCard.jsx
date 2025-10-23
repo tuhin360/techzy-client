@@ -15,27 +15,7 @@ export const FeaturedProductCard = ({ product, wishlist, toggleWishlist }) => {
   const formatPrice = (price) => `৳${price?.toLocaleString("en-US") || 0}`;
 
   const handleAddToCart = () => {
-    if (user && user.email) {
-      const cartItem = {
-        menuId: product._id,
-        email: user.email,
-        title: product.title,
-        image: product.image,
-        price: product.price,
-      };
-
-      axiosSecure.post("/carts", cartItem).then((res) => {
-        if (res.data.insertedId) {
-          Swal.fire({
-            title: "Added to Cart!",
-            text: `${product.title} has been added to your cart.`,
-            icon: "success",
-            confirmButtonColor: "#f97316",
-          });
-          refetch();
-        }
-      });
-    } else {
+    if (!user?.email) {
       Swal.fire({
         title: "Not Logged In",
         text: "Please login first to add items to your cart.",
@@ -44,7 +24,40 @@ export const FeaturedProductCard = ({ product, wishlist, toggleWishlist }) => {
       }).then(() => {
         navigate("/login", { state: { from: location } });
       });
+      return;
     }
+
+    const cartItem = {
+      menuId: product._id,
+      email: user.email,
+      title: product.title,
+      image: product.image,
+      price: product.price,
+    };
+
+    axiosSecure
+      .post("/carts", cartItem)
+      .then((res) => {
+        if (res.data.alreadyInCart) {
+          Swal.fire({
+            title: "Already in Cart",
+            text: `${product.title} is already in your cart.`,
+            icon: "info",
+            confirmButtonColor: "#f97316",
+          });
+        } else if (res.data.insertedId) {
+          Swal.fire({
+            title: "Added to Cart!",
+            text: `${product.title} has been added to your cart.`,
+            icon: "success",
+            confirmButtonColor: "#f97316",
+          });
+          refetch();
+        }
+      })
+      .catch(() =>
+        Swal.fire("Error!", "Could not add to cart. Try again later.", "error")
+      );
   };
 
   return (

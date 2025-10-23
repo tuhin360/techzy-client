@@ -28,6 +28,7 @@ import AllFridayOfferProducts from "../pages/AllFridayOfferProducts/AllFridayOff
 import AllFeaturedProducts from "../pages/AllFeaturedProducts/AllFeaturedProducts";
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 import CategoryProduct from "../pages/CategoryProduct/CategoryProduct";
+import SearchResults from "../pages/SearchResults/SearchResults";
 
 export const router = createBrowserRouter([
   {
@@ -87,6 +88,10 @@ export const router = createBrowserRouter([
         path: "/products/category/:category",
         element: <CategoryProduct />,
       },
+      {
+        path: "/search",
+        element: <SearchResults/>
+      }
     ],
   },
   {

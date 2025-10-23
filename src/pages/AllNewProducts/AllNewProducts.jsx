@@ -4,11 +4,11 @@ import useProducts from "../../hooks/useProducts";
 import { ProductCard } from "../../components/ProductCard";
 import { SkeletonCard } from "../../components/SkeletonCard";
 import SharedTitleSection from "../../components/SharedTitleSection/SharedTitleSection";
-import useWishlist from "../../hooks/useWishlist"; // ✅ shared hook
+import useWishlist from "../../hooks/useWishlist";
 
 const AllNewProducts = () => {
   const { products, loading, error } = useProducts();
-  const { wishlistIds, toggleWishlist } = useWishlist(); // ✅ use shared hook
+  const { wishlistIds, toggleWishlist } = useWishlist();
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
