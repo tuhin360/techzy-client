@@ -37,6 +37,10 @@ const ManageOrders = () => {
   const [viewMode, setViewMode] = useState("cards"); // 'cards' or 'table'
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   
+  // 🔹 Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const ordersPerPage = 10;
+  
   // Create a ref for the search input
   const searchInputRef = useRef(null);
 
@@ -62,6 +66,7 @@ const ManageOrders = () => {
   // Memoize the search handler to prevent unnecessary re-renders
   const handleSearchChange = useCallback((e) => {
     setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page on search
   }, []);
 
   // Handle search input focus management
@@ -76,6 +81,7 @@ const ManageOrders = () => {
   // Clear search with focus retention
   const clearSearch = useCallback(() => {
     setSearchTerm("");
+    setCurrentPage(1); // Reset to first page
     if (searchInputRef.current) {
       searchInputRef.current.focus();
     }
@@ -216,13 +222,14 @@ const ManageOrders = () => {
     // Also search in partial transaction ID (last 8 characters)
     const partialTransactionMatch = order.transactionId?.slice(-8).toLowerCase().includes(searchLower) || false;
     
-    // Debug log to help identify issues (remove in production)
-    // if (searchTerm && order.transactionId) {
-    //   console.log(`Searching "${searchTerm}" in transaction "${order.transactionId}": ${transactionMatch || partialTransactionMatch}`);
-    // }
-    
     return emailMatch || idMatch || transactionMatch || nameMatch || partialTransactionMatch;
   });
+
+  // 🔹 Pagination logic
+  const indexOfLast = currentPage * ordersPerPage;
+  const indexOfFirst = indexOfLast - ordersPerPage;
+  const currentOrders = filteredOrders.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
 
   const getStatusBadge = (status) => {
     const statusConfig = {
@@ -367,7 +374,7 @@ const ManageOrders = () => {
       <div className="flex justify-between items-start">
         <div className="flex items-center space-x-2">
           <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs font-bold">
-            #{index + 1}
+            #{indexOfFirst + index + 1}
           </span>
           <span className="font-mono text-sm text-gray-600">
             #{order._id.slice(-6).toUpperCase()}
@@ -558,7 +565,10 @@ const ManageOrders = () => {
                   </div>
                   <select
                     value={filterStatus}
-                    onChange={(e) => setFilterStatus(e.target.value)}
+                    onChange={(e) => {
+                      setFilterStatus(e.target.value);
+                      setCurrentPage(1); // Reset to first page on filter change
+                    }}
                     className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none bg-white"
                   >
                     <option value="all">All Status</option>
@@ -608,7 +618,7 @@ const ManageOrders = () => {
         <div className="p-4">
           {/* Mobile Cards View */}
           <div className="lg:hidden space-y-4">
-            {filteredOrders.map((order, index) => (
+            {currentOrders.map((order, index) => (
               <OrderCard key={order._id} order={order} index={index} />
             ))}
           </div>
@@ -651,38 +661,13 @@ const ManageOrders = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {filteredOrders.map((order, index) => (
+                      {currentOrders.map((order, index) => (
                         <tr
                           key={order._id}
                           className="hover:bg-gray-50 transition-colors duration-200"
                         >
                           <td className="px-6 py-4 text-sm font-bold">
-                            {index + 1}
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="flex items-center space-x-2">
-                              <MdPayment className="w-4 h-4 text-blue-500" />
-                              <span className="font-mono text-sm">
-                                #{order._id.slice(-6).toUpperCase()}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div>
-                              <div className="font-medium text-gray-900 text-sm flex items-center">
-                                <MdEmail className="w-4 h-4 mr-1 text-blue-500" />
-                                {order.email.split("@")[0]}
-                              </div>
-                              <div className="text-xs text-gray-500 ml-5">
-                                {order.email}
-                              </div>
-                              {order.transactionId && (
-                                <div className="text-xs text-gray-400 font-mono ml-5">
-                                  <CreditCard className="w-3 h-3 inline mr-1" />
-                                  TX: {order.transactionId.slice(-8)}
-                                </div>
-                              )}
-                            </div>
+                            {indexOfFirst + index + 1}
                           </td>
                           <td className="px-6 py-4">
                             <div>
@@ -743,7 +728,7 @@ const ManageOrders = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-                {filteredOrders.map((order, index) => (
+                {currentOrders.map((order, index) => (
                   <OrderCard key={order._id} order={order} index={index} />
                 ))}
               </div>
@@ -775,6 +760,51 @@ const ManageOrders = () => {
                   </button>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* 🔹 Pagination */}
+          {filteredOrders.length > ordersPerPage && (
+            <div className="flex justify-center items-center mt-10 space-x-2 pb-6 pt-4">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+                className={`px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer ${
+                  currentPage === 1
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    : "bg-yellow-500 text-white hover:bg-yellow-600"
+                }`}
+              >
+                Prev
+              </button>
+
+              {Array.from({ length: totalPages }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer ${
+                    currentPage === i + 1
+                      ? "bg-orange-500 text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+
+              <button
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(p + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className={`px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer ${
+                  currentPage === totalPages
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    : "bg-yellow-500 text-white hover:bg-yellow-600"
+                }`}
+              >
+                Next
+              </button>
             </div>
           )}
 
@@ -899,4 +929,4 @@ const ManageOrders = () => {
   );
 };
 
-export default ManageOrders;
+ export default ManageOrders;

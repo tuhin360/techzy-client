@@ -1,6 +1,7 @@
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { Users, UserCheck, Shield, Trash2, Edit, Crown } from "lucide-react";
+import { Users, UserCheck, Shield, Trash2, Crown } from "lucide-react";
 import Swal from "sweetalert2";
 
 const ManageUsers = () => {
@@ -13,6 +14,19 @@ const ManageUsers = () => {
     },
   });
 
+  // 🔹 Pagination States
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 10;
+
+  const totalPages = Math.ceil(users.length / usersPerPage);
+  const startIndex = (currentPage - 1) * usersPerPage;
+  const currentUsers = users.slice(startIndex, startIndex + usersPerPage);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
+
+  // 🔹 Handle Role Toggle
   const handleToggleRole = (user) => {
     Swal.fire({
       title: "Are you sure?",
@@ -38,6 +52,7 @@ const ManageUsers = () => {
     });
   };
 
+  // 🔹 Handle Delete User
   const handleDeleteUser = async (user) => {
     try {
       const result = await Swal.fire({
@@ -54,7 +69,7 @@ const ManageUsers = () => {
         const res = await axiosSecure.delete(`/users/${user._id}`);
 
         if (res.data.success) {
-          refetch(); // refresh users list instantly
+          refetch();
           Swal.fire({
             icon: "success",
             title: "Deleted!",
@@ -82,6 +97,7 @@ const ManageUsers = () => {
     }
   };
 
+  // 🔹 Role Badge
   const getRoleBadge = (role) => {
     if (role === "admin") {
       return (
@@ -143,8 +159,8 @@ const ManageUsers = () => {
           </p>
         </div>
 
-        {/* Desktop Table */}
-        <div className="hidden md:block overflow-x-auto">
+        {/* Table */}
+        <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
@@ -166,13 +182,13 @@ const ManageUsers = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {users.map((user, index) => (
+              {currentUsers.map((user, index) => (
                 <tr
                   key={user._id}
                   className="hover:bg-gray-50 transition-colors"
                 >
                   <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                    {String(index + 1).padStart(2, "0")}
+                    {String(startIndex + index + 1).padStart(2, "0")}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center space-x-3">
@@ -221,66 +237,6 @@ const ManageUsers = () => {
           </table>
         </div>
 
-        {/* Mobile Cards */}
-        <div className="md:hidden p-4 space-y-4">
-          {users.map((user, index) => (
-            <div
-              key={user._id}
-              className="bg-white rounded-xl shadow-sm p-4 space-y-3 border border-gray-100"
-            >
-              {/* Top section: serial & role */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-500">
-                  #{String(index + 1).padStart(2, "0")}
-                </span>
-                {getRoleBadge(user.role)}
-              </div>
-
-              {/* User info */}
-              <div className="flex items-center space-x-3">
-                <img
-                  src={
-                    user.photoURL ||
-                    user.image ||
-                    `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                      user.name || user.displayName || "User"
-                    )}&background=f97316&color=ffffff`
-                  }
-                  alt={user.name || user.displayName}
-                  className="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-900 truncate">
-                    {user.name || user.displayName || "Unknown User"}
-                  </p>
-                  <p className="text-sm text-gray-600 truncate">{user.email}</p>
-                </div>
-              </div>
-
-              {/* Action buttons */}
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-gray-200">
-                {user.role !== "admin" && (
-                  <button
-                    onClick={() => handleToggleRole(user)}
-                    className="flex items-center gap-1 px-3 py-2 text-sm text-orange-600 border border-orange-300 hover:bg-orange-50 rounded-lg transition"
-                  >
-                    <Shield className="w-4 h-4" />
-                    <span>Make Admin</span>
-                  </button>
-                )}
-                <button
-                  onClick={() => handleDeleteUser(user)}
-                  className="flex items-center gap-1 px-3 py-2 text-sm text-red-600 border border-red-300 hover:bg-red-50 rounded-lg transition"
-                  title="Delete User"
-                >
-                  <Trash2 className="w-4 h-4" />
-                  <span>Delete</span>
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
         {/* Empty State */}
         {users.length === 0 && (
           <div className="text-center py-12">
@@ -294,6 +250,49 @@ const ManageUsers = () => {
           </div>
         )}
       </div>
+
+      {/* 🔹 Pagination */}
+      {users.length > usersPerPage && (
+        <div className="flex justify-center items-center mt-10 space-x-2 pb-16">
+          <button
+            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer ${
+              currentPage === 1
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : "bg-yellow-500 text-white hover:bg-yellow-600"
+            }`}
+          >
+            Prev
+          </button>
+
+          {Array.from({ length: totalPages }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer ${
+                currentPage === i + 1
+                  ? "bg-orange-500 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+          <button
+            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className={`px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer ${
+              currentPage === totalPages
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : "bg-yellow-500 text-white hover:bg-yellow-600"
+            }`}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };
