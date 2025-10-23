@@ -3,7 +3,6 @@ import useProducts from "../../hooks/useProducts";
 import { ProductCard } from "../../components/ProductCard";
 import { SkeletonCard } from "../../components/SkeletonCard";
 import SharedTitleSection from "../../components/SharedTitleSection/SharedTitleSection";
-import SharedScrollToTop from "../../components/SharedScrollToTop/SharedScrollToTop";
 import useWishlist from "../../hooks/useWishlist"; // ✅ import shared wishlist hook
 
 const AllFridayOfferProducts = () => {
@@ -39,7 +38,6 @@ const AllFridayOfferProducts = () => {
 
   return (
     <section className="max-w-7xl mx-auto py-16 lg:py-20">
-      <SharedScrollToTop />
       <div className="px-4 sm:px-6 lg:px-0">
         <SharedTitleSection
           title="Friday"
