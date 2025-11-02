@@ -1,7 +1,7 @@
 <div align="center">
 
   <!-- Cover Image -->
-  <img src="./src/assets/home/cover.jpg" alt="Techzy Cover" width="100%" style="border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 24px;" />
+  <img src="https://i.ibb.co.com/TBK795FZ/techzy-Banner.jpg" alt="Techzy Cover" width="100%" style="border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 24px;" />
 
   <!-- Logo & Title -->
   <img src="https://img.icons8.com/fluency/96/000000/electronics.png" alt="Techzy Icon" width="70" />
