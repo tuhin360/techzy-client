@@ -31,7 +31,7 @@ const BestSellProduct = () => {
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-4 gap-8">
           {loading
-            ? [...Array(6)].map((_, i) => <BestSellerCardSkeleton key={i} />)
+            ? [...Array(8)].map((_, i) => <BestSellerCardSkeleton key={i} />)
             : bestSellProducts.slice(0, 8).map((product, index) => (
                 <BestSellProductCard
                   key={product._id}

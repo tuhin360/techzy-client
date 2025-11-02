@@ -90,8 +90,8 @@ export const router = createBrowserRouter([
       },
       {
         path: "/search",
-        element: <SearchResults/>
-      }
+        element: <SearchResults />,
+      },
     ],
   },
   {
@@ -164,7 +164,7 @@ export const router = createBrowserRouter([
           </AdminRoute>
         ),
         loader: ({ params }) =>
-          fetch(`https://techzy-server.vercel.app/products/${params.id}`),
+          fetch(`https://techzy-server.vercel.app/products/${params.id}`)
       },
       {
         path: "profile",
