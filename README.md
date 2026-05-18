@@ -10,20 +10,14 @@
     Techzy E-commerce Platform
   </h1>
 
-  <p><strong>🔥 Buy and Sell Gadgets with Ease — Full-Stack MERN Application</strong></p>
+  <p><strong>🔥 Buy and Sell Gadgets with Ease — Full-Stack MERN E-commerce Client with Premium Responsive Layouts</strong></p>
 
   <!-- Animated Tech Badges -->
   <p>
-    <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB&animation=slow" alt="React" />
-    <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white&animation=slow" alt="Vite" />
-    <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white&animation=slow" alt="Node.js" />
-    <img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white&animation=slow" alt="Express" />
-  </p>
-  <p>
-    <img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white&animation=slow" alt="MongoDB" />
-    <img src="https://img.shields.io/badge/Stripe-008CDD?style=for-the-badge&logo=stripe&logoColor=white&animation=slow" alt="Stripe" />
-    <img src="https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white&animation=slow" alt="Tailwind" />
-    <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black&animation=slow" alt="Firebase" />
+    <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+    <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+    <img src="https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind" />
+    <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" alt="Firebase" />
   </p>
 
   <!-- Quick Links -->
@@ -37,79 +31,88 @@
 
 ---
 
-### 🌈 Why Techzy?
-
-> 💻 **Full-Stack MERN E-commerce Solution** — Shop gadgets, manage products, and track orders seamlessly.  
-> ⚡ Designed for **users and admins** with secure authentication, live cart updates, and real-time order management.  
+### 🌈 About Techzy
+A state-of-the-art MERN stack electronics and gadgets store. Tailored with a premium, sleek dark/orange styling system, mobile-first layouts, role-based dashboards, and interactive touch controls.
 
 ---
 
-## 🌟 Key Features
+## 🌟 Key Features & Mobile Optimizations
 
-| ✅ Feature | 🎯 Benefit |
-|-----------|-----------|
-| 🛒 **Dynamic Product Listing** | Browse all gadgets with categories and detailed product pages |
-| 🔍 **Search & Filter** | Quickly find gadgets with search bar and category filter |
-| 🛍️ **Shopping Cart** | Add, delete, update cart items, synced with backend using React Query refetch |
-| 🔐 **User Authentication** | Firebase + JWT for secure login, Google Sign-In, and role-based access |
-| 💳 **Stripe Checkout** | Real payments integrated using Stripe PaymentIntent |
-| 📦 **Order Management** | Users can track orders; admins can manage all orders |
-| ⭐ **Product Reviews** | Users can rate and review products; reviews displayed dynamically |
-| 🔧 **Admin Dashboard** | Add/update/delete products, manage users, and view analytics |
-| 🌐 **Responsive Design** | Works beautifully on mobile, tablet, and desktop |
-| 📨 **Contact & Notifications** | Contact via email (EmailJS) and toast notifications |
+### 📱 Premium Mobile UI/UX Overhauls
+1. **Interactive Top Navigation Header**:
+   - Removed the duplicate top-right hamburger menu.
+   - Inserted a sleek **Profile Avatar** in the top header. Clicking the avatar displays an elegant dropdown modal containing the logged-in username (routes directly to `/dashboard/profile` "My Profile") and a fully functional logout trigger.
+   - Built a click-outside listener to automatically close the dropdown whenever the user clicks elsewhere.
+2. **Collapsible Mobile Categories**:
+   - Redesigned the mobile menu to feature a collapsible categories list. Categories now collapse and expand via a clean plus/minus accordion switch.
+3. **Always-On Bottom Navigation Bar**:
+   - Integrated a floating navigation bar that anchors to the bottom of mobile viewports, containing dedicated quick links for **Home**, **Shop**, **Cart**, and **Menu**.
+4. **Perfectly Fitted Mobile Forms**:
+   - Re-styled the **Sign-In** and **Sign-Up** viewports. On phone screens, all illustration panels hide automatically, and layout margins shrink so that forms fit the display perfectly without scrolling.
+   - Added clean "Back to Home" (`← Back to Home`) navigational triggers at the bottom of both authentication cards.
+5. **Touch-Optimized Catalogs**:
+   - Scaled down the massive home catalog buttons ("Show More") on mobile devices using responsive styling rules (`px-6 py-3 md:px-10 md:py-5 text-sm md:text-lg`).
+   - Redesigned the **Hot Deals** section to look beautiful and fit small viewports perfectly.
 
----
-
-## 👥 Admin vs User Features
-
-| Feature | User | Admin |
-|---------|------|-------|
-| View products | ✅ | ✅ |
-| Add to cart | ✅ | ❌ |
-| Checkout & payment | ✅ | ❌ |
-| Leave review | ✅ | ❌ |
-| View order history | ✅ | ✅ |
-| Manage orders | ❌ | ✅ |
-| Add/update/delete products | ❌ | ✅ |
-| Manage users | ❌ | ✅ |
-| Dashboard analytics | ❌ | ✅ |
+### ⚡ Core Operations & Architecture
+- **Centralized Wishlist Management (`useWishlist`)**: Built a centralized wishlist synchronization hook to eliminate item duplication, manage local state, and update dynamically in real time.
+- **Robust Mobile Google Auth**: Google Sign-In is optimized for cross-device authentication, supporting asynchronous user registration updates to MongoDB upon auth state updates.
+- **Stripe & SSLCommerz Checkouts**: Complete payment checkout workflows supporting international credit cards (Stripe) and local electronic payment cards (SSLCommerz).
+- **User Dashboard Operations**: Implemented account profile photo uploads (via ImgBB API integrations) and secure user password update modules.
 
 ---
 
-## 🚀 Live Demo
+## 👥 Dashboard Access
 
-<p align="center">
-  <a href="https://techzy-client.vercel.app">
-    <img src="https://img.shields.io/badge/👉_Click_Here_to_Try-FF8C00?style=for-the-badge&logo=vercel&logoColor=white&labelColor=black" />
-  </a>
-</p>
+| Feature | Regular User | System Admin |
+|:---|:---:|:---:|
+| View products & categories | ✅ | ✅ |
+| Manage Shopping Cart & Wishlist | ✅ | ❌ |
+| Checkout with Stripe / SSLCommerz | ✅ | ❌ |
+| Manage catalogs & products | ❌ | ✅ |
+| View detailed dashboard analytics | ❌ | ✅ |
+| Manage users & subscriber lists | ❌ | ✅ |
 
 ---
 
 ## 🧪 Tech Stack
 
 ```text
-Frontend:   React • Vite • Tailwind • React Query • React Hook Form
-Auth:       Firebase • JWT • Google Sign-In
-UI/UX:      Swiper • AOS • Lucide • React Rating • SweetAlert2 • React Hot Toast
-Backend:    Node.js • Express • MongoDB • Stripe SDK
-DevOps:     ESLint • Prettier • Nodemon • Vercel
+Frontend Framework:  React • Vite
+Auth & Security:     Firebase Authentication • JWT Client Storage
+Styling Engine:      Tailwind CSS • Vanilla CSS Custom Overrides
+Icons & Assets:      Lucide React • Swiper sliders
+Backend (API):       Node.js • Express.js • MongoDB
+```
 
-💡 Getting Started
+---
 
-1. Clone the repo:
+## 🚀 Getting Started
 
-2. Install dependencies for frontend:
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/tuhin360/techzy.git
+   cd techzy-client
+   ```
 
-cd techzy-client
-pnpm install
-pnpm dev
+2. **Install dependencies:**
+   ```bash
+   pnpm install
+   ```
 
-3. Install dependencies for backend:
+3. **Create a `.env.local` configuration file:**
+   ```env
+   VITE_API_KEY=yourFirebaseApiKey
+   VITE_AUTH_DOMAIN=yourFirebaseAuthDomain
+   VITE_PROJECT_ID=yourFirebaseProjectId
+   VITE_STORAGE_BUCKET=yourFirebaseStorageBucket
+   VITE_MESSAGING_SENDER_ID=yourFirebaseMessagingSenderId
+   VITE_APP_ID=yourFirebaseAppId
+   VITE_API_URL=http://localhost:5000
+   ```
 
-cd techzy-server
-pnpm install
-pnpm dev
-
-4. Setup .env files for Firebase, MongoDB, and Stripe keys.
+4. **Start the development server:**
+   ```bash
+   pnpm dev
+   ```
+   *Open `http://localhost:5173` in your browser.*
