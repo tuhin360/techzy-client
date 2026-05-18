@@ -1,163 +1,229 @@
-import { Store, Truck, Shield, ArrowRight, Star, Users } from "lucide-react";
-import headphoneGirl from "../../assets/banner/2.jpg";
+import { useState, useRef } from "react";
+import { Store, Truck, Shield, ArrowRight, Star, Zap, Award, Flame, Play, Pause } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import SharedTitleSection from "../../components/SharedTitleSection/SharedTitleSection";
+import { Link } from "react-router-dom";
 
 const About = () => {
+  const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  const toggleVideo = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
   const features = [
     {
       id: 1,
       title: "Premium Quality",
-      description:
-        "Authentic electronics from top brands like Apple, Sony, Samsung, and more.",
+      description: "Direct partnerships with Apple, Sony, Samsung, and top global brands ensure 100% authentic tech products.",
       icon: Store,
+      color: "from-blue-500 to-cyan-500",
     },
     {
       id: 2,
-      title: "Fast Shipping",
-      description:
-        "Nationwide delivery with quick, reliable, and tracked service.",
+      title: "Hyper-Speed Shipping",
+      description: "Next-day delivery inside Dhaka and fully-tracked express nationwide shipping for ultimate convenience.",
       icon: Truck,
+      color: "from-orange-500 to-amber-500",
     },
     {
       id: 3,
-      title: "Trusted Service",
-      description:
-        "Hassle-free returns, warranty support, and dedicated customer care.",
+      title: "2-Year Shield Warranty",
+      description: "Enjoy absolute peace of mind with our official warranties, hassle-free returns, and lifetime technical support.",
       icon: Shield,
+      color: "from-emerald-500 to-teal-500",
     },
   ];
 
   const timeline = [
     {
       year: "2020",
-      title: "Founded Techzy",
-      description:
-        "Started as a small online store with a mission to bring authentic tech to Bangladesh.",
+      title: "TechZy Innovation Initiated",
+      description: "Founded as a specialized MERN online technology boutique to address authentic high-end tech gaps in Bangladesh.",
     },
     {
       year: "2021",
-      title: "Expanded Product Range",
-      description:
-        "Added smartphones, wearables, and audio gear from global brands.",
+      title: "Direct Global Integrations",
+      description: "Signed official retail integration terms, adding wearable smart gear, audios, and high-fidelity devices.",
     },
     {
       year: "2022",
-      title: "Launched Nationwide Delivery",
-      description:
-        "Partnered with trusted couriers for fast and safe delivery across all divisions.",
+      title: "Integrated Secure Gateways",
+      description: "Added top-tier encrypted checkout systems including Stripe, SSLCommerz local banking and EMI frameworks.",
     },
     {
       year: "2024",
-      title: "10,000+ Happy Customers",
-      description:
-        "Celebrated a major milestone with over 10,000 satisfied customers and 4.9-star rating.",
+      title: "The Ultimate Gadget Space",
+      description: "Reached over 50,000 satisfied tech lovers nationwide while carrying a stellar 4.9 average consumer satisfaction score.",
     },
   ];
 
   return (
     <>
       <Helmet>
-        <title>Techzy | About</title>
+        <title>Techzy | About & Innovation</title>
       </Helmet>
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Hero Section */}
 
+      <section className="py-16 sm:py-24 bg-gradient-to-b from-gray-900 via-gray-950 to-black text-white relative overflow-hidden">
+        
+        {/* Floating background glowing highlights */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-orange-600/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse delay-700"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          
+          {/* Header */}
           <SharedTitleSection
-            title="About"
-            highlight="Techzy"
-            subtitle="Your premier destination for cutting-edge electronics in
-              Bangladesh. We bring you the latest gadgets with authenticity,
-              quality, and unmatched service."
+            title="THE FUTURE OF"
+            highlight="TECHZY"
+            subtitle="Pioneering absolute tech authenticities, premium sound innovations, and seamless secure payments for every citizen in Bangladesh."
           />
 
-          {/* Mission & Image */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-16">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
-                Our Mission
+          {/* Cinematic Video & Innovation Statement Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-24 mt-12">
+            
+            {/* Left: About Statement & Pillars */}
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/10 border border-orange-500/30 rounded-xl text-orange-400 font-bold text-xs uppercase tracking-widest">
+                <Flame className="w-4 h-4 animate-bounce" />
+                Next-Gen Tech Hub
+              </div>
+              <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+                Crafting the Absolute <br />
+                <span className="bg-gradient-to-r from-orange-400 via-pink-500 to-purple-500 bg-clip-text text-transparent">
+                  Elite Gadget Experience
+                </span>
               </h2>
-              <p className="text-gray-600 text-sm sm:text-base mb-4">
-                At Techzy, we empower every customer with the latest technology.
-                Since 2020, we've been delivering genuine electronics at
-                unbeatable prices across Bangladesh. Our passion for innovation
-                drives us to bring you the best gadgets from global brands,
-                ensuring trust and satisfaction.
+              <p className="text-gray-400 text-sm sm:text-base leading-relaxed">
+                TechZy isn't just an e-commerce platform—it is a secure gateway to global innovation. We believe technology should elevate your lifestyle, unlock your creative potential, and keep you connected effortlessly. That's why we curate only the highest performing gadgets.
               </p>
-              <p className="text-gray-600 text-sm sm:text-base">
-                We strive to make technology accessible, reliable, and fun for
-                everyone. Whether you’re looking for premium audio, smart
-                wearables, or the latest smartphones, Techzy is your one-stop
-                shop for all things tech.
-              </p>
-            </div>
-            <div className="relative rounded-xl overflow-hidden shadow-lg">
-              <img
-                src={headphoneGirl}
-                alt="Tech Trend Store"
-                className="w-full h-64 sm:h-80 md:h-96 object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-            </div>
-          </div>
-
-          {/* ✅ Why Choose Us - Gradient Background */}
-          <div className="mb-16 rounded-3xl overflow-hidden">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-8 py-6 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700">
-              Why Choose Us
-            </h2>
-            <div className="bg-gradient-to-b from-gray-50 to-gray-100 py-8 px-4">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-6xl mx-auto">
-                {features.map((feature) => (
-                  <div
-                    key={feature.id}
-                    className="bg-white rounded-2xl shadow-lg p-6 text-center hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
-                  >
-                    <feature.icon className="w-8 h-8 text-blue-600 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm">
-                      {feature.description}
-                    </p>
-                  </div>
-                ))}
+              <div className="grid grid-cols-2 gap-4 pt-4">
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-4 hover:border-orange-500/40 transition-all">
+                  <div className="text-2xl font-black text-orange-500">100%</div>
+                  <div className="text-xs text-gray-400 font-semibold mt-1">Authentic Guarantee</div>
+                </div>
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-4 hover:border-orange-500/40 transition-all">
+                  <div className="text-2xl font-black text-purple-500">256-Bit</div>
+                  <div className="text-xs text-gray-400 font-semibold mt-1">Encrypted Payment</div>
+                </div>
               </div>
             </div>
+
+            {/* Right: Premium Music Video Container */}
+            <div className="relative group">
+              <div className="absolute -inset-1.5 bg-gradient-to-r from-orange-500 via-pink-600 to-purple-600 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
+              
+              <div className="relative bg-gray-950 border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
+                {/* Embedded High Definition Video */}
+                <video
+                  ref={videoRef}
+                  className="w-full h-[280px] sm:h-[400px] object-cover scale-102 transition-transform duration-700 hover:scale-105"
+                  src="https://assets.mixkit.co/videos/preview/mixkit-young-man-listening-to-music-with-headphones-40097-large.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+                
+                {/* Cinematic Overlay & Controls */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs font-semibold text-orange-400 uppercase tracking-widest">
+                        TechZy Lifestyles
+                      </p>
+                      <h4 className="text-lg font-black text-white mt-1">
+                        Immersive Sound Revolution
+                      </h4>
+                    </div>
+                    {/* Pause/Play Button Trigger */}
+                    <button
+                      onClick={toggleVideo}
+                      className="p-3.5 bg-orange-600 hover:bg-orange-700 text-white rounded-2xl shadow-lg transition-transform hover:scale-110 active:scale-95 cursor-pointer"
+                    >
+                      {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 fill-white" />}
+                    </button>
+                  </div>
+                  
+                  {/* Floating Pure CSS Equalizer Lines */}
+                  <div className="flex items-end gap-1.5 mt-4 opacity-75">
+                    <span className="w-1 bg-orange-500 rounded-t h-4 animate-[pulse_1s_infinite]"></span>
+                    <span className="w-1 bg-orange-500 rounded-t h-6 animate-[pulse_1.2s_infinite]"></span>
+                    <span className="w-1 bg-orange-500 rounded-t h-3 animate-[pulse_0.8s_infinite]"></span>
+                    <span className="w-1 bg-orange-500 rounded-t h-7 animate-[pulse_1.5s_infinite]"></span>
+                    <span className="w-1 bg-orange-500 rounded-t h-4 animate-[pulse_1.1s_infinite]"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
 
-          {/* ✅ CTA - Gradient Background */}
-          <div className="mb-16 rounded-3xl overflow-hidden text-center md:text-left">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-700 py-12 px-6 sm:px-12 text-white shadow-xl">
-              <div className="max-w-4xl mx-auto flex flex-col md:flex-row md:justify-between md:items-center gap-6">
-                <div>
-                  <h3 className="text-2xl sm:text-3xl font-bold mb-2">
-                    Discover the Future of Tech
+          {/* Why Choose Us Grid */}
+          <div className="mb-24">
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-center mb-12 tracking-tight">
+              Why Innovation Lovers Choose <span className="text-orange-500">TechZy</span>
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {features.map((feature) => (
+                <div
+                  key={feature.id}
+                  className="bg-white/5 border border-white/10 rounded-3xl p-8 hover:border-orange-500/40 hover:bg-white/[0.07] transition-all duration-300 transform hover:-translate-y-2 group shadow-lg"
+                >
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                    <feature.icon className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3">
+                    {feature.title}
                   </h3>
-                  <p className="text-blue-100 text-sm sm:text-base max-w-md">
-                    Shop our curated collection of electronics and elevate your
-                    digital experience with premium gadgets.
+                  <p className="text-gray-400 text-sm leading-relaxed">
+                    {feature.description}
                   </p>
                 </div>
-                <button className="inline-flex items-center px-6 py-3 bg-white text-blue-700 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-md transform hover:scale-105">
-                  Explore Products <ArrowRight className="w-4 h-4 ml-2" />
-                </button>
-              </div>
+              ))}
             </div>
           </div>
 
-          {/* ✅ New Section 2: Our Journey Timeline */}
+          {/* Premium Call to Action */}
+          <div className="mb-24 rounded-3xl overflow-hidden relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-600 via-pink-600 to-purple-800 opacity-90"></div>
+            
+            <div className="relative py-16 px-8 sm:px-16 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-8 max-w-6xl mx-auto">
+              <div className="space-y-3">
+                <h3 className="text-3xl sm:text-4xl font-black tracking-tight">
+                  Discover the Future of Tech
+                </h3>
+                <p className="text-orange-50/80 text-sm sm:text-base max-w-md font-medium">
+                  Shop our curated, validated innovation arrays and take your digital performance to the next level.
+                </p>
+              </div>
+              <Link to="/shop">
+                <button className="inline-flex items-center px-8 py-4 bg-white text-gray-900 font-extrabold rounded-2xl hover:bg-orange-50 transition-all duration-300 shadow-2xl transform hover:scale-105 active:scale-95 cursor-pointer">
+                  Explore Products <ArrowRight className="w-5 h-5 ml-2 text-orange-600" />
+                </button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Vertical Journey Timeline */}
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-10">
-              Our Journey
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-center mb-16 tracking-tight">
+              Our Journey Pathway
             </h2>
             <div className="relative max-w-4xl mx-auto mt-12">
-              {/* Central Vertical Line (behind cards) */}
-              <div className="absolute left-1/2 top-0 w-0.5 h-full bg-gradient-to-b from-blue-400 via-purple-500 to-blue-600 transform -translate-x-1/2 z-0"></div>
+              {/* Central Vertical Connector line */}
+              <div className="absolute left-1/2 top-0 w-0.5 h-full bg-gradient-to-b from-orange-500 via-pink-500 to-purple-600 transform -translate-x-1/2 z-0 opacity-40"></div>
 
               {timeline.map((item, index) => {
-                const isLeft = index % 2 === 0; // Even = left, Odd = right
+                const isLeft = index % 2 === 0;
 
                 return (
                   <div
@@ -166,25 +232,25 @@ const About = () => {
                       isLeft ? "md:flex-row" : "md:flex-row-reverse"
                     } items-center gap-6 mb-16`}
                   >
-                    {/* Year Badge (on left or right) */}
+                    {/* Circle badge */}
                     <div className="flex-shrink-0 z-10">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 text-white flex items-center justify-center text-sm font-bold shadow-lg transform transition-transform hover:scale-110">
+                      <div className="w-14 h-14 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 text-white flex items-center justify-center font-black shadow-lg transform transition-transform hover:scale-110 duration-300">
                         {item.year}
                       </div>
                     </div>
 
-                    {/* Content Box */}
+                    {/* Timeline card with glassmorphism */}
                     <div
-                      className={`z-10 bg-white p-6 rounded-2xl shadow-md md:w-96 transform transition-all duration-300 hover:shadow-xl ${
+                      className={`z-10 bg-white/5 border border-white/10 p-6 sm:p-8 rounded-3xl md:w-[380px] transform transition-all duration-300 hover:shadow-2xl hover:border-orange-500/30 ${
                         isLeft
                           ? "md:ml-10 md:mr-auto text-left"
                           : "md:mr-10 md:ml-auto text-right"
                       }`}
                     >
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">
+                      <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
                         {item.title}
                       </h3>
-                      <p className="text-gray-600 text-sm leading-relaxed">
+                      <p className="text-gray-400 text-sm leading-relaxed">
                         {item.description}
                       </p>
                     </div>
@@ -193,6 +259,7 @@ const About = () => {
               })}
             </div>
           </div>
+
         </div>
       </section>
     </>
