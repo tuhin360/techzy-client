@@ -2,31 +2,18 @@ import { FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 const SocialLogin = () => {
   const { googleSignIn } = useAuth();
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const handleGoogleSignIn = async () => {
     try {
-      const result = await googleSignIn();
-      const userInfo = {
-        email: result.user?.email,
-        name: result.user?.displayName,
-      };
-
-      try {
-        await axiosPublic.post("/users", userInfo);
-      } catch (err) {
-        if (err.response && err.response.status === 400) {
-          console.log("User already exists, continue...");
-        } else {
-          throw err;
-        }
-      }
-
-      navigate("/");
+      await googleSignIn();
+      navigate(from, { replace: true });
     } catch (error) {
       console.error("Google SignIn error:", error);
     }
