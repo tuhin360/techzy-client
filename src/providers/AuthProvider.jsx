@@ -2,6 +2,7 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
   signOut,
   sendPasswordResetEmail,
   updateProfile,
@@ -39,7 +40,12 @@ const AuthProvider = ({ children }) => {
 
   const googleSignIn = () => {
     setLoading(true);
-    return signInWithPopup(auth, googleProvider);
+    return signInWithPopup(auth, googleProvider).catch((error) => {
+      if (error.code === 'auth/popup-blocked') {
+        return signInWithRedirect(auth, googleProvider);
+      }
+      throw error;
+    });
   };
 
   const logOut = () => {
