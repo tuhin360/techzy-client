@@ -1,39 +1,97 @@
 import { EyeOff } from "lucide-react";
 import { Eye } from "lucide-react";
 import { User, Mail, Lock, ArrowRight, CheckCircle2 } from "lucide-react";
-import { useContext } from "react";
-import { useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../providers/AuthProvider";
 import { Helmet } from "react-helmet-async";
 import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 import SocialLogin from "../../components/SocialLogin/SocialLogin";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { signIn } = useContext(AuthContext);
+  const { signIn, resetPassword } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
 
   const from = location.state?.from?.pathname || "/";
 
+  // Pre-fill email on mount if remembered
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("remembered-email");
+    if (savedEmail) {
+      setEmail(savedEmail);
+      setRememberMe(true);
+    }
+  }, []);
+
   // handle form submit
   const handleLogin = (e) => {
     e.preventDefault();
     const form = e.target;
-    const email = form.email.value;
     const password = form.password.value;
-    console.log(email, password);
 
     signIn(email, password)
       .then((result) => {
         const loggedUser = result.user;
         console.log(loggedUser);
+
+        // Store or remove email in LocalStorage
+        if (rememberMe) {
+          localStorage.setItem("remembered-email", email);
+        } else {
+          localStorage.removeItem("remembered-email");
+        }
+
         toast.success("Login successful");
         navigate(from, { replace: true });
       })
       .catch((error) => {
         toast.error(error.message);
+      });
+  };
+
+  const handleForgotPassword = () => {
+    if (!email) {
+      Swal.fire({
+        title: "Reset Password",
+        text: "Please enter your email address to receive a password reset link:",
+        input: "email",
+        inputPlaceholder: "Enter your email address",
+        showCancelButton: true,
+        confirmButtonText: "Send Link",
+        confirmButtonColor: "#f97316",
+        preConfirm: (emailInput) => {
+          if (!emailInput) {
+            Swal.showValidationMessage("Email is required");
+          }
+          return emailInput;
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          triggerResetPassword(result.value);
+        }
+      });
+    } else {
+      triggerResetPassword(email);
+    }
+  };
+
+  const triggerResetPassword = (emailAddress) => {
+    resetPassword(emailAddress)
+      .then(() => {
+        Swal.fire({
+          title: "Reset Link Sent",
+          text: `A password reset link has been successfully sent to ${emailAddress}. Please check your inbox.`,
+          icon: "success",
+          confirmButtonColor: "#f97316",
+        });
+      })
+      .catch((err) => {
+        toast.error(err.message);
       });
   };
 
@@ -107,8 +165,8 @@ const Login = () => {
                       <input
                         type="email"
                         name="email"
-                        //   value={formData.email}
-                        //   onChange={handleChange}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 focus:border-yellow-400 rounded-xl focus:outline-none transition-colors"
                         placeholder="Enter your email"
                         required
@@ -147,26 +205,26 @@ const Login = () => {
                     </div>
                   </div>
 
-                  {/* Remember me and Forgot password */}
                   <div className="flex items-center justify-between">
-                    <label className="flex items-center">
+                    <label className="flex items-center cursor-pointer select-none">
                       <input
                         type="checkbox"
                         name="remember"
-                        //   checked={formData.remember}
-                        //   onChange={handleChange}
-                        className="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 rounded focus:ring-yellow-500 focus:ring-2"
+                        checked={rememberMe}
+                        onChange={(e) => setRememberMe(e.target.checked)}
+                        className="w-4 h-4 text-yellow-400 bg-gray-100 border-gray-300 rounded focus:ring-yellow-500 focus:ring-2 cursor-pointer"
                       />
                       <span className="ml-2 text-sm text-gray-600">
                         Remember me
                       </span>
                     </label>
-                    <a
-                      href="#"
-                      className="text-sm text-yellow-600 hover:text-yellow-700 font-semibold hover:underline"
+                    <button
+                      type="button"
+                      onClick={handleForgotPassword}
+                      className="text-sm text-yellow-600 hover:text-yellow-700 font-semibold hover:underline bg-transparent border-0 cursor-pointer p-0"
                     >
                       Forgot password?
-                    </a>
+                    </button>
                   </div>
 
                   {/* Submit button */}
