@@ -12,6 +12,7 @@ import emailjs from "@emailjs/browser";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 // Fix Leaflet default marker issue
 delete L.Icon.Default.prototype._getIconUrl;
@@ -25,6 +26,7 @@ L.Icon.Default.mergeOptions({
 });
 
 const Contact = () => {
+  const axiosPublic = useAxiosPublic();
   const [isSending, setIsSending] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
   const [errors, setErrors] = useState({});
@@ -123,37 +125,53 @@ const Contact = () => {
     setIsSending(true);
     setAlertMessage(null);
 
-    emailjs
-      .send("service_rw14j24", "template_6m0qdwh", formData, "1fUGboxoEk715gn9R")
-      .then(
-        () => {
-          setIsSending(false);
-          setAlertMessage({
-            type: "success",
-            text: "✅ Your message has been sent successfully!",
-          });
-          setFormData({
-            user_name: "",
-            user_email: "",
-            phone: "",
-            subject: "General Inquiry",
-            message: "",
-          });
-          setErrors({});
-          setTouched({});
-          setTimeout(() => setAlertMessage(null), 5000);
-        },
-        (error) => {
-          setIsSending(false);
-          setAlertMessage({
-            type: "error",
-            text: `❌ Failed to send message. ${
-              error.text || "Please try again later."
-            }`,
-          });
-          setTimeout(() => setAlertMessage(null), 5000);
-        }
-      );
+    // 1. Persist the message securely to our server database
+    axiosPublic.post("/contacts", formData)
+      .then(() => {
+        // 2. Server persistence succeeded! Dispatch EmailJS in the background
+        emailjs
+          .send("service_rw14j24", "template_6m0qdwh", formData, "1fUGboxoEk715gn9R")
+          .then(
+            () => {
+              console.log("Email successfully dispatched via EmailJS!");
+            },
+            (err) => {
+              // Log the email delivery error quietly
+              console.error("EmailJS failed to deliver:", err);
+              if (err.text?.includes("Invalid grant") || err.text?.includes("Gmail_API")) {
+                console.warn(
+                  "⚠️ EmailJS Config Alert: Gmail API 'Invalid grant' detected. Please log into emailjs.com and reconnect your Gmail service account."
+                );
+              }
+            }
+          );
+
+        // Display success immediately since the message is successfully stored in the database
+        setIsSending(false);
+        setAlertMessage({
+          type: "success",
+          text: "✅ Your message has been received! We will get back to you shortly.",
+        });
+        setFormData({
+          user_name: "",
+          user_email: "",
+          phone: "",
+          subject: "General Inquiry",
+          message: "",
+        });
+        setErrors({});
+        setTouched({});
+        setTimeout(() => setAlertMessage(null), 5000);
+      })
+      .catch((error) => {
+        console.error("Backend contact storage failed:", error);
+        setIsSending(false);
+        setAlertMessage({
+          type: "error",
+          text: "❌ Failed to send message. Please try again later.",
+        });
+        setTimeout(() => setAlertMessage(null), 5000);
+      });
   };
 
   const isFormValid =
