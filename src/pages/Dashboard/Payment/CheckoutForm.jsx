@@ -4,7 +4,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useCart from "../../../hooks/useCart";
 import useAuth from "../../../hooks/useAuth";
 
-const CheckoutForm = () => {
+const CheckoutForm = ({ coupon, discountedPrice }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState("");
@@ -21,15 +21,17 @@ const CheckoutForm = () => {
     cart.reduce((total, item) => total + item.price, 0).toFixed(2)
   );
 
-  // Request client secret from backend when cart changes
+  const activePrice = discountedPrice !== undefined ? discountedPrice : totalPrice;
+
+  // Request client secret from backend when price changes
   useEffect(() => {
-    if (totalPrice > 0) {
+    if (activePrice > 0) {
       axiosSecure
-        .post("/payments/create-payment-intent", { price: totalPrice })
+        .post("/payments/create-payment-intent", { price: activePrice })
         .then((res) => setClientSecret(res.data.clientSecret))
         .catch((err) => console.error("Error getting clientSecret:", err));
     }
-  }, [axiosSecure, totalPrice]);
+  }, [axiosSecure, activePrice]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -85,11 +87,12 @@ const CheckoutForm = () => {
         await axiosSecure.post("/payments", {
           email: user?.email,
           transactionId: paymentIntent.id,
-          amount: paymentIntent.amount / 100, // Stripe returns cents
+          amount: activePrice, // Save final discounted amount
           date: new Date(),
           cartItems: cart.map((item) => item._id),
           menuItems: cart.map((item) => item.menuId),
           status: "pending",
+          couponCode: coupon?.code || null,
         });
 
         // ✅ Refetch cart to update sidebar instantly

@@ -6,7 +6,7 @@ import useCart from "../../../hooks/useCart";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
-import { CreditCard, Wallet, MapPin, Phone, User, ShieldCheck } from "lucide-react";
+import { CreditCard, Wallet, MapPin, Phone, User, ShieldCheck, Tag, X, Gift } from "lucide-react";
 
 const stripePromise = loadStripe(import.meta.env.VITE_PAYMENT_GATEWAY_PK);
 
@@ -16,6 +16,12 @@ const Payment = () => {
   const [address, setAddress] = useState("");
   const [isProcessingSSL, setIsProcessingSSL] = useState(false);
 
+  // Coupon States
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+
   const [cart] = useCart();
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
@@ -23,6 +29,49 @@ const Payment = () => {
   const totalPrice = Number(
     cart.reduce((total, item) => total + item.price, 0).toFixed(2)
   );
+
+  const finalPrice = Number((totalPrice - discountAmount).toFixed(2));
+
+  // Handle Coupon Apply
+  const handleApplyCoupon = async (e) => {
+    e.preventDefault();
+    if (!couponCode.trim()) {
+      toast.error("Please enter a promo code!");
+      return;
+    }
+
+    setIsApplyingCoupon(true);
+    const toastId = toast.loading("Validating promo code...");
+
+    try {
+      const res = await axiosSecure.post("/coupons/validate", {
+        code: couponCode.trim(),
+        totalPrice: totalPrice,
+      });
+
+      if (res.data.success) {
+        setAppliedCoupon(res.data);
+        setDiscountAmount(res.data.discountAmount);
+        toast.success(
+          `Promo "${res.data.code}" applied successfully! Saved ৳${(res.data.discountAmount * 115).toLocaleString()}`,
+          { id: toastId }
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.error || "Invalid or expired promo code.", { id: toastId });
+    } finally {
+      setIsApplyingCoupon(false);
+    }
+  };
+
+  // Handle Coupon Remove
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setDiscountAmount(0);
+    setCouponCode("");
+    toast.success("Promo code removed.");
+  };
 
   const handleSSLPayment = async (e) => {
     e.preventDefault();
@@ -43,17 +92,17 @@ const Payment = () => {
       const paymentData = {
         cartItems: cart.map((item) => item._id),
         menuItems: cart.map((item) => item.menuId),
-        totalPrice: totalPrice,
+        totalPrice: finalPrice, // Send dynamic discounted price
         userEmail: user?.email,
         userName: user?.displayName || "Customer",
         userPhone: phone,
         userAddress: address,
+        couponCode: appliedCoupon?.code || null, // Send coupon code if present
       };
 
       const res = await axiosSecure.post("/payments/ssl-initiate", paymentData);
       if (res.data.url) {
         toast.success("Redirecting to secure gateway...", { id: toastId });
-        // Redirect browser to SSLCommerz Hosted Page
         window.location.replace(res.data.url);
       } else {
         toast.error("Failed to generate payment link", { id: toastId });
@@ -84,7 +133,7 @@ const Payment = () => {
         </div>
 
         {/* Price Breakdown */}
-        <div className="bg-orange-50/50 border border-orange-100 rounded-2xl p-4 sm:p-6 mb-8 flex justify-between items-center">
+        <div className="bg-orange-50/50 border border-orange-100 rounded-2xl p-4 sm:p-6 mb-6 flex justify-between items-center">
           <div>
             <p className="text-sm font-semibold text-orange-800 uppercase tracking-wider">
               Total Payable Amount
@@ -94,13 +143,76 @@ const Payment = () => {
             </p>
           </div>
           <div className="text-right">
-            <p className="text-3xl font-black text-orange-600">
-              ৳{(totalPrice * 115).toLocaleString()}
-            </p>
+            <div className="flex items-baseline justify-end gap-2">
+              {discountAmount > 0 && (
+                <span className="text-base line-through text-gray-400 font-medium">
+                  ৳{(totalPrice * 115).toLocaleString()}
+                </span>
+              )}
+              <p className="text-3xl font-black text-orange-600">
+                ৳{(finalPrice * 115).toLocaleString()}
+              </p>
+            </div>
             <p className="text-xs text-gray-400 font-medium">
-              approx. ${totalPrice} USD
+              approx. ${finalPrice} USD
             </p>
           </div>
+        </div>
+
+        {/* Dynamic Promo Code Box */}
+        <div className="bg-white border-2 border-dashed border-orange-200 rounded-2xl p-5 mb-8">
+          {!appliedCoupon ? (
+            <form onSubmit={handleApplyCoupon} className="space-y-2">
+              <label className="text-xs font-bold text-gray-700 uppercase tracking-wider block">
+                Have a Promo/Coupon Code?
+              </label>
+              <div className="flex gap-2">
+                <div className="relative flex-1">
+                  <Tag className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    type="text"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value)}
+                    placeholder="Enter Code (e.g. TECHZY20)"
+                    className="w-full pl-10 pr-4 py-2.5 border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 rounded-xl text-gray-800 text-sm focus:outline-none transition-colors uppercase font-semibold"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={isApplyingCoupon || totalPrice <= 0}
+                  className="px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white text-sm font-bold rounded-xl transition-all active:scale-95 shadow cursor-pointer disabled:bg-gray-300 disabled:cursor-not-allowed"
+                >
+                  {isApplyingCoupon ? "Applying..." : "Apply"}
+                </button>
+              </div>
+              <p className="text-[10px] text-gray-400 font-medium">
+                Try codes: <strong className="text-orange-500">TECHZY20</strong> (20%), <strong className="text-orange-500">SAVE10</strong> (10%), or <strong className="text-orange-500">MEGA50</strong> (50%)
+              </p>
+            </form>
+          ) : (
+            <div className="flex items-center justify-between bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 text-emerald-800">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-emerald-600 text-white rounded-lg animate-bounce">
+                  <Gift className="w-4 h-4" />
+                </div>
+                <div>
+                  <h5 className="font-extrabold text-sm uppercase tracking-wide">
+                    🎟️ {appliedCoupon.code} Applied!
+                  </h5>
+                  <p className="text-xs text-emerald-600 font-medium mt-0.5">
+                    Saved {appliedCoupon.discountPercent}% off (৳{(discountAmount * 115).toLocaleString()})
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={handleRemoveCoupon}
+                className="p-1.5 hover:bg-emerald-100 rounded-full transition-colors text-emerald-600 hover:text-emerald-800 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Payment Method Selector */}
@@ -153,8 +265,9 @@ const Payment = () => {
               <p className="text-sm font-semibold text-gray-700 mb-4">
                 Card Billing Details
               </p>
-              <Elements stripe={stripePromise}>
-                <CheckoutForm />
+              {/* Force Elements remount when price changes to fetch new clientSecret */}
+              <Elements stripe={stripePromise} key={finalPrice}>
+                <CheckoutForm coupon={appliedCoupon} discountedPrice={finalPrice} />
               </Elements>
             </div>
           </div>
@@ -229,7 +342,7 @@ const Payment = () => {
               }`}
             >
               <Wallet className="w-5 h-5" />
-              {isProcessingSSL ? "Initializing Secure Channel..." : `Pay ৳${(totalPrice * 115).toLocaleString()} via SSLCommerz`}
+              {isProcessingSSL ? "Initializing Secure Channel..." : `Pay ৳${(finalPrice * 115).toLocaleString()} via SSLCommerz`}
             </button>
           </form>
         )}
