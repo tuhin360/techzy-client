@@ -1,5 +1,6 @@
 import bannerImage from "../../../assets/banner/1.jpg"; // Adjust path as needed
 import { ShoppingBag, Star, Truck, Shield } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Banner = () => {
   return (
@@ -70,15 +71,19 @@ const Banner = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-            <button className="group relative px-5 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-full hover:from-blue-600 hover:to-purple-600 transform hover:scale-105 transition-all duration-300 shadow-md text-sm sm:text-base">
-              <ShoppingBag className="inline w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-              Shop Now & Save Big
-              <div className="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-            </button>
+            <Link to="/shop">
+              <button className="group relative px-5 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-full hover:from-blue-600 hover:to-purple-600 transform hover:scale-105 transition-all duration-300 shadow-md text-sm sm:text-base cursor-pointer">
+                <ShoppingBag className="inline w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                Shop Now & Save Big
+                <div className="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+              </button>
+            </Link>
 
-            <button className="px-5 py-2.5 sm:px-6 sm:py-3 border-2 border-amber-300 text-amber-300 font-semibold rounded-full hover:bg-amber-300 hover:text-gray-900 transition-all duration-300 shadow-md text-sm sm:text-base">
-              Explore All Deals
-            </button>
+            <Link to="/all-fridayOffer-products">
+              <button className="px-5 py-2.5 sm:px-6 sm:py-3 border-2 border-amber-300 text-amber-300 font-semibold rounded-full hover:bg-amber-300 hover:text-gray-900 transition-all duration-300 shadow-md text-sm sm:text-base cursor-pointer">
+                Explore All Deals
+              </button>
+            </Link>
           </div>
         </div>
       </div>
