@@ -74,7 +74,7 @@ const Navbar = () => {
       try {
         const response = await fetch(
           `${
-            import.meta.env.VITE_API_URL
+            import.meta.env.VITE_API_URL || import.meta.env.VITE_SERVER_URL || "http://localhost:5000"
           }/products/search?query=${encodeURIComponent(searchQuery)}`
         );
 
