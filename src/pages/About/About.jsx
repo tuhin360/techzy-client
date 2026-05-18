@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { Store, Truck, Shield, ArrowRight, Star, Zap, Award, Flame, Play, Pause } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Store, Truck, Shield, ArrowRight, Play, Pause, Flame } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import SharedTitleSection from "../../components/SharedTitleSection/SharedTitleSection";
 import { Link } from "react-router-dom";
@@ -72,11 +72,11 @@ const About = () => {
         <title>Techzy | About & Innovation</title>
       </Helmet>
 
-      <section className="py-16 sm:py-24 bg-gradient-to-b from-gray-900 via-gray-950 to-black text-white relative overflow-hidden">
+      <section className="py-16 sm:py-24 bg-gradient-to-b from-gray-50 via-white to-gray-100 text-gray-900 relative overflow-hidden">
         
         {/* Floating background glowing highlights */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange-600/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse delay-700"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-orange-500/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl animate-pulse delay-700"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           
@@ -92,36 +92,36 @@ const About = () => {
             
             {/* Left: About Statement & Pillars */}
             <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/10 border border-orange-500/30 rounded-xl text-orange-400 font-bold text-xs uppercase tracking-widest">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/10 border border-orange-500/20 rounded-xl text-orange-600 font-bold text-xs uppercase tracking-widest">
                 <Flame className="w-4 h-4 animate-bounce" />
                 Next-Gen Tech Hub
               </div>
-              <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+              <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight text-gray-900">
                 Crafting the Absolute <br />
-                <span className="bg-gradient-to-r from-orange-400 via-pink-500 to-purple-500 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-orange-500 via-pink-600 to-purple-600 bg-clip-text text-transparent">
                   Elite Gadget Experience
                 </span>
               </h2>
-              <p className="text-gray-400 text-sm sm:text-base leading-relaxed">
+              <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
                 TechZy isn't just an e-commerce platform—it is a secure gateway to global innovation. We believe technology should elevate your lifestyle, unlock your creative potential, and keep you connected effortlessly. That's why we curate only the highest performing gadgets.
               </p>
               <div className="grid grid-cols-2 gap-4 pt-4">
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-4 hover:border-orange-500/40 transition-all">
+                <div className="bg-white border border-gray-100 rounded-2xl p-4 hover:border-orange-500/30 shadow-sm hover:shadow transition-all">
                   <div className="text-2xl font-black text-orange-500">100%</div>
-                  <div className="text-xs text-gray-400 font-semibold mt-1">Authentic Guarantee</div>
+                  <div className="text-xs text-gray-500 font-semibold mt-1">Authentic Guarantee</div>
                 </div>
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-4 hover:border-orange-500/40 transition-all">
-                  <div className="text-2xl font-black text-purple-500">256-Bit</div>
-                  <div className="text-xs text-gray-400 font-semibold mt-1">Encrypted Payment</div>
+                <div className="bg-white border border-gray-100 rounded-2xl p-4 hover:border-orange-500/30 shadow-sm hover:shadow transition-all">
+                  <div className="text-2xl font-black text-purple-600">256-Bit</div>
+                  <div className="text-xs text-gray-500 font-semibold mt-1">Encrypted Payment</div>
                 </div>
               </div>
             </div>
 
             {/* Right: Premium Music Video Container */}
             <div className="relative group">
-              <div className="absolute -inset-1.5 bg-gradient-to-r from-orange-500 via-pink-600 to-purple-600 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200"></div>
+              <div className="absolute -inset-1.5 bg-gradient-to-r from-orange-500 via-pink-600 to-purple-600 rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
               
-              <div className="relative bg-gray-950 border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
+              <div className="relative bg-white border border-gray-200 rounded-3xl overflow-hidden shadow-2xl">
                 {/* Embedded High Definition Video */}
                 <video
                   ref={videoRef}
@@ -169,22 +169,22 @@ const About = () => {
 
           {/* Why Choose Us Grid */}
           <div className="mb-24">
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-center mb-12 tracking-tight">
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-center mb-12 tracking-tight text-gray-900">
               Why Innovation Lovers Choose <span className="text-orange-500">TechZy</span>
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {features.map((feature) => (
                 <div
                   key={feature.id}
-                  className="bg-white/5 border border-white/10 rounded-3xl p-8 hover:border-orange-500/40 hover:bg-white/[0.07] transition-all duration-300 transform hover:-translate-y-2 group shadow-lg"
+                  className="bg-white border border-gray-100 rounded-3xl p-8 hover:border-orange-500/30 hover:bg-orange-50/10 transition-all duration-300 transform hover:-translate-y-2 group shadow-md hover:shadow-xl"
                 >
                   <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300`}>
                     <feature.icon className="w-6 h-6" />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">
+                  <p className="text-gray-600 text-sm leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
@@ -193,12 +193,12 @@ const About = () => {
           </div>
 
           {/* Premium Call to Action */}
-          <div className="mb-24 rounded-3xl overflow-hidden relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-600 via-pink-600 to-purple-800 opacity-90"></div>
+          <div className="mb-24 rounded-3xl overflow-hidden relative shadow-xl">
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-600 via-pink-600 to-purple-800 opacity-95"></div>
             
             <div className="relative py-16 px-8 sm:px-16 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-8 max-w-6xl mx-auto">
               <div className="space-y-3">
-                <h3 className="text-3xl sm:text-4xl font-black tracking-tight">
+                <h3 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
                   Discover the Future of Tech
                 </h3>
                 <p className="text-orange-50/80 text-sm sm:text-base max-w-md font-medium">
@@ -215,7 +215,7 @@ const About = () => {
 
           {/* Vertical Journey Timeline */}
           <div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-center mb-16 tracking-tight">
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-center mb-16 tracking-tight text-gray-900">
               Our Journey Pathway
             </h2>
             <div className="relative max-w-4xl mx-auto mt-12">
@@ -241,16 +241,16 @@ const About = () => {
 
                     {/* Timeline card with glassmorphism */}
                     <div
-                      className={`z-10 bg-white/5 border border-white/10 p-6 sm:p-8 rounded-3xl md:w-[380px] transform transition-all duration-300 hover:shadow-2xl hover:border-orange-500/30 ${
+                      className={`z-10 bg-white border border-gray-100 p-6 sm:p-8 rounded-3xl md:w-[380px] transform transition-all duration-300 hover:shadow-2xl hover:border-orange-500/30 shadow-md ${
                         isLeft
                           ? "md:ml-10 md:mr-auto text-left"
                           : "md:mr-10 md:ml-auto text-right"
                       }`}
                     >
-                      <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                         {item.title}
                       </h3>
-                      <p className="text-gray-400 text-sm leading-relaxed">
+                      <p className="text-gray-600 text-sm leading-relaxed">
                         {item.description}
                       </p>
                     </div>
