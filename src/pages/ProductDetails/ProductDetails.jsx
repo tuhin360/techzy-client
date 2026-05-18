@@ -6,6 +6,7 @@ import useAuth from "../../hooks/useAuth";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import useCart from "../../hooks/useCart";
 import useWishlist from "../../hooks/useWishlist";
+import useAdmin from "../../hooks/useAdmin";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -15,6 +16,7 @@ const ProductDetails = () => {
   const location = useLocation();
   const [cart, refetchCart] = useCart();
   const { wishlistIds, toggleWishlist } = useWishlist();
+  const [isAdmin] = useAdmin();
 
   // Local UI states
   const [selectedColor, setSelectedColor] = useState(null);
@@ -58,6 +60,16 @@ const ProductDetails = () => {
         icon: "warning",
         confirmButtonColor: "#f97316",
       }).then(() => navigate("/login", { state: { from: location } }));
+      return;
+    }
+
+    if (isAdmin) {
+      Swal.fire({
+        title: "Action Restricted",
+        text: "Admins are not allowed to add items to the cart.",
+        icon: "error",
+        confirmButtonColor: "#f97316",
+      });
       return;
     }
 
@@ -116,6 +128,16 @@ const ProductDetails = () => {
         icon: "warning",
         confirmButtonColor: "#f97316",
       }).then(() => navigate("/login", { state: { from: location } }));
+      return;
+    }
+
+    if (isAdmin) {
+      Swal.fire({
+        title: "Action Restricted",
+        text: "Admins are not allowed to add items to the wishlist.",
+        icon: "error",
+        confirmButtonColor: "#f97316",
+      });
       return;
     }
 

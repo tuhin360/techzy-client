@@ -3,6 +3,7 @@ import useAuth from "../hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import useCart from "../hooks/useCart";
+import useAdmin from "../hooks/useAdmin";
 import Swal from "sweetalert2";
 
 export const ProductCard = ({ product, wishlist, toggleWishlist }) => {
@@ -12,6 +13,7 @@ export const ProductCard = ({ product, wishlist, toggleWishlist }) => {
   const location = useLocation();
   const axiosPublic = useAxiosPublic();
   const [, refetchCart] = useCart();
+  const [isAdmin] = useAdmin();
 
   const isInWishlist = wishlist?.includes(_id);
 
@@ -23,6 +25,16 @@ export const ProductCard = ({ product, wishlist, toggleWishlist }) => {
         icon: "warning",
         confirmButtonColor: "#f97316",
       }).then(() => navigate("/login", { state: { from: location } }));
+      return;
+    }
+
+    if (isAdmin) {
+      Swal.fire({
+        title: "Action Restricted",
+        text: "Admins are not allowed to add items to the cart.",
+        icon: "error",
+        confirmButtonColor: "#f97316",
+      });
       return;
     }
 

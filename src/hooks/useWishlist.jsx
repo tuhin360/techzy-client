@@ -1,10 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAuth from "./useAuth";
 import useAxiosPublic from "./useAxiosPublic";
+import useAdmin from "./useAdmin";
+import Swal from "sweetalert2";
 
 const useWishlist = () => {
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
+  const [isAdmin] = useAdmin();
+  const queryClient = useQueryClient();
 
   // Fetch wishlist product IDs for this user
   const {
@@ -40,24 +44,55 @@ const useWishlist = () => {
   // Toggle wishlist
   const toggleWishlist = async (productId) => {
     if (!user?.email) {
-      alert("Please login first!");
+      Swal.fire({
+        title: "Not Logged In",
+        text: "Please login first to manage wishlist.",
+        icon: "warning",
+        confirmButtonColor: "#f97316",
+      });
       return;
     }
 
+    if (isAdmin) {
+      Swal.fire({
+        title: "Action Restricted",
+        text: "Admins are not allowed to add items to wishlist.",
+        icon: "error",
+        confirmButtonColor: "#f97316",
+      });
+      return;
+    }
+
+    // Capture previous wishlist state for rollback
+    const previousWishlistIds = queryClient.getQueryData(["wishlistIds", user?.email]) || [];
+    const isAdding = !previousWishlistIds.includes(productId);
+
+    // Optimistically update query cache
+    let updatedWishlistIds = [...previousWishlistIds];
+    if (isAdding) {
+      updatedWishlistIds.push(productId);
+    } else {
+      updatedWishlistIds = updatedWishlistIds.filter((id) => id !== productId);
+    }
+    queryClient.setQueryData(["wishlistIds", user?.email], updatedWishlistIds);
+
     try {
-      if (wishlistIds.includes(productId)) {
+      if (isAdding) {
+        await axiosPublic.post("/wishlist", { email: user.email, productId });
+      } else {
         await axiosPublic.delete("/wishlist", {
           data: { email: user.email, productId },
         });
-      } else {
-        await axiosPublic.post("/wishlist", { email: user.email, productId });
       }
 
-      // Refresh both queries
+      // Quietly refetch in the background to ensure absolute sync
       refetchWishlistIds();
       refetchWishlist();
     } catch (err) {
       console.error("Wishlist toggle error:", err);
+      // Rollback to previous state on error
+      queryClient.setQueryData(["wishlistIds", user?.email], previousWishlistIds);
+      Swal.fire("Error", "Failed to update wishlist. Try again.", "error");
     }
   };
 

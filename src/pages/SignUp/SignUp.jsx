@@ -42,33 +42,38 @@ const SignUp = () => {
 
   // Form submit handler
   const onSubmit = async (data) => {
-    if (!data.photo || !data.photo[0]) {
-      Swal.fire("Error", "Please upload a profile photo!", "error");
-      return;
-    }
+    let photoURL = "https://cdn-icons-png.flaticon.com/512/149/149071.png"; // default avatar
 
-    const image = data.photo[0];
-    const formData = new FormData();
-    formData.append("image", image);
+    if (data.photo && data.photo[0]) {
+      const image = data.photo[0];
+      const formData = new FormData();
+      formData.append("image", image);
 
-    const url = `https://api.imgbb.com/1/upload?key=bc1aa9cda145ca4353091bcbb08066ce`;
+      const url = `https://api.imgbb.com/1/upload?key=bc1aa9cda145ca4353091bcbb08066ce`;
 
-    try {
-      // Upload image to imgbb
-      const res = await fetch(url, {
-        method: "POST",
-        body: formData,
-      });
+      try {
+        // Upload image to imgbb
+        const res = await fetch(url, {
+          method: "POST",
+          body: formData,
+        });
 
-      const imgData = await res.json();
+        const imgData = await res.json();
 
-      if (!imgData.success) {
-        Swal.fire("Error", "Image upload failed!", "error");
+        if (!imgData.success) {
+          Swal.fire("Error", "Image upload failed!", "error");
+          return;
+        }
+
+        photoURL = imgData.data.display_url;
+      } catch (error) {
+        console.error("Image upload error:", error);
+        Swal.fire("Error", "Something went wrong during image upload!", "error");
         return;
       }
+    }
 
-      const photoURL = imgData.data.display_url;
-
+    try {
       // Create Firebase user
       createUser(data.email, data.password)
         .then((result) => {
@@ -100,8 +105,27 @@ const SignUp = () => {
           });
         })
         .catch((error) => {
-          console.error(error.message);
-          Swal.fire("Error", error.message, "error");
+          console.error("SignUp error:", error);
+          const errMsg = error.message || "";
+          if (
+            error.code === "auth/email-already-in-use" ||
+            errMsg.includes("auth/email-already-in-use") ||
+            errMsg.includes("email-already-in-use")
+          ) {
+            Swal.fire({
+              title: "Email Already Registered",
+              text: "This email address is already in use. Please use a different email or log in.",
+              icon: "warning",
+              confirmButtonColor: "#f59e0b",
+            });
+          } else {
+            Swal.fire({
+              title: "Sign Up Failed",
+              text: error.message || "Something went wrong while creating your account.",
+              icon: "error",
+              confirmButtonColor: "#f59e0b",
+            });
+          }
         });
     } catch (error) {
       console.error("Image upload error:", error);
@@ -256,7 +280,7 @@ const SignUp = () => {
                           <input
                             type="file"
                             accept="image/*"
-                            {...register("photo", { required: true })}
+                            {...register("photo", { required: false })}
                             className="hidden"
                             id="photoUpload"
                             ref={fileInputRef}

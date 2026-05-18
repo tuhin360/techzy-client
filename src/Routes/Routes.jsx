@@ -164,7 +164,7 @@ export const router = createBrowserRouter([
           </AdminRoute>
         ),
         loader: ({ params }) =>
-          fetch(`https://techzy-server.vercel.app/products/${params.id}`)
+          fetch(`${import.meta.env.VITE_SERVER_URL || "http://localhost:5000"}/products/${params.id}`)
       },
       {
         path: "profile",
