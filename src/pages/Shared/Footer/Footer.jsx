@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   Facebook,
   Twitter,
@@ -93,52 +94,52 @@ const Footer = () => {
             </h3>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="/"
+                <Link
+                  to="/"
                   className="text-gray-300 hover:text-blue-400 transition duration-200"
                 >
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/products"
+                <Link
+                  to="/shop"
                   className="text-gray-300 hover:text-blue-400 transition duration-200"
                 >
                   All Products
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/deals"
+                <Link
+                  to="/all-fridayOffer-products"
                   className="text-gray-300 hover:text-blue-400 transition duration-200"
                 >
                   Special Deals
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/about"
+                <Link
+                  to="/about"
                   className="text-gray-300 hover:text-blue-400 transition duration-200"
                 >
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/contact"
+                <Link
+                  to="/contact"
                   className="text-gray-300 hover:text-blue-400 transition duration-200"
                 >
                   Contact
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/track-order"
+                <Link
+                  to="/dashboard"
                   className="text-gray-300 hover:text-blue-400 transition duration-200"
                 >
                   Track Order
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -150,52 +151,52 @@ const Footer = () => {
             </h3>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="/smartphones"
+                <Link
+                  to="/products/category/Mobile"
                   className="text-gray-300 hover:text-blue-400 transition duration-200"
                 >
                   Smartphones
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/laptops"
+                <Link
+                  to="/products/category/Computing"
                   className="text-gray-300 hover:text-blue-400 transition duration-200"
                 >
                   Laptops & Computers
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/headphones"
+                <Link
+                  to="/products/category/Audio"
                   className="text-gray-300 hover:text-blue-400 transition duration-200"
                 >
                   Audio & Headphones
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/gaming"
+                <Link
+                  to="/products/category/Wearables"
                   className="text-gray-300 hover:text-blue-400 transition duration-200"
                 >
-                  Gaming Gear
-                </a>
+                  Wearable Devices
+                </Link>
               </li>
               <li>
-                <a
-                  href="/cameras"
+                <Link
+                  to="/products/category/Camera"
                   className="text-gray-300 hover:text-blue-400 transition duration-200"
                 >
-                  Cameras
-                </a>
+                  Cameras & Drones
+                </Link>
               </li>
               <li>
-                <a
-                  href="/accessories"
+                <Link
+                  to="/products/category/Accessories"
                   className="text-gray-300 hover:text-blue-400 transition duration-200"
                 >
                   Accessories
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
