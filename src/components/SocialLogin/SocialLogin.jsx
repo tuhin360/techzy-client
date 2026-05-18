@@ -3,6 +3,7 @@ import { FcGoogle } from "react-icons/fc";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { useNavigate, useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
 const SocialLogin = () => {
   const { googleSignIn } = useAuth();
   const axiosPublic = useAxiosPublic();
@@ -16,6 +17,7 @@ const SocialLogin = () => {
       navigate(from, { replace: true });
     } catch (error) {
       console.error("Google SignIn error:", error);
+      toast.error(error.message || "Login failed. Please try again.");
     }
   };
 
