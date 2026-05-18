@@ -3,6 +3,7 @@ import { Store, Truck, Shield, ArrowRight, Play, Pause, Flame } from "lucide-rea
 import { Helmet } from "react-helmet-async";
 import SharedTitleSection from "../../components/SharedTitleSection/SharedTitleSection";
 import { Link } from "react-router-dom";
+import headphoneGirl from "../../assets/banner/2.jpg";
 
 const About = () => {
   const videoRef = useRef(null);
@@ -117,52 +118,83 @@ const About = () => {
               </div>
             </div>
 
-            {/* Right: Premium Music Video Container */}
-            <div className="relative group">
-              <div className="absolute -inset-1.5 bg-gradient-to-r from-orange-500 via-pink-600 to-purple-600 rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+            {/* Right: Immersive Media Grid (Video + Lady Pic) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full lg:max-w-2xl">
               
-              <div className="relative bg-white border border-gray-200 rounded-3xl overflow-hidden shadow-2xl">
-                {/* Embedded High Definition Video */}
-                <video
-                  ref={videoRef}
-                  className="w-full h-[280px] sm:h-[400px] object-cover scale-102 transition-transform duration-700 hover:scale-105"
-                  src="https://assets.mixkit.co/videos/preview/mixkit-young-man-listening-to-music-with-headphones-40097-large.mp4"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                />
+              {/* Card 1: Cinematic Video Container */}
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 via-pink-600 to-purple-600 rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
                 
-                {/* Cinematic Overlay & Controls */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-semibold text-orange-400 uppercase tracking-widest">
-                        TechZy Lifestyles
-                      </p>
-                      <h4 className="text-lg font-black text-white mt-1">
-                        Immersive Sound Revolution
-                      </h4>
-                    </div>
-                    {/* Pause/Play Button Trigger */}
-                    <button
-                      onClick={toggleVideo}
-                      className="p-3.5 bg-orange-600 hover:bg-orange-700 text-white rounded-2xl shadow-lg transition-transform hover:scale-110 active:scale-95 cursor-pointer"
-                    >
-                      {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 fill-white" />}
-                    </button>
-                  </div>
+                <div className="relative bg-white border border-gray-200 rounded-3xl overflow-hidden shadow-xl h-[300px] sm:h-[380px]">
+                  {/* Embedded High Definition Video */}
+                  <video
+                    ref={videoRef}
+                    className="w-full h-full object-cover scale-102 transition-transform duration-700 hover:scale-105"
+                    src="https://assets.mixkit.co/videos/preview/mixkit-young-man-listening-to-music-with-headphones-40097-large.mp4"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                  />
                   
-                  {/* Floating Pure CSS Equalizer Lines */}
-                  <div className="flex items-end gap-1.5 mt-4 opacity-75">
-                    <span className="w-1 bg-orange-500 rounded-t h-4 animate-[pulse_1s_infinite]"></span>
-                    <span className="w-1 bg-orange-500 rounded-t h-6 animate-[pulse_1.2s_infinite]"></span>
-                    <span className="w-1 bg-orange-500 rounded-t h-3 animate-[pulse_0.8s_infinite]"></span>
-                    <span className="w-1 bg-orange-500 rounded-t h-7 animate-[pulse_1.5s_infinite]"></span>
-                    <span className="w-1 bg-orange-500 rounded-t h-4 animate-[pulse_1.1s_infinite]"></span>
+                  {/* Cinematic Overlay & Controls */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-[10px] font-semibold text-orange-400 uppercase tracking-widest">
+                          TechZy Live
+                        </p>
+                        <h4 className="text-sm font-black text-white mt-0.5">
+                          Motion Beats
+                        </h4>
+                      </div>
+                      <button
+                        onClick={toggleVideo}
+                        className="p-2.5 bg-orange-600 hover:bg-orange-700 text-white rounded-xl shadow-lg transition-transform hover:scale-110 active:scale-95 cursor-pointer"
+                      >
+                        {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-white" />}
+                      </button>
+                    </div>
+                    
+                    {/* Floating Equalizer */}
+                    <div className="flex items-end gap-1 mt-3 opacity-70">
+                      <span className="w-0.5 bg-orange-500 rounded-t h-3 animate-[pulse_1s_infinite]"></span>
+                      <span className="w-0.5 bg-orange-500 rounded-t h-5 animate-[pulse_1.2s_infinite]"></span>
+                      <span className="w-0.5 bg-orange-500 rounded-t h-2 animate-[pulse_0.8s_infinite]"></span>
+                      <span className="w-0.5 bg-orange-500 rounded-t h-6 animate-[pulse_1.5s_infinite]"></span>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              {/* Card 2: Lady enjoying music on headphones */}
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 via-pink-600 to-orange-600 rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                
+                <div className="relative bg-white border border-gray-200 rounded-3xl overflow-hidden shadow-xl h-[300px] sm:h-[380px]">
+                  <img
+                    src={headphoneGirl}
+                    alt="Lady enjoying music on headphones"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  
+                  {/* Image Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex flex-col justify-end p-4">
+                    <div>
+                      <p className="text-[10px] font-semibold text-purple-400 uppercase tracking-widest">
+                        TechZy Lifestyles
+                      </p>
+                      <h4 className="text-sm font-black text-white mt-0.5">
+                        Immersive Sound Revolution
+                      </h4>
+                    </div>
+                    <p className="text-[11px] text-gray-300 mt-1 line-clamp-2">
+                      Experience absolute audio precision with ergonomic custom fits and noise-cancellation shields.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
           </div>
