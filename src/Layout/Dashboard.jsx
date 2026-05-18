@@ -28,6 +28,7 @@ const ADMIN_MENU = [
     label: "Manage Products",
   },
   { to: "/dashboard/manage-orders", icon: FaListAlt, label: "Manage Orders" },
+  { to: "/dashboard/manage-subscribers", icon: FaEnvelope, label: "Subscribers" },
 ];
 
 const USER_MENU = [

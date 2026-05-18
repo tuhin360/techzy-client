@@ -15,6 +15,7 @@ import ManageProducts from "../pages/Dashboard/ManageProducts/ManageProducts";
 import WishList from "../pages/Dashboard/WishList/WishList";
 import AddProduct from "../pages/Dashboard/AddProduct/AddProduct";
 import AdminRoute from "./AdminRoute";
+import ManageSubscribers from "../pages/Dashboard/ManageSubscribers/ManageSubscribers";
 import UpdateProductItem from "../pages/Dashboard/UpdateProductItem/UpdateProductItem";
 import Payment from "../pages/Dashboard/Payment/Payment";
 import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
@@ -129,6 +130,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <ManageUsers />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "manage-subscribers",
+        element: (
+          <AdminRoute>
+            <ManageSubscribers />
           </AdminRoute>
         ),
       },

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Facebook,
@@ -13,8 +13,37 @@ import {
   Shield,
   Headphones,
 } from "lucide-react";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import toast from "react-hot-toast";
 
 const Footer = () => {
+  const axiosPublic = useAxiosPublic();
+  const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email.trim()) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    setSubmitting(true);
+    const toastId = toast.loading("Subscribing to newsletter...");
+    try {
+      const res = await axiosPublic.post("/newsletter/subscribe", { email: email.trim() });
+      if (res.data.success) {
+        toast.success(res.data.message || "Thank you for subscribing! 🎉", { id: toastId });
+        setEmail("");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.error || "Failed to subscribe. Please check your email.", { id: toastId });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <footer className="bg-gray-900 text-white mt-20">
       {/* Features section */}
@@ -233,16 +262,24 @@ const Footer = () => {
             {/* Newsletter */}
             <div className="mt-6">
               <h4 className="font-semibold mb-2 text-white">Newsletter</h4>
-              <div className="flex">
+              <form onSubmit={handleSubscribe} className="flex">
                 <input
                   type="email"
-                  placeholder="Your email"
-                  className="flex-1 px-3 py-2 bg-gray-800 text-white rounded-l-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Your email (e.g. user@gmail.com)"
+                  required
+                  disabled={submitting}
+                  className="flex-1 px-3 py-2 bg-gray-800 text-white rounded-l-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 text-sm"
                 />
-                <button className="bg-blue-600 px-4 py-2 rounded-r-md hover:bg-blue-700 transition duration-200">
+                <button
+                  type="submit"
+                  disabled={submitting || !email}
+                  className="bg-blue-600 px-4 py-2 rounded-r-md hover:bg-blue-700 transition duration-200 cursor-pointer disabled:bg-gray-700 disabled:cursor-not-allowed"
+                >
                   <Mail size={16} />
                 </button>
-              </div>
+              </form>
             </div>
           </div>
         </div>
