@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useSearchParams } from "react-router-dom";
+import Swal from "sweetalert2";
 import {
   CreditCard,
   Calendar,
@@ -30,6 +32,35 @@ const PaymentHistory = () => {
   const [sortBy, setSortBy] = useState("date");
   const [sortOrder, setSortOrder] = useState("desc");
   const [isLoaded, setIsLoaded] = useState(false);
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const status = searchParams.get("status");
+    const txn = searchParams.get("txn");
+
+    if (status === "success") {
+      Swal.fire({
+        title: "Payment Successful!",
+        text: `Thank you for your order! Transaction ID: ${txn}`,
+        icon: "success",
+        confirmButtonColor: "#f97316",
+      });
+    } else if (status === "failed") {
+      Swal.fire({
+        title: "Payment Failed",
+        text: "Your transaction could not be processed. Please try again.",
+        icon: "error",
+        confirmButtonColor: "#ef4444",
+      });
+    } else if (status === "cancelled") {
+      Swal.fire({
+        title: "Payment Cancelled",
+        text: "You cancelled the payment process. You can checkout again from your cart.",
+        icon: "warning",
+        confirmButtonColor: "#f59e0b",
+      });
+    }
+  }, [searchParams]);
 
   const {
     data: payments = [],
