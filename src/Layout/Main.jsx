@@ -21,7 +21,7 @@ const Main = () => {
   }, [location.pathname]);
 
   return (
-    <div>
+    <div className={noHeaderFooter ? "" : "pb-16 md:pb-0"}>
       {!noHeaderFooter && <Navbar />}
       <Outlet />
       {!noHeaderFooter && <Footer />}

@@ -9,7 +9,7 @@ import {
   CheckCircle2,
   X,
 } from "lucide-react";
-import { useContext, useState, useRef } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -38,7 +38,14 @@ const SignUp = () => {
     formState: { errors },
   } = useForm();
 
-  const { createUser } = useContext(AuthContext);
+  const { createUser, user } = useContext(AuthContext);
+
+  // Auto-redirect if user is logged in (e.g. from mobile Google login redirect)
+  useEffect(() => {
+    if (user) {
+      navigate(from, { replace: true });
+    }
+  }, [user, navigate, from]);
 
   // Form submit handler
   const onSubmit = async (data) => {
@@ -369,6 +376,16 @@ const SignUp = () => {
                       Sign in here
                     </Link>
                   </p>
+                </div>
+
+                {/* Back to Home Button */}
+                <div className="text-center mt-5">
+                  <Link
+                    to="/"
+                    className="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-orange-500 transition-colors bg-gray-100 hover:bg-orange-50 px-4 py-2 rounded-full border border-gray-250 cursor-pointer"
+                  >
+                    <span>← Back to Home</span>
+                  </Link>
                 </div>
               </div>
             </div>

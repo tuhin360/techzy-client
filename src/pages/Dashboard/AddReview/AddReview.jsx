@@ -88,11 +88,11 @@ const AddReview = () => {
       </div>
 
       {/* Review Form */}
-      <div className="max-w-4xl mx-auto bg-white p-10 rounded-2xl shadow-lg">
+      <div className="max-w-4xl mx-auto bg-white p-6 sm:p-10 rounded-2xl shadow-lg">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-7">
           {/* Review Textarea */}
           <div>
-            <label className="block mb-2 text-xl font-semibold">
+            <label className="block mb-2 text-lg sm:text-xl font-semibold">
               Tell us about your experience.
             </label>
             <textarea
@@ -101,12 +101,12 @@ const AddReview = () => {
                 validate: (value) => {
                   const words = value.trim().split(/\s+/).length;
                   if (words < 10) return "Review must be at least 10 words";
-                  if (words > 50) return "Review cannot exceed 40 words";
+                  if (words > 50) return "Review cannot exceed 50 words";
                   return true;
                 },
               })}
               placeholder="Write your review here..."
-              className="textarea textarea-bordered w-full px-5 py-6 h-36 text-xl focus:outline-none focus:ring focus:ring-orange-200 resize-none rounded-lg"
+              className="textarea textarea-bordered w-full px-4 py-4 sm:px-5 sm:py-6 h-36 text-base sm:text-xl focus:outline-none focus:ring focus:ring-orange-200 resize-none rounded-lg border-2 border-gray-250"
             ></textarea>
 
             {/* Word count display */}
@@ -127,10 +127,10 @@ const AddReview = () => {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full btn text-white text-xl font-semibold px-6 py-6 rounded-lg transition ${
+              className={`w-full btn text-white text-base sm:text-xl font-semibold px-4 py-3 sm:px-6 sm:py-4 rounded-lg transition flex items-center justify-center cursor-pointer ${
                 loading
                   ? "bg-orange-400 cursor-not-allowed"
-                  : "bg-orange-600 hover:bg-orange-700"
+                  : "bg-orange-600 hover:bg-orange-700 shadow-md hover:shadow-lg"
               }`}
             >
               {loading ? "Adding Review..." : "Add Review"}

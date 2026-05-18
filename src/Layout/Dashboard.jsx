@@ -166,44 +166,56 @@ const Sidebar = memo(
 const Header = memo(({ user }) => (
   <header className="bg-white shadow-sm p-4 flex items-center justify-between sticky top-0 z-10">
     <h2 className="text-xl font-semibold text-gray-800">Dashboard</h2>
-    <div className="flex items-center space-x-3">
-      <span className="text-sm font-medium text-gray-600 hidden sm:block">
+    <Link
+      to="/dashboard/profile"
+      className="flex items-center space-x-3 hover:opacity-85 hover:scale-[1.02] active:scale-95 transition-all duration-200 cursor-pointer group"
+    >
+      <span className="text-sm font-semibold text-gray-600 group-hover:text-orange-600 transition-colors hidden sm:block">
         {user?.displayName || "User"}
       </span>
-      {user?.photoURL && (
+      {user?.photoURL ? (
         <img
-          className="w-6 h-6 rounded-full"
+          className="w-8 h-8 rounded-full object-cover border border-orange-500 shadow-sm transition-transform group-hover:rotate-6"
           src={user.photoURL}
-          alt=""
+          alt={user?.displayName || "User Profile"}
           loading="lazy"
           onError={(e) => (e.target.style.display = "none")}
         />
+      ) : (
+        <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold text-sm border border-orange-200">
+          {(user?.displayName || user?.email || "U")[0].toUpperCase()}
+        </div>
       )}
-    </div>
+    </Link>
   </header>
 ));
 
 // Streamlined mobile navigation
-const MobileNav = memo(({ toggleSidebar, isSidebarOpen }) => (
+const MobileNav = memo(({ toggleSidebar, isSidebarOpen, cartCount }) => (
   <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-md flex justify-around items-center p-2 z-50">
     {BOTTOM_NAV.map(({ to, icon: Icon, label }) => (
       <NavLink
         key={to}
         to={to}
         className={({ isActive }) =>
-          `flex flex-col items-center p-2 text-gray-600 hover:text-orange-600 transition-colors duration-200 ${
+          `flex flex-col items-center p-2 text-gray-600 hover:text-orange-600 transition-colors duration-200 relative ${
             isActive ? "text-orange-600" : ""
           }`
         }
       >
         <Icon className="w-6 h-6" />
+        {label === "Cart" && cartCount > 0 && (
+          <span className="absolute top-1 right-2 bg-orange-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+            {cartCount}
+          </span>
+        )}
         <span className="text-xs">{label}</span>
       </NavLink>
     ))}
 
     <button
       onClick={toggleSidebar}
-      className="flex flex-col items-center p-2 text-gray-600 hover:text-orange-600 transition-colors duration-200"
+      className="flex flex-col items-center p-2 text-gray-600 hover:text-orange-600 transition-colors duration-200 cursor-pointer"
       aria-label={isSidebarOpen ? "Close menu" : "Open menu"}
     >
       {isSidebarOpen ? (
@@ -279,7 +291,7 @@ const Dashboard = () => {
         <main className="flex-1 w-full h-screen overflow-auto">
           <Header user={user} />
 
-          <div className="p-4 sm:p-6 lg:p-8">
+          <div className="p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
             <Suspense
               fallback={
                 <div className="animate-pulse space-y-4">
@@ -295,7 +307,7 @@ const Dashboard = () => {
       </div>
 
       {/* Mobile Navigation */}
-      <MobileNav toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+      <MobileNav toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} cartCount={cart.length} />
     </div>
   );
 };

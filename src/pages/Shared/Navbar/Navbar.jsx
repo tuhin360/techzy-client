@@ -8,8 +8,12 @@ import {
   Phone,
   Mail,
   Loader2,
+  Home,
+  Store,
+  ShoppingBag,
+  User,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, NavLink } from "react-router-dom";
 import { AuthContext } from "../../../providers/AuthProvider";
 import useCart from "../../../hooks/useCart";
 import useAdmin from "../../../hooks/useAdmin";
@@ -32,6 +36,8 @@ const Navbar = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
 
   const { user, logOut } = useContext(AuthContext);
   const [cart] = useCart();
@@ -41,6 +47,7 @@ const Navbar = () => {
 
   const searchRef = useRef(null);
   const timeoutRef = useRef(null);
+  const profileDropdownRef = useRef(null);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -107,11 +114,17 @@ const Navbar = () => {
     };
   }, [searchQuery]);
 
-  // Close search results when clicking outside
+  // Close search results and profile dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setShowSearchResults(false);
+      }
+      if (
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(event.target)
+      ) {
+        setIsProfileDropdownOpen(false);
       }
     };
 
@@ -305,8 +318,9 @@ const Navbar = () => {
           {/* Right Side Icons */}
           <div className="flex items-center space-x-2">
             {/* Wishlist */}
+            {/* Wishlist */}
             {!isAdmin && (
-              <Link to={user ? "/dashboard/wishlist" : "/login"}>
+              <Link to={user ? "/dashboard/wishlist" : "/login"} className="hidden md:block">
                 <button className="relative p-2 text-gray-700 hover:text-orange-600 transition duration-200 cursor-pointer">
                   <Heart size={20} />
                   {!isWishlistLoading && wishlist?.length > 0 && (
@@ -320,13 +334,13 @@ const Navbar = () => {
 
             {/* Shopping Cart / Admin */}
             {isAdmin ? (
-              <Link to="/dashboard/manage-users">
+              <Link to="/dashboard/manage-users" className="hidden md:block">
                 <button className="relative p-2 text-gray-700 hover:text-orange-600 transition duration-200 cursor-pointer">
                   Admin Dashboard
                 </button>
               </Link>
             ) : (
-              <Link to="/dashboard/cart">
+              <Link to="/dashboard/cart" className="hidden md:block">
                 <button className="relative p-2 text-gray-700 hover:text-orange-600 transition duration-200 cursor-pointer">
                   <ShoppingCart size={20} />
                   {cart.length > 0 && (
@@ -338,39 +352,70 @@ const Navbar = () => {
               </Link>
             )}
 
-            {/* User Profile */}
+            {/* User Profile / Login (Industry Standard Mobile/Desktop Responsive) */}
             {user ? (
-              <Link to="/dashboard/profile">
-                <div className="flex items-center gap-4 pl-2">
+              <div className="flex items-center gap-2 sm:gap-4 pl-2 relative" ref={profileDropdownRef}>
+                <button
+                  onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                  className="focus:outline-none cursor-pointer flex items-center justify-center"
+                >
                   <img
                     src={user.photoURL || "https://i.ibb.co/GvFrhKg6/user.png"}
                     alt="profile"
                     title={user.displayName || "User"}
-                    className="w-10 h-10 rounded-full border cursor-pointer hidden md:block"
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-gray-250 cursor-pointer object-cover hover:border-orange-500 transition-colors"
                   />
-                  <button
-                    onClick={handleLogout}
-                    className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2 px-6 rounded-md font-bold shadow-lg hover:from-yellow-600 hover:to-orange-600 transition cursor-pointer hidden md:block"
-                  >
-                    Logout
-                  </button>
-                </div>
-              </Link>
-            ) : (
-              <Link to="/login">
-                <button className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white ml-2 py-2 px-6 rounded-md font-bold shadow-lg hover:from-yellow-600 hover:to-orange-600 transition cursor-pointer hidden md:block">
-                  Login
                 </button>
-              </Link>
-            )}
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={toggleMenu}
-              className="md:hidden p-2 text-gray-700 hover:text-blue-600"
-            >
-              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
+                {/* Premium Dropdown Menu */}
+                {isProfileDropdownOpen && (
+                  <div className="absolute right-0 top-full mt-3 w-48 bg-white rounded-xl shadow-xl py-2 border border-gray-100 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Logged in as</p>
+                      <p className="text-sm font-extrabold text-gray-800 truncate">
+                        {user.displayName || "User"}
+                      </p>
+                    </div>
+                    <Link
+                      to="/dashboard/profile"
+                      onClick={() => setIsProfileDropdownOpen(false)}
+                      className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 font-semibold transition"
+                    >
+                      My Profile
+                    </Link>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setIsProfileDropdownOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 font-bold transition cursor-pointer"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+                
+                <button
+                  onClick={handleLogout}
+                  className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2 px-6 rounded-md font-bold shadow-lg hover:from-yellow-600 hover:to-orange-600 transition cursor-pointer hidden md:block"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center">
+                {/* Desktop Login Button */}
+                <Link to="/login" className="hidden md:block">
+                  <button className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white ml-2 py-2 px-6 rounded-md font-bold shadow-lg hover:from-yellow-600 hover:to-orange-600 transition cursor-pointer">
+                    Login
+                  </button>
+                </Link>
+                {/* Mobile Login Icon (Lucide User Icon) */}
+                <Link to="/login" className="md:hidden p-2 text-gray-700 hover:text-orange-600 transition duration-200 cursor-pointer">
+                  <User className="w-6 h-6" />
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -399,21 +444,35 @@ const Navbar = () => {
               Home
             </Link>
 
-            {/* Mobile Categories */}
-            <div>
-              <p className="text-gray-700 font-semibold mb-2">Categories</p>
-              <div className="space-y-2">
-                {categories.map((cat) => (
-                  <Link
-                    key={cat.path}
-                    to={cat.path}
-                    className="block px-2 py-1 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {cat.name}
-                  </Link>
-                ))}
-              </div>
+            {/* Mobile Categories with Collapse Toggle */}
+            <div className="border-b border-gray-100 pb-3">
+              <button
+                onClick={() => setIsMobileCategoriesOpen(!isMobileCategoriesOpen)}
+                className="w-full flex items-center justify-between text-gray-700 font-bold hover:text-orange-500 focus:outline-none transition cursor-pointer"
+              >
+                <span>Categories</span>
+                <span className="transform transition-transform duration-200 text-lg font-bold">
+                  {isMobileCategoriesOpen ? "−" : "+"}
+                </span>
+              </button>
+              
+              {isMobileCategoriesOpen && (
+                <div className="mt-2 pl-3 space-y-1.5 border-l-2 border-orange-400 animate-in slide-in-from-top-1 duration-200">
+                  {categories.map((cat) => (
+                    <Link
+                      key={cat.path}
+                      to={cat.path}
+                      className="block px-2 py-1 text-sm text-gray-600 hover:text-orange-500 rounded-md transition font-semibold"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        setIsMobileCategoriesOpen(false);
+                      }}
+                    >
+                      {cat.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
 
             <Link
@@ -459,6 +518,62 @@ const Navbar = () => {
           </div>
         </div>
       )}
+
+      {/* Bottom Mobile Navigation */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-md flex justify-around items-center p-2 z-50">
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `flex flex-col items-center p-2 text-gray-600 hover:text-orange-600 transition-colors duration-200 ${
+              isActive ? "text-orange-600" : ""
+            }`
+          }
+        >
+          <Home className="w-6 h-6" />
+          <span className="text-xs font-semibold">Home</span>
+        </NavLink>
+        <NavLink
+          to="/shop"
+          className={({ isActive }) =>
+            `flex flex-col items-center p-2 text-gray-600 hover:text-orange-600 transition-colors duration-200 ${
+              isActive ? "text-orange-600" : ""
+            }`
+          }
+        >
+          <Store className="w-6 h-6" />
+          <span className="text-xs font-semibold">Shop</span>
+        </NavLink>
+        <NavLink
+          to="/dashboard/cart"
+          className={({ isActive }) =>
+            `flex flex-col items-center p-2 text-gray-600 hover:text-orange-600 transition-colors duration-200 relative ${
+              isActive ? "text-orange-600" : ""
+            }`
+          }
+        >
+          <ShoppingBag className="w-6 h-6" />
+          {cart.length > 0 && (
+            <span className="absolute top-1 right-2 bg-orange-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+              {cart.length}
+            </span>
+          )}
+          <span className="text-xs font-semibold">Cart</span>
+        </NavLink>
+        <button
+          onClick={toggleMenu}
+          className={`flex flex-col items-center p-2 text-gray-600 hover:text-orange-600 transition-colors duration-200 cursor-pointer ${
+            isMenuOpen ? "text-orange-600" : ""
+          }`}
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+        >
+          {isMenuOpen ? (
+            <X className="w-6 h-6" />
+          ) : (
+            <Menu className="w-6 h-6" />
+          )}
+          <span className="text-xs font-semibold">Menu</span>
+        </button>
+      </div>
     </nav>
   );
 };

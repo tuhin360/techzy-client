@@ -63,10 +63,10 @@ const Cover = () => {
         <div className="absolute bottom-32 left-32 w-32 h-32 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full opacity-20 animate-bounce"></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
-          {/* Left: Alexa with Premium Effects */}
-          <div className="flex justify-center lg:justify-start order-2 lg:order-1">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-12 items-center">
+          {/* Left: Alexa with Premium Effects (Hidden on mobile/tablet to save space) */}
+          <div className="hidden lg:flex justify-center lg:justify-start order-2 lg:order-1">
             <div className="relative group">
               {/* Glow Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full blur-2xl opacity-50 group-hover:opacity-70 transition-opacity duration-500 scale-110"></div>
@@ -93,36 +93,35 @@ const Cover = () => {
           </div>
 
           {/* Center: Premium Deal Content */}
-          <div className="text-center order-1 lg:order-2">
+          <div className="text-center order-1 lg:order-2 col-span-1 lg:col-span-1 max-w-2xl mx-auto w-full">
             {/* Luxury Badge */}
-            <div className="inline-flex items-center bg-gradient-to-r from-red-600 via-pink-600 to-purple-600 text-white px-6 py-3 rounded-full text-sm font-black mb-6 shadow-2xl animate-pulse">
-              <Sparkles className="w-5 h-5 mr-2 animate-spin" />
+            <div className="inline-flex items-center bg-gradient-to-r from-red-600 via-pink-600 to-purple-600 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full text-xs sm:text-sm font-black mb-4 sm:mb-6 shadow-2xl animate-pulse">
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2 animate-spin" />
               MEGA TECH FESTIVAL
-              <Sparkles className="w-5 h-5 ml-2 animate-spin" />
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 ml-1.5 sm:ml-2 animate-spin" />
             </div>
 
             {/* Main Headlines */}
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-4">
+            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black mb-3 sm:mb-4">
               <span className="bg-gradient-to-r from-yellow-300 via-orange-300 to-red-300 bg-clip-text text-transparent drop-shadow-lg">
                 HOT
-              </span>
-              <br />
+              </span>{" "}
               <span className="text-white drop-shadow-lg">DEALS</span>
             </h1>
 
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 mb-8 shadow-2xl">
-              <p className="text-2xl md:text-3xl font-black bg-gradient-to-r from-red-600 to-purple-600 bg-clip-text text-transparent">
+            <div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-4 mb-6 sm:mb-8 shadow-2xl max-w-md mx-auto">
+              <p className="text-xl sm:text-3xl font-black bg-gradient-to-r from-red-600 to-purple-600 bg-clip-text text-transparent">
                 UP TO 70% OFF
               </p>
-              <p className="text-gray-700 font-medium">Limited Time Only</p>
+              <p className="text-xs sm:text-sm text-gray-700 font-semibold">Limited Time Only</p>
             </div>
 
             {/* Elegant Countdown */}
-            <div className="mb-10">
-              <p className="text-white/90 font-semibold mb-4 text-lg">
+            <div className="mb-6 sm:mb-10">
+              <p className="text-white/95 font-bold mb-3 sm:mb-4 text-sm sm:text-lg">
                 Deal Ends In:
               </p>
-              <div className="flex justify-center space-x-3 md:space-x-6">
+              <div className="flex justify-center space-x-2 sm:space-x-4">
                 {[
                   {
                     label: "DAYS",
@@ -147,17 +146,17 @@ const Cover = () => {
                 ].map((item, index) => (
                   <div key={index} className="relative group">
                     <div
-                      className={`bg-gradient-to-br ${item.color} p-4 md:p-6 rounded-2xl shadow-2xl min-w-[70px] md:min-w-[90px] group-hover:scale-110 transition-transform duration-300`}
+                      className={`bg-gradient-to-br ${item.color} p-2 sm:p-4 rounded-xl sm:rounded-2xl shadow-xl min-w-[55px] xs:min-w-[65px] sm:min-w-[85px] group-hover:scale-105 transition-transform duration-300 relative z-10`}
                     >
-                      <div className="text-2xl md:text-4xl font-black text-white">
+                      <div className="text-base sm:text-2xl md:text-3xl font-black text-white leading-tight">
                         {item.value.toString().padStart(2, "0")}
                       </div>
-                      <div className="text-xs md:text-sm text-white/80 font-bold">
+                      <div className="text-[9px] sm:text-xs text-white/90 font-bold">
                         {item.label}
                       </div>
                     </div>
                     <div
-                      className={`absolute inset-0 bg-gradient-to-br ${item.color} rounded-2xl blur-lg opacity-50 group-hover:opacity-70 transition-opacity duration-300`}
+                      className={`absolute inset-0 bg-gradient-to-br ${item.color} rounded-xl sm:rounded-2xl blur-md opacity-40 group-hover:opacity-60 transition-opacity duration-300`}
                     ></div>
                   </div>
                 ))}
@@ -165,45 +164,44 @@ const Cover = () => {
             </div>
 
             {/* Premium CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <Link to="/shop">
-                <button className="group relative bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-8 md:px-10 py-4 md:py-5 rounded-2xl font-black text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 overflow-hidden cursor-pointer">
+            <div className="flex flex-row gap-3 justify-center mb-6 max-w-sm sm:max-w-md mx-auto">
+              <Link to="/shop" className="flex-1">
+                <button className="w-full group relative bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 py-3 rounded-xl sm:rounded-2xl font-black text-sm sm:text-lg shadow-xl hover:scale-105 overflow-hidden cursor-pointer transition-all duration-300">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="relative flex items-center justify-center space-x-3">
-                    <ShoppingBag className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+                  <div className="relative flex items-center justify-center space-x-1.5 sm:space-x-3">
+                    <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform duration-300" />
                     <span>Shop Now</span>
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                   </div>
                 </button>
               </Link>
 
-              <Link to="/shop">
-                <button className="group border-3 border-white/80 text-white px-8 md:px-10 py-4 md:py-5 rounded-2xl font-bold text-lg backdrop-blur-sm bg-white/10 hover:bg-white hover:text-gray-900 transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-3">
-                  <Gift className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+              <Link to="/shop" className="flex-1">
+                <button className="w-full group border-2 border-white/80 text-white py-3 rounded-xl sm:rounded-2xl font-bold text-sm sm:text-lg backdrop-blur-sm bg-white/10 hover:bg-white hover:text-gray-900 transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-1.5 sm:space-x-3">
+                  <Gift className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform duration-300" />
                   <span>All Deals</span>
                 </button>
               </Link>
             </div>
 
             {/* Luxury Trust Indicators */}
-            <div className="flex flex-wrap justify-center gap-6 text-white/90">
-              <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                <span className="text-sm font-semibold">25K+ Reviews</span>
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-4 md:gap-6 text-white/90">
+              <div className="flex items-center space-x-1.5 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-semibold">
+                <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
+                <span>25K+ Reviews</span>
               </div>
-              <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                <Clock className="w-4 h-4 text-green-400" />
-                <span className="text-sm font-semibold">Fast Delivery</span>
+              <div className="flex items-center space-x-1.5 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-semibold">
+                <Clock className="w-3.5 h-3.5 text-green-400" />
+                <span>Fast Delivery</span>
               </div>
-              <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                <Zap className="w-4 h-4 text-blue-400" />
-                <span className="text-sm font-semibold">Authentic</span>
+              <div className="flex items-center space-x-1.5 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-semibold">
+                <Zap className="w-3.5 h-3.5 text-blue-400" />
+                <span>Authentic</span>
               </div>
             </div>
           </div>
 
-          {/* Right: Headphone with Premium Effects */}
-          <div className="flex justify-center lg:justify-end order-3">
+          {/* Right: Headphone with Premium Effects (Hidden on mobile/tablet to save space) */}
+          <div className="hidden lg:flex justify-center lg:justify-end order-3">
             <div className="relative group">
               {/* Multi-layer Glow */}
               <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full blur-2xl opacity-50 group-hover:opacity-70 transition-opacity duration-500 scale-110"></div>

@@ -107,8 +107,8 @@ const ManageSubscribers = () => {
           </p>
         </div>
 
-        {/* Table */}
-        <div className="overflow-x-auto">
+        {/* Desktop Table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
@@ -162,6 +162,45 @@ const ManageSubscribers = () => {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Cards */}
+        <div className="md:hidden p-4 space-y-4">
+          {isLoading ? (
+            <div className="text-center py-12 text-gray-500 font-medium">
+              Loading subscribers...
+            </div>
+          ) : currentSubscribers.map((item, index) => (
+            <div
+              key={item._id}
+              className="bg-white rounded-xl shadow-sm p-4 space-y-3 border border-gray-100"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-gray-500">
+                  #{String(startIndex + index + 1).padStart(2, "0")}
+                </span>
+                <span className="text-[11px] text-gray-400">
+                  {new Date(item.subscribedAt).toLocaleDateString()}
+                </span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Mail className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                <p className="font-semibold text-gray-900 truncate flex-1">{item.email}</p>
+              </div>
+              <div className="flex items-center justify-between pt-2 border-t border-gray-100 text-xs">
+                <span className="text-[11px] text-gray-400">
+                  {new Date(item.subscribedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </span>
+                <button
+                  onClick={() => handleDelete(item)}
+                  className="flex items-center gap-1 text-red-600 hover:text-red-700 transition font-semibold"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Remove</span>
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Empty State */}

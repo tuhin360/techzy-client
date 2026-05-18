@@ -13,7 +13,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { signIn, resetPassword } = useContext(AuthContext);
+  const { signIn, resetPassword, user } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -27,6 +27,13 @@ const Login = () => {
       setRememberMe(true);
     }
   }, []);
+
+  // Auto-redirect if user is logged in (e.g. from mobile Google login redirect)
+  useEffect(() => {
+    if (user) {
+      navigate(from, { replace: true });
+    }
+  }, [user, navigate, from]);
 
   // handle form submit
   const handleLogin = (e) => {
@@ -264,6 +271,16 @@ const Login = () => {
                       Sign up here
                     </Link>
                   </p>
+                </div>
+
+                {/* Back to Home Button */}
+                <div className="text-center mt-5">
+                  <Link
+                    to="/"
+                    className="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-orange-500 transition-colors bg-gray-100 hover:bg-orange-50 px-4 py-2 rounded-full border border-gray-200 cursor-pointer"
+                  >
+                    <span>← Back to Home</span>
+                  </Link>
                 </div>
               </div>
             </div>

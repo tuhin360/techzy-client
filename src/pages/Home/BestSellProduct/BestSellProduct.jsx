@@ -52,9 +52,9 @@ const BestSellProduct = () => {
         {/* Show More Button */}
         <div className="text-center mt-16">
           <Link to="/all-bestSeller-products">
-            <button className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-2xl hover:from-yellow-600 hover:to-orange-600 transition-colors duration-300 shadow-lg cursor-pointer">
-              <span className="text-lg">Show More</span>
-              <ArrowRight className="w-6 h-6 ml-3" />
+            <button className="inline-flex items-center px-6 py-3 md:px-10 md:py-5 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-2xl hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 transform active:scale-95 hover:scale-105 shadow-lg cursor-pointer">
+              <span className="text-sm md:text-lg">Show More</span>
+              <ArrowRight className="w-4 h-4 md:w-6 md:h-6 ml-2 md:ml-3" />
             </button>
           </Link>
         </div>

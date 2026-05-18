@@ -159,8 +159,8 @@ const ManageUsers = () => {
           </p>
         </div>
 
-        {/* Table */}
-        <div className="overflow-x-auto">
+        {/* Desktop Table */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
@@ -235,6 +235,58 @@ const ManageUsers = () => {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Cards */}
+        <div className="md:hidden p-4 space-y-4">
+          {currentUsers.map((user, index) => (
+            <div
+              key={user._id}
+              className="bg-white rounded-xl shadow-sm p-4 space-y-3 border border-gray-100"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-gray-500">
+                  #{String(startIndex + index + 1).padStart(2, "0")}
+                </span>
+                <div>{getRoleBadge(user.role)}</div>
+              </div>
+              <div className="flex items-center space-x-3">
+                <img
+                  src={
+                    user.photoURL ||
+                    user.image ||
+                    `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                      user.name || user.displayName || "User"
+                    )}&background=f97316&color=ffffff`
+                  }
+                  alt={user.name || user.displayName}
+                  className="w-10 h-10 rounded-full object-cover border-2 border-gray-200"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-900 truncate">
+                    {user.name || user.displayName || "Unknown User"}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                </div>
+              </div>
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-gray-100">
+                <button
+                  onClick={() => handleToggleRole(user)}
+                  className="flex items-center gap-1 px-3 py-1.5 text-xs text-orange-600 border border-orange-200 hover:bg-orange-50 rounded-lg transition font-medium cursor-pointer"
+                >
+                  <Shield className="w-3.5 h-3.5" />
+                  <span>Toggle Role</span>
+                </button>
+                <button
+                  onClick={() => handleDeleteUser(user)}
+                  className="flex items-center gap-1 px-3 py-1.5 text-xs text-red-600 border border-red-200 hover:bg-red-50 rounded-lg transition font-medium cursor-pointer"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Delete</span>
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Empty State */}

@@ -4,6 +4,8 @@ import {
   signInWithPopup,
   signOut,
   sendPasswordResetEmail,
+  updateProfile,
+  updatePassword,
 } from "firebase/auth";
 import { useState, createContext } from "react";
 import {
@@ -49,10 +51,33 @@ const AuthProvider = ({ children }) => {
     return sendPasswordResetEmail(auth, email);
   };
 
+  const updateUserProfile = (name, photo) => {
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: photo,
+    });
+  };
+
+  const updateUserPassword = (newPassword) => {
+    return updatePassword(auth.currentUser, newPassword);
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
+        // Automatically sync the user in our MongoDB backend!
+        const userDbData = {
+          email: currentUser.email,
+          name: currentUser.displayName || "User",
+        };
+        axiosPublic.post("/users", userDbData).catch((err) => {
+          // If 400 is returned, they already exist, which is fine
+          if (err.response && err.response.status !== 400) {
+            console.error("Auto-sync user database failed:", err);
+          }
+        });
+
         // get token & store client
         const userInfo = { email: currentUser.email };
         axiosPublic.post("/jwt", userInfo).then((res) => {
@@ -80,6 +105,8 @@ const AuthProvider = ({ children }) => {
     logOut,
     googleSignIn,
     resetPassword,
+    updateUserProfile,
+    updateUserPassword,
   };
 
   return (
