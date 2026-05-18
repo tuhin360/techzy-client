@@ -90,7 +90,7 @@ export const ProductCard = ({ product, wishlist, toggleWishlist }) => {
       {/* Product Image → navigate to details */}
       <Link
         to={`/products/${_id}`}
-        className="block relative h-56 bg-gray-50 overflow-hidden"
+        className="block relative h-40 md:h-56 bg-gray-50 overflow-hidden"
       >
         <img
           src={image}
@@ -100,40 +100,42 @@ export const ProductCard = ({ product, wishlist, toggleWishlist }) => {
       </Link>
 
       {/* Info */}
-      <div className="p-4">
-        <div className="flex items-center mb-1">
-          {[...Array(5)].map((_, i) => (
-            <Star
-              key={i}
-              className={`w-4 h-4 ${
-                i < Math.floor(product.rating)
-                  ? "text-yellow-400 fill-yellow-400"
-                  : "text-gray-300"
-              }`}
-            />
-          ))}
-          <span className="text-xs text-gray-500 ml-1">
+      <div className="p-3 md:p-4">
+        <div className="flex items-center mb-1 flex-wrap gap-1">
+          <div className="flex items-center">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={`w-3 h-3 md:w-4 md:h-4 ${
+                  i < Math.floor(product.rating)
+                    ? "text-yellow-400 fill-yellow-400"
+                    : "text-gray-300"
+                }`}
+              />
+            ))}
+          </div>
+          <span className="text-[10px] md:text-xs text-gray-500">
             {product.rating} ({product.reviews})
           </span>
         </div>
 
-        <h3 className="text-sm font-semibold text-gray-900 mb-2 line-clamp-2">
+        <h3 className="text-xs md:text-sm font-semibold text-gray-900 mb-2 line-clamp-2 h-8 md:h-10">
           {title}
         </h3>
 
         <div className="mb-3">
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-bold text-blue-600">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-base md:text-lg font-bold text-blue-600">
               {formatPrice(price)}
             </span>
             {originalPrice && originalPrice > price && (
-              <span className="text-sm text-gray-400 line-through">
+              <span className="text-xs md:text-sm text-gray-400 line-through">
                 {formatPrice(originalPrice)}
               </span>
             )}
           </div>
           {discount > 0 && (
-            <p className="text-xs text-green-600 font-medium">
+            <p className="text-[10px] md:text-xs text-green-600 font-medium">
               Save {formatPrice(originalPrice - price)}
             </p>
           )}
@@ -141,9 +143,9 @@ export const ProductCard = ({ product, wishlist, toggleWishlist }) => {
 
         <button
           onClick={handleAddToCart}
-          className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-3 rounded-lg font-medium text-sm shadow hover:from-yellow-600 hover:to-orange-600 transition-colors duration-300 flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white py-2 md:py-3 rounded-lg font-medium text-xs md:text-sm shadow hover:from-yellow-600 hover:to-orange-600 transition-colors duration-300 flex items-center justify-center gap-1.5 cursor-pointer"
         >
-          <ShoppingCart className="w-4 h-4" /> Add to Cart
+          <ShoppingCart className="w-3.5 h-3.5 md:w-4 md:h-4" /> Add to Cart
         </button>
       </div>
     </div>

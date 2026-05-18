@@ -45,7 +45,7 @@ const AllFridayOfferProducts = () => {
           subtitle="Grab exclusive deals on the latest gadgets today!"
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {loading
             ? Array.from({ length: productsPerPage }).map((_, i) => (
                 <SkeletonCard key={i} />
